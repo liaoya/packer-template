@@ -4,7 +4,7 @@
       "type": "qemu",
       "accelerator": "kvm",
       "format": "qcow2",
-      "output_directory": "qemu-{{ user `vm_name` }}",
+      "output_directory": "packer-{{ user `vm_name` }}-qemu",
       "qemuargs": [
         ["-m", "{{ user `memory` }}"],
         ["-smp", "cpus={{ user `cpus` }}"]
@@ -39,7 +39,7 @@
       "guest_additions_mode": "disable",
       "guest_os_type": "RedHat_64",
       "hard_drive_interface": "sata",
-      "output_directory": "virtualbox-iso-{{ user `vm_name` }}",
+      "output_directory": "packer-{{ user `vm_name` }}-virtualbox-iso",
       "post_shutdown_delay": "10s",
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--audio", "none"],
@@ -74,6 +74,8 @@
     {
       "type": "shell",
       "scripts": [
+        "scripts/common/sshd.sh",
+        "scripts/centos/networking.sh",
         "scripts/centos/cleanup.sh",
         "scripts/common/minimize.sh"
       ]
