@@ -1,5 +1,13 @@
-# Cache objects
-packer_cache/
-
-# For built boxes
+.DS_Store
+.bundle/
+.kitchen
+.kitchen.yml
 *.box
+*.variables.json
+/builds/
+/packer-*/
+Gemfile.lock
+iso
+packer_cache
+packer.log
+virtualfloppy.vfd
