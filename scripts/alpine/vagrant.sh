@@ -35,6 +35,7 @@ fi
 
 # User specific aliases and functions
 EOF
+fi
 
 cat << EOF >> /home/vagrant/.bash_profile
 # .bash_profile

@@ -37,9 +37,9 @@
       ],
       "format": "ova",
       "guest_additions_mode": "disable",
-      "guest_os_type": "RedHat_64",
+      "guest_os_type": "Fedora_64",
       "hard_drive_interface": "sata",
-      "output_directory": "packer-{{ user `vm_name` }}-virtualbox-iso",
+      "output_directory": "packer-{{ user `vm_name` }}-virtualbox",
       "post_shutdown_delay": "10s",
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--audio", "none"],
@@ -74,11 +74,13 @@
     {
       "type": "shell",
       "scripts": [
+        "scripts/fedora/fix-slow-dns.sh",
         "scripts/common/sshd.sh",
-        "scripts/centos/networking.sh",
-        "scripts/centos/cleanup.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/fedora/cleanup.sh",
         "scripts/common/minimize.sh"
-      ]
+      ],
+      "execute_command": "{{.Vars}} /bin/sh '{{.Path}}'"
     }
   ],
 
@@ -88,6 +90,12 @@
       "type": "shell-local",
       "only": ["qemu"],
       "inline": ["qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2"]
+    },
+    {
+      "keep_input_artifact": true,
+      "output": "box/{{user `vm_name`}}/{{user `vm_name`}}.{{.Provider}}.box",
+      "type": "vagrant",
+      "vagrantfile_template": "{{ user `vagrantfile_template` }}"
     }
   ],
 
@@ -110,6 +118,7 @@
     "ssh_password": "NextGen",
     "ssh_username": "root",
     "ssh_wait_timeout": "1200s",
-    "vm_name": "CentOS"
+    "vagrantfile_template": "Vagrantfile",
+    "vm_name": "Fedora"
   }
 }

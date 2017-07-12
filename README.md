@@ -14,7 +14,7 @@ Use the following command to build CentOS 7.3.1611 for qemu
 
     packer build -only virtualbox-iso -var-file conf/centos/c7-1611-minimal.json -var "kickstart=centos/c7-kvm-ks.cfg" centos.json
 
-## How to build alpine
+## Build alpine
 
 More boot time is required for virtualbox-iso.
 
@@ -46,5 +46,12 @@ The following command for build qemu
 
     export http_proxy=http://10.113.69.79:3128
     packer build -only qemu -var-file conf/alpine/3.6.2.json -var-file "nameserver=10.182.244.34" alpine-vagrant.json
+
+## Build CentOS
+
+The following command is used for
+
+## Build Fedora
+
 
 The following command is used for

@@ -4,6 +4,6 @@
   "iso_name": "CentOS-7-x86_64-Minimal-1611.iso",
   "iso_path": "/var/mirror/isos/CentOS/7.3",
   "iso_url": "",
-  "kickstart": "centos/",
+  "kickstart": "",
   "vm_name": "c7-1611-minimal"
 }
