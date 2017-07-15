@@ -49,7 +49,7 @@ rc-service sshd stop
 mount /dev/vg0/lv_root /mnt
 
 # Enable serial console
-sed -i 's/\\bdefault_kernel_opts=\"quiet\\b/& console=ttyS0,115200 console=tty0 ignore_loglevel/' /mnt/etc/update-extlinux.conf
+sed -i 's/^default_kernel_opts=\"quiet/& console=ttyS0,115200 console=tty0 ignore_loglevel/' /mnt/etc/update-extlinux.conf
 sed -i 's/^serial_port=.*/serial_port=0/' /mnt/etc/update-extlinux.conf
 
 SSHD_CONFIG=/mnt/etc/ssh/sshd_config

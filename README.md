@@ -23,29 +23,19 @@ The following information is required for build
 * DNS nameserver
 * Proxy for apk
 
-### Build ova or qcow2 file
+### Build qcow2 file and its corresponding vagrant box
 
-The following command for build virtualbox-iso, iso_path is provide at last so that is will overwrite that in conf/alpine/3.6.2.json
-
-    export http_proxy=http://10.182.172.49:3128
-    packer build -only virtualbox-iso -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" -var "iso_path=/home/tshen/Downloads" alpine.json
-
-The following command for build qemu
+Use the following command to build, you will find qcow2 file under images/qemu and ova file under box/
 
     export http_proxy=http://10.113.69.79:3128
     packer build -only qemu -var-file conf/alpine/3.6.2.json -var-file "nameserver=10.182.244.34" alpine.json
 
-### Build vagrant box
+### Build virtualbox ova and its corresponding vagrant box
 
-The following command for build virtualbox-iso, iso_path is provide at last so that is will overwrite that in conf/3.6.2.json
+Use the following command to build
 
     export http_proxy=http://10.182.172.49:3128
     packer build -only virtualbox-iso -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" -var "iso_path=/home/tshen/Downloads" alpine-vagrant.json
-
-The following command for build qemu
-
-    export http_proxy=http://10.113.69.79:3128
-    packer build -only qemu -var-file conf/alpine/3.6.2.json -var-file "nameserver=10.182.244.34" alpine-vagrant.json
 
 ## Build CentOS
 

@@ -2,7 +2,7 @@
   "builders": [
     {
       "type": "qemu",
-      "boot_wait": "10s",
+      "boot_wait": "6s",
       "accelerator": "kvm",
       "format": "qcow2",
       "output_directory": "qemu-{{ user `vm_name` }}",
@@ -37,10 +37,14 @@
     {
       "type": "virtualbox-iso",
       "boot_wait": "30s",
+      "export_opts": [
+        "--vsys", "0"
+      ],
+      "format": "ova",      
       "guest_additions_mode": "disable",
       "guest_os_type": "Linux_64",
       "hard_drive_interface": "sata",
-      "output_directory": "virtual-{{ user `vm_name` }}",
+      "output_directory": "virtualbox-{{ user `vm_name` }}",
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--audio", "none"],
         ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"],
@@ -53,7 +57,7 @@
       "boot_command": [
         "root<enter><wait>",
         "ifconfig eth0 up && udhcpc -i eth0<enter><wait10>",
-        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/install.sh<enter><wait>",
+        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/alpine/install.sh<enter><wait>",
         "dos2unix install.sh<enter>",
         "sh install.sh -d {{user `domain`}} -n {{user `nameserver`}} -p {{user `ssh_password`}} -P {{user `http_proxy`}} -r {{user `repository`}} -z {{user `timezone`}}<enter>"
       ],
@@ -90,6 +94,27 @@
 
   "post-processors": [
     {
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu-{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
+      "type": "shell-local",
+      "only": ["qemu"],
+      "inline": [
+        "qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2",
+        "mkdir -p $DEST",
+        "xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME.qcow2.xz"
+      ]
+    },
+
+    {
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=virtualbox-{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
+      "type": "shell-local",
+      "only": ["virtualbox-iso"],
+      "inline": [
+        "mkdir -p $DEST",
+        "cp $OUTPUT/$IMAGENAME.ova $DEST/"
+      ]
+    },
+
+    {
       "keep_input_artifact": false,
       "output": "box/{{user `vm_name`}}/{{user `vm_name`}}.{{.Provider}}.box",
       "type": "vagrant",
@@ -119,7 +144,7 @@
     "ssh_password": "vagrant",
     "ssh_wait_timeout": "10m",
     "timezone": "Asia/Shanghai",
-    "vagrantfile_template": "Vagrantfile",
+    "vagrantfile_template": "",
     "vm_name": "alpine"
   }
 }

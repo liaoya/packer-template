@@ -15,7 +15,7 @@ date > /etc/vagrant_box_build_time
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 apk add bash curl
 
-adduser -D vagrant -G users -s /bin/bash
+adduser -D -s /bin/bash vagrant
 echo "vagrant:vagrant" | chpasswd
 
 mkdir -pm 700 /home/vagrant/.ssh
@@ -35,7 +35,6 @@ fi
 
 # User specific aliases and functions
 EOF
-fi
 
 cat << EOF >> /home/vagrant/.bash_profile
 # .bash_profile
