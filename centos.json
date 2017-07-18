@@ -72,6 +72,13 @@
 
   "provisioners": [
     {
+      "environment_vars": [
+        "HTTP_PROXY={{user `http_proxy`}}",
+        "NO_PROXY={{user `no_proxy`}}",        
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
       "type": "shell",
       "scripts": [
         "scripts/common/sshd.sh",
@@ -85,10 +92,14 @@
 
   "post-processors": [
     {
-      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu-{{ user `vm_name` }}"],
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu-{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
       "type": "shell-local",
       "only": ["qemu"],
-      "inline": ["qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2"]
+      "inline": [
+        "qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2",
+        "mkdir -p $DEST",
+        "xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME.qcow2.xz"        
+      ]
     },
 
     {
@@ -99,6 +110,13 @@
         "mkdir -p $DEST",
         "cp $OUTPUT/$IMAGENAME.ova $DEST/$IMAGENAME-virtualbox.ova"
       ]
+    },
+
+    {
+      "keep_input_artifact": false,
+      "output": "box/{{user `vm_name`}}/{{user `vm_name`}}-{{.Provider}}.box",
+      "type": "vagrant",
+      "vagrantfile_template": "{{ user `vagrantfile_template` }}"
     }
   ],
 

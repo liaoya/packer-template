@@ -1,6 +1,6 @@
 # packer-template
 
-My own packer template repository
+My own packer template repository. I prefer to build a customized image based on official CentOS or Fedora vagrant box, extract qcow2 files
 
 ## Prepare
 
