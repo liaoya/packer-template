@@ -7,7 +7,7 @@ TEMP=`getopt -o d:n:p:P:r:z: --long domain:,nameserver:,passwrod:,proxy:,reposit
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
-DOMAIN="local" NAMESERVER="10.182.244.34" PASSWORD="NextGen" PROXY="http://10.113.69.79:3128" REPOSITORY="-1" TIMEZONE="Asia/Shanghai"
+DOMAIN="local" NAMESERVER="10.182.244.34" PASSWORD="packer" PROXY="http://10.113.69.79:3128" REPOSITORY="-1" TIMEZONE="Asia/Shanghai"
 while true ; do
     case "$1" in
         -d|--domain)

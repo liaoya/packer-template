@@ -4,7 +4,7 @@
       "type": "qemu",
       "accelerator": "kvm",
       "format": "qcow2",
-      "output_directory": "packer-{{ user `vm_name` }}-qemu",
+      "output_directory": "qemu-{{ user `vm_name` }}",
       "qemuargs": [
         ["-m", "{{ user `memory` }}"],
         ["-smp", "cpus={{ user `cpus` }}"]
@@ -39,7 +39,7 @@
       "guest_additions_mode": "disable",
       "guest_os_type": "RedHat_64",
       "hard_drive_interface": "sata",
-      "output_directory": "packer-{{ user `vm_name` }}-virtualbox-iso",
+      "output_directory": "virtualbox-{{ user `vm_name` }}",
       "post_shutdown_delay": "10s",
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--audio", "none"],
@@ -75,7 +75,8 @@
       "type": "shell",
       "scripts": [
         "scripts/common/sshd.sh",
-        "scripts/centos/networking.sh",
+        "scripts/common/networking.sh",
+        "scripts/common/vagrant.sh",
         "scripts/centos/cleanup.sh",
         "scripts/common/minimize.sh"
       ]
@@ -84,12 +85,24 @@
 
   "post-processors": [
     {
-      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=packer-{{ user `vm_name` }}-qemu"],
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu-{{ user `vm_name` }}"],
       "type": "shell-local",
       "only": ["qemu"],
       "inline": ["qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2"]
+    },
+
+    {
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=virtualbox-{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
+      "type": "shell-local",
+      "only": ["virtualbox-iso"],
+      "inline": [
+        "mkdir -p $DEST",
+        "cp $OUTPUT/$IMAGENAME.ova $DEST/$IMAGENAME-virtualbox.ova"
+      ]
     }
   ],
+
+
 
   "variables": {
     "cpus": "1",
@@ -107,7 +120,7 @@
     "no_proxy": "{{env `no_proxy`}}",
 
     "shutdown_command": "shutdown -P now",
-    "ssh_password": "NextGen",
+    "ssh_password": "packer",
     "ssh_username": "root",
     "ssh_wait_timeout": "1200s",
     "vm_name": "CentOS"

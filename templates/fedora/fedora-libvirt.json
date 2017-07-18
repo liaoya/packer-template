@@ -115,7 +115,7 @@
     "no_proxy": "{{env `no_proxy`}}",
 
     "shutdown_command": "shutdown -P now",
-    "ssh_password": "NextGen",
+    "ssh_password": "packer",
     "ssh_username": "root",
     "ssh_wait_timeout": "1200s",
     "vagrantfile_template": "Vagrantfile",

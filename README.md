@@ -2,6 +2,12 @@
 
 My own packer template repository
 
+## Prepare
+
+Set `PACKER_KEY_INTERVAL`=10ms to speed console input
+
+Use packer to build TPD images. Please set `CURLOPT_SSL_VERIFYPEER` to false and the http server host ISO in no_proxy list
+
 ## How to build CentOS
 
 I suggest use CentOS official vagrant box since they're always up-to-date
@@ -12,7 +18,7 @@ Use the following command to build CentOS 7.3.1611 for virtualbox-iso
 
 Use the following command to build CentOS 7.3.1611 for qemu
 
-    packer build -only virtualbox-iso -var-file conf/centos/c7-1611-minimal.json -var "kickstart=centos/c7-kvm-ks.cfg" centos.json
+    packer build -only qemu -var-file conf/centos/c7-1611-minimal.json -var "kickstart=centos/c7-kvm-ks.cfg" centos.json
 
 ## Build alpine
 
@@ -42,6 +48,5 @@ Use the following command to build
 The following command is used for
 
 ## Build Fedora
-
 
 The following command is used for
