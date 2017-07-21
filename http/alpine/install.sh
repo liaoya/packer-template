@@ -52,6 +52,8 @@ mount /dev/vg0/lv_root /mnt
 sed -i 's/^default_kernel_opts=\"quiet/& console=ttyS0,115200 console=tty0 ignore_loglevel/' /mnt/etc/update-extlinux.conf
 sed -i 's/^serial_port=.*/serial_port=0/' /mnt/etc/update-extlinux.conf
 
+sed -i "/^#http.*(!edge).*/s/#//g" /mnt/etc/apk/repositories
+
 SSHD_CONFIG=/mnt/etc/ssh/sshd_config
 sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/g' $SSHD_CONFIG
 grep -s -q -w "^UseDNS yes" $SSHD_CONFIG && sed -i "/UseDNS/d" $SSHD_CONFIG && sed -i "/^# no default banner path/i UseDNS no" $SSHD_CONFIG

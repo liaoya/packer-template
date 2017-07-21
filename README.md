@@ -1,6 +1,8 @@
 # packer-template
 
-My own packer template repository. I prefer to build a customized image based on official CentOS or Fedora vagrant box, extract qcow2 files
+My own packer template repository. I prefer to build a customized image based on official CentOS or Fedora vagrant box, extract qcow2 files.
+
+The only reason I want to build fedora is the official build use plain disk layout
 
 ## Prepare
 
@@ -41,7 +43,7 @@ Use the following command to build, you will find qcow2 file under images/qemu a
 Use the following command to build
 
     export http_proxy=http://10.182.172.49:3128
-    packer build -only virtualbox-iso -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" -var "iso_path=/home/tshen/Downloads" alpine-vagrant.json
+    packer build -only virtualbox-iso -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" -var "iso_path=/home/tshen/Downloads" alpine.json
 
 ## Build CentOS
 

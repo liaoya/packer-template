@@ -50,7 +50,7 @@
         ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"],
         ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
         ["modifyvm", "{{.Name}}", "--nictype1", "virtio"],
-        ["modifyvm", "{{.Name}}", "--usb", "on", "--usbxhci", "on"]
+        ["modifyvm", "{{.Name}}", "--usb", "on", "--usbehci", "on"]
       ],
       "vm_name": "{{ user `vm_name` }}",
 
