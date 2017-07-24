@@ -36,13 +36,17 @@ The following information is required for build
 Use the following command to build, you will find qcow2 file under images/qemu and ova file under box/
 
     export http_proxy=http://10.113.69.79:3128
-    packer build -only qemu -var-file conf/alpine/3.6.2.json -var-file "nameserver=10.182.244.34" alpine.json
+    mkdir -p qemu
+    rm -fr images/alpine* box/alpine* qemu/alpine*
+    packer build -only qemu -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
 
 ### Build virtualbox ova and its corresponding vagrant box
 
 Use the following command to build
 
     export http_proxy=http://10.182.172.49:3128
+    mkdir -p virtualbox
+    rm -fr images/alpine* box/alpine* virtualbox/alpine*
     packer build -only virtualbox-iso -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" -var "iso_path=/home/tshen/Downloads" alpine.json
 
 ## Build CentOS

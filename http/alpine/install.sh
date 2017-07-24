@@ -38,10 +38,12 @@ setup-timezone -z $TIMEZONE
 setup-sshd -c openssh
 /etc/init.d/hostname --quiet restart
 setup-proxy -q $PROXY
-. /etc/profile.d/proxy.sh
+[ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 setup-apkrepos $REPOSITORY
 setup-ntp -c chrony
+# For virtualbox
 [ -b /dev/vda ] && echo -e "y\n" | setup-disk -m sys -s 0 -L /dev/vda
+# For qemu
 [ -b /dev/sda ] && echo -e "y\n" | setup-disk -m sys -s 0 -L /dev/sda
 
 # Post Installation
@@ -52,6 +54,7 @@ mount /dev/vg0/lv_root /mnt
 sed -i 's/^default_kernel_opts=\"quiet/& console=ttyS0,115200 console=tty0 ignore_loglevel/' /mnt/etc/update-extlinux.conf
 sed -i 's/^serial_port=.*/serial_port=0/' /mnt/etc/update-extlinux.conf
 
+# Enable all stable repository
 sed -i "/^#http.*(!edge).*/s/#//g" /mnt/etc/apk/repositories
 
 SSHD_CONFIG=/mnt/etc/ssh/sshd_config

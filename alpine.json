@@ -5,7 +5,7 @@
       "boot_wait": "6s",
       "accelerator": "kvm",
       "format": "qcow2",
-      "output_directory": "qemu-{{ user `vm_name` }}",
+      "output_directory": "qemu/{{ user `vm_name` }}",
       "qemuargs": [
         ["-m", "{{ user `memory` }}"],
         ["-smp", "cpus={{ user `cpus` }}"]
@@ -44,7 +44,7 @@
       "guest_additions_mode": "disable",
       "guest_os_type": "Linux_64",
       "hard_drive_interface": "sata",
-      "output_directory": "virtualbox-{{ user `vm_name` }}",
+      "output_directory": "virtualbox/{{ user `vm_name` }}",
       "vboxmanage": [
         ["modifyvm", "{{.Name}}", "--audio", "none"],
         ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"],
@@ -101,7 +101,7 @@
 
   "post-processors": [
     {
-      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu-{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu/{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
       "type": "shell-local",
       "only": ["qemu"],
       "inline": [
@@ -112,7 +112,7 @@
     },
 
     {
-      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=virtualbox-{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=virtualbox/{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
       "type": "shell-local",
       "only": ["virtualbox-iso"],
       "inline": [
