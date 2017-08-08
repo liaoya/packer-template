@@ -55,7 +55,8 @@ sed -i 's/^default_kernel_opts=\"quiet/& console=ttyS0,115200 console=tty0 ignor
 sed -i 's/^serial_port=.*/serial_port=0/' /mnt/etc/update-extlinux.conf
 
 # Enable all stable repository
-sed -i "/^#http.*(!edge).*/s/#//g" /mnt/etc/apk/repositories
+sed -i '/^#http.*edge.*/! s/#//g' /mnt/etc/apk/repositories
+sed -i '/\/media/ s//#\/media/g' /mnt/etc/apk/repositories
 
 SSHD_CONFIG=/mnt/etc/ssh/sshd_config
 sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/g' $SSHD_CONFIG

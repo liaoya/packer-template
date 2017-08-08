@@ -13,6 +13,7 @@ date > /etc/vagrant_box_build_time
 #   on first 'vagrant up', overwritten with a local, secure key.
 #
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
+apk update
 apk add bash curl
 
 adduser -D -s /bin/bash vagrant
