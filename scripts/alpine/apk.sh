@@ -11,4 +11,7 @@ fi
 
 if [ $PACKER_BUILDER_TYPE == "virtualbox-iso" ]; then
     apk add virtualbox-guest-additions virtualbox-guest-modules-virthardened
+    echo "vboxpci" >> /etc/modules
+    echo "vboxdrv" >> /etc/modules
+    echo "vboxsf" >> /etc/modules
 fi
