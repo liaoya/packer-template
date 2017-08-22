@@ -3,7 +3,7 @@ set -eux
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 
 apk update
-apk add wget file sshpass tmux vlan
+apk add wget file sshpass tmux vlan iproute2
 
 if [ $PACKER_BUILDER_TYPE == "qemu" ]; then
     apk add qemu-guest-agent

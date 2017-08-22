@@ -6,9 +6,15 @@ The only reason I want to build fedora is the official build use plain disk layo
 
 ## Prepare
 
-Set `PACKER_KEY_INTERVAL`=10ms to speed console input
+Put the following in `~/.bash_profile` or in command line. 
+If iso file hosts in intranet server, please add that server in no_proxy list.
 
-Use packer to build TPD images. Please set `CURLOPT_SSL_VERIFYPEER` to false and the http server host ISO in no_proxy list
+```bash
+export PACKER_KEY_INTERVAL=10ms
+export PACKER_CACHE_DIR=~/.cache/packer
+[ -d $PACKER_CACHE_DIR ] || mkdir -p $PACKER_CACHE_DIR
+export CURLOPT_SSL_VERIFYPEER=false
+```
 
 ## How to build CentOS
 
@@ -33,7 +39,7 @@ The following information is required for build
 
 ### Build qcow2 file and its corresponding vagrant box
 
-Use the following command to build, you will find qcow2 file under images/qemu and ova file under box/
+Use the following command to build  at Nanjing site, qcow2 file is under images/qemu and vagrant box is under box/
 
     export http_proxy=http://10.113.69.79:3128
     mkdir -p qemu
@@ -42,7 +48,7 @@ Use the following command to build, you will find qcow2 file under images/qemu a
 
 ### Build virtualbox ova and its corresponding vagrant box
 
-Use the following command to build
+Use the following command to build at Nanjing site, ova file is under virtualbox and vagrant box is under box/
 
     export http_proxy=http://10.182.172.49:3128
     mkdir -p virtualbox
