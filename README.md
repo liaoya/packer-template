@@ -6,6 +6,8 @@ The only reason I want to build fedora is the official build use plain disk layo
 
 ## Prepare
 
+### On Linux
+
 Put the following in `~/.bash_profile` or in command line. 
 If iso file hosts in intranet server, please add that server in no_proxy list.
 
@@ -16,17 +18,30 @@ export PACKER_CACHE_DIR=~/.cache/packer
 export CURLOPT_SSL_VERIFYPEER=false
 ```
 
+### On Windows
+
+```dos
+set PACKER_KEY_INTERVAL=10ms
+set PACKER_CACHE_DIR=%APPDATA%\.packer_cache
+mkdir %PACKER_CACHE_DIR%
+set CURLOPT_SSL_VERIFYPEER=false
+```
+
 ## How to build CentOS
 
 I suggest use CentOS official vagrant box since they're always up-to-date
 
 Use the following command to build CentOS 7.3.1611 for virtualbox-iso
 
-    packer build -only virtualbox-iso -var-file conf/centos/c7-1611-minimal.json -var "iso_path=/home/tshen/Downloads" -var "kickstart=centos/c7-sata-ks.cfg" centos.json
+```bash
+packer build -only virtualbox-iso -var-file conf/centos/c7-1611-minimal.json -var "iso_path=/home/tshen/Downloads" -var "kickstart=centos/c7-sata-ks.cfg" centos.json
+```
 
 Use the following command to build CentOS 7.3.1611 for qemu
 
-    packer build -only qemu -var-file conf/centos/c7-1611-minimal.json -var "kickstart=centos/c7-kvm-ks.cfg" centos.json
+```bash
+packer build -only qemu -var-file conf/centos/c7-1611-minimal.json -var "kickstart=centos/c7-kvm-ks.cfg" centos.json
+```
 
 ## Build alpine
 
@@ -41,19 +56,22 @@ The following information is required for build
 
 Use the following command to build  at Nanjing site, qcow2 file is under images/qemu and vagrant box is under box/
 
-    export http_proxy=http://10.113.69.79:3128
-    mkdir -p qemu
-    rm -fr images/alpine* box/alpine* qemu/alpine*
-    packer build -only qemu -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
+```shell
+mkdir -p qemu
+rm -fr images/alpine* box/alpine*
+packer build -only qemu -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
+```
 
 ### Build virtualbox ova and its corresponding vagrant box
 
 Use the following command to build at Nanjing site, ova file is under virtualbox and vagrant box is under box/
 
-    export http_proxy=http://10.182.172.49:3128
-    mkdir -p virtualbox
-    rm -fr images/alpine* box/alpine* virtualbox/alpine*
-    packer build -only virtualbox-iso -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" -var "iso_path=/home/tshen/Downloads" alpine.json
+```shell
+export http_proxy=http://10.182.172.49:3128
+mkdir -p virtualbox
+rm -fr images/alpine* box/alpine* virtualbox/alpine*
+packer build -only virtualbox-iso -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
+```
 
 ## Build CentOS
 

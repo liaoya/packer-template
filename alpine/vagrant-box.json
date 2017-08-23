@@ -1,0 +1,10 @@
+{
+    "name": "SaaS/alpine",
+    "versions": [{
+        "version": "3.6.2",
+        "providers": [{
+            "name": "virtualbox",
+            "url": "box/alpine-3.6.2/alpine-3.6.2-virtualbox.box"
+        }]
+    }]
+}

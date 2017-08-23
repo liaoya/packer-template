@@ -15,7 +15,7 @@
       "boot_command": [
         "root<enter><wait>",
         "ifconfig eth0 up && udhcpc -i eth0<enter><wait10>",
-        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/alpine/install.sh<enter><wait>",
+        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/install.sh<enter><wait>",
         "dos2unix install.sh<enter>",
         "sh install.sh -d {{user `domain`}} -n {{user `nameserver`}} -p {{user `ssh_password`}} -P {{user `http_proxy`}} -r {{user `repository`}} -z {{user `timezone`}}<enter>"
       ],
@@ -57,7 +57,7 @@
       "boot_command": [
         "root<enter><wait>",
         "ifconfig eth0 up && udhcpc -i eth0<enter><wait10>",
-        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/alpine/install.sh<enter><wait>",
+        "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/install.sh<enter><wait>",
         "dos2unix install.sh<enter>",
         "sh install.sh -d {{user `domain`}} -n {{user `nameserver`}} -p {{user `ssh_password`}} -P {{user `http_proxy`}} -r {{user `repository`}} -z {{user `timezone`}}<enter>"
       ],
@@ -89,12 +89,12 @@
       ],
       "type": "shell",
       "scripts": [
-        "scripts/alpine/sshd.sh",
-        "scripts/alpine/vagrant.sh",
-        "scripts/alpine/sudoers.sh",
-        "scripts/alpine/apk.sh",
-        "scripts/alpine/cleanup.sh",
-        "scripts/alpine/minimize.sh"
+        "scripts/sshd.sh",
+        "scripts/vagrant.sh",
+        "scripts/sudoers.sh",
+        "scripts/apk.sh",
+        "scripts/cleanup.sh",
+        "scripts/minimize.sh"
       ],
       "execute_command": "{{.Vars}} /bin/sh '{{.Path}}'"
     }
@@ -102,7 +102,7 @@
 
   "post-processors": [
     {
-      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu/{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu/{{ user `vm_name` }}", "DEST=image/{{ user `vm_name` }}"],
       "type": "shell-local",
       "only": ["qemu"],
       "inline": [
@@ -113,7 +113,7 @@
     },
 
     {
-      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=virtualbox/{{ user `vm_name` }}", "DEST=images/{{ user `vm_name` }}"],
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=virtualbox/{{ user `vm_name` }}", "DEST=image/{{ user `vm_name` }}"],
       "type": "shell-local",
       "only": ["virtualbox-iso"],
       "inline": [
