@@ -1,0 +1,15 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+    config.vm.define ""
+    config.vm.box = "liaoya/alpiine"
+
+    config.vm.provider :virtualbox do |v, override|
+        v.customize ["modifyvm", :id, "--memory", 128]
+        v.customize ["modifyvm", :id, "--cpus", 1]
+        v.customize ["modifyvm", :id, "--nictype1", "virtio"]
+        v.customize ["modifyvm", :id, "--audio", "none"]
+        v.customize ["modifyvm", :id, "--usb", "off"]
+    end
+end

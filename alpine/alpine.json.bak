@@ -49,7 +49,7 @@
         ["modifyvm", "{{.Name}}", "--audio", "none"],
         ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"],
         ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
-        ["modifyvm", "{{.Name}}", "--nictype1", "virtio", "--natdnshostresolver1", "on"],
+        ["modifyvm", "{{.Name}}", "--nictype1", "virtio"],
         ["modifyvm", "{{.Name}}", "--usb", "on", "--usbehci", "on"]
       ],
       "vm_name": "{{ user `vm_name` }}",
@@ -102,16 +102,17 @@
 
   "post-processors": [
     {
-      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu/{{ user `vm_name` }}", "DEST=image/{{ user `vm_name` }}", "LIBGUESTFS_BACKEND=direct"],
+      "environment_vars": ["IMAGENAME={{user `vm_name`}}", "OUTPUT=qemu/{{ user `vm_name` }}", "DEST=image/{{ user `vm_name` }}"],
       "type": "shell-local",
       "only": ["qemu"],
       "inline": [
         "qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2",
         "mkdir -p $DEST",
-        "[ $(command -v virt-sparsify) ] && virt-sparsify $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME.qcow2",
-        "[ -f $DEST/$IMAGENAME.qcow2 ] && mv -f $DEST/$IMAGENAME.qcow2 $OUTPUT/$IMAGENAME.qcow2",
-        "[ $(command -v pxz) ] && pxz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz",
-        "[ -f $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz ] || xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz"
+        "export LIBGUESTFS_BACKEND=direct",
+        "[[ $(command -v virt-sparsify) ]] && virt-sparsify $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME.qcow2",
+        "[[ -f $DEST/$IMAGENAME.qcow2 ]] && mv -f $DEST/$IMAGENAME.qcow2 $OUTPUT/$IMAGENAME.qcow2",
+        "[[ $(command -v pxz) ]] && pxz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz",
+        "[[ -f $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz ]] || xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz"
       ]
     },
 
@@ -155,8 +156,8 @@
     "ssh_password": "vagrant",
     "ssh_wait_timeout": "10m",
     "timezone": "Asia/Shanghai",
-    "vagrantfile_template": "tpl/vagrantfile",
-    "version": "{{isotime \"20060102\"}}",
+    "vagrantfile_template": "",
+
     "vm_name": "alpine"
   }
 }

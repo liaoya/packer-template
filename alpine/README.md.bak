@@ -6,7 +6,7 @@
 
 ### Prepare
 
-Put the following in `~/.bash_profile` or in command line.
+Put the following in `~/.bash_profile` or in command line. 
 If iso file hosts in intranet server, please add that server in no_proxy list.
 
 ```bash
@@ -19,7 +19,7 @@ export CURLOPT_SSL_VERIFYPEER=false
 More boot time is required for virtualbox-iso. The following information is required for build
 
 - DNS nameserver
-- Proxy for apk
+- Proxy for apk, set the environment variable `http_proxy`, `https_proxy`, `no_proxy`
 
 if build at home, use `-var "iso_url=http://mirrors.ustc.edu.cn/alpine/v3.6/releases/x86_64/alpine-virt-3.6.2-x86_64.iso"`
 
@@ -28,8 +28,7 @@ if build at home, use `-var "iso_url=http://mirrors.ustc.edu.cn/alpine/v3.6/rele
 Use the following command to build  at Nanjing site, qcow2 file is under image/ and vagrant box is under box/
 
 ```shell
-export http_proxy=http://cn-proxy.jp.oracle.com:80
-rm -fr qemu/* image/* box/*
+rm -fr qemu/*
 packer build -only qemu -var-file conf/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
 ```
 
@@ -38,20 +37,11 @@ packer build -only qemu -var-file conf/3.6.2.json -var "nameserver=10.182.244.34
 Use the following command to build at Nanjing site, ova file is under image/ and vagrant box is under box/
 
 ```shell
-export http_proxy=http://cn-proxy.jp.oracle.com:80
-rm -fr virtualbox/* image/* box/*
+rm -fr virtualbox/*
 packer build -only virtualbox-iso -var-file conf/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
 ```
 
 The root is disabled via ssh from remote. Please use vagrant/vagrant for login.
-
-### Generate json file for `vagrant box add`
-
-```
-rm -f vagrant-box-def.json
-python ../gen-vagrant-def.py -n "SaaS/alpine-3.6.2" -v "2017.09.04" -p "virtualbox" -u "box/alpine-3.6.2/alpine-3.6.2-virtualbox-20170904.box"
-python ../gen-vagrant-def.py -n "SaaS/alpine-3.6.2" -v "2017.09.04" -p "libvirt" -u "box/alpine-3.6.2/alpine-3.6.2-libvirt-20170904.box"
-```
 
 ### Import
 
