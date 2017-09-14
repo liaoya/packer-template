@@ -13,10 +13,10 @@ date > /etc/vagrant_box_build_time
 #   on first 'vagrant up', overwritten with a local, secure key.
 #
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
-apk update
-apk add bash curl
+apk update -q --no-progress
+apk add -q --no-progress bash
 
-adduser -D -s /bin/bash vagrant
+adduser -D -s /bin/bash -G users vagrant
 echo "vagrant:vagrant" | chpasswd
 
 mkdir -pm 700 /home/vagrant/.ssh
@@ -48,6 +48,7 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # User specific environment and startup programs
+# export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 EOF
 
 chown vagrant:users /home/vagrant/.bashrc /home/vagrant/.bash_profile

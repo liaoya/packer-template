@@ -27,7 +27,7 @@
       "shutdown_command": "{{user `shutdown_command`}}",
       "ssh_password": "{{user `ssh_password`}}",
       "ssh_username": "{{user `ssh_username`}}",
-      "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
+      "ssh_timeout": "{{user `ssh_timeout`}}"
     },
 
     {
@@ -66,7 +66,7 @@
       "shutdown_command": "{{user `shutdown_command`}}",
       "ssh_password": "{{user `ssh_password`}}",
       "ssh_username": "{{user `ssh_username`}}",
-      "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"        
+      "ssh_timeout": "{{user `ssh_timeout`}}"        
     }
   ],
 
@@ -117,7 +117,7 @@
     "shutdown_command": "shutdown -P now",
     "ssh_password": "packer",
     "ssh_username": "root",
-    "ssh_wait_timeout": "1200s",
+    "ssh_timeout": "1200s",
     "vagrantfile_template": "Vagrantfile",
     "vm_name": "Fedora"
   }

@@ -6,6 +6,8 @@
 
 ### Prepare
 
+Packer 1.1.1 is required since `ssh_timeout` was renamed to `ssh_timeout`.
+
 Put the following in `~/.bash_profile` or in command line.
 If iso file hosts in intranet server, please add that server in no_proxy list.
 
@@ -47,10 +49,10 @@ The root is disabled via ssh from remote. Please use vagrant/vagrant for login.
 
 ### Generate json file for `vagrant box add`
 
-```
+```shell
 rm -f vagrant-box-def.json
-python ../gen-vagrant-def.py -n "SaaS/alpine-3.6.2" -v "2017.09.04" -p "virtualbox" -u "box/alpine-3.6.2/alpine-3.6.2-virtualbox-20170904.box"
-python ../gen-vagrant-def.py -n "SaaS/alpine-3.6.2" -v "2017.09.04" -p "libvirt" -u "box/alpine-3.6.2/alpine-3.6.2-libvirt-20170904.box"
+python ../gen-vagrant-def.py -n "alpine/3.6.2" -v "20171016" -p "virtualbox" -u "box/alpine-3.6.2/alpine-3.6.2-virtualbox-20171016.box"
+python ../gen-vagrant-def.py -n "alpine/3.6.2" -v "20171016" -p "libvirt" -u "box/alpine-3.6.2/alpine-3.6.2-libvirt-20171016.box"
 ```
 
 ### Import

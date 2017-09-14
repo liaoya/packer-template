@@ -1,11 +1,11 @@
 set -eux
 
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
-
-apk add sudo
+apk update -q --no-progress
+apk add -q --no-progress sudo
 adduser vagrant wheel
 
-cat << EOF >> /etc/sudoers
+cat << EOF > /etc/sudoers
 Defaults exempt_group=wheel
 %wheel ALL=NOPASSWD:ALL
 

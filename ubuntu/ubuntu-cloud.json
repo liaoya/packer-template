@@ -3,8 +3,9 @@
     "builders": [
         {
             "type": "qemu",
-            "boot_wait": "6s",
             "accelerator": "kvm",
+            "boot_wait": "6s",
+            "disk_image": "true",
             "format": "qcow2",
             "output_directory": "qemu/{{ user `vm_name` }}",
             "qemuargs": [
@@ -15,30 +16,17 @@
                 [
                     "-smp",
                     "cpus={{ user `cpus` }}"
+                ],
+                [
+                    "-cdrom",
+                    "seed/seed.iso"
                 ]
             ],
             "vm_name": "{{ user `vm_name` }}.qcow2",
             "boot_command": [
-                "{{ user `boot_command_prefix` }}",
-                "/install/vmlinuz noapic ",
-                "initrd=/install/initrd.gz ",
-                "file=/floppy/{{ user `preseed` }} ",
-                "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
-                "hostname={{ user `hostname` }} ",
-                "grub-installer/bootdev=/dev/vda<wait> ",
-                "fb=false debconf/frontend=noninteractive ",
-                "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
-                "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
-                "passwd/user-fullname={{ user `ssh_fullname` }} ",
-                "passwd/user-password={{ user `ssh_password` }} ",
-                "passwd/user-password-again={{ user `ssh_password` }} ",
-                "passwd/username={{ user `ssh_username` }} ",
-                "-- <enter>"
+                "<enter>"
             ],
             "disk_size": "{{ user `disk_size` }}",
-            "floppy_files": [
-                "http/{{ user `preseed` }}"
-            ],
             "headless": "{{ user `headless` }}",
             "iso_checksum": "{{ user `iso_checksum` }}",
             "iso_checksum_type": "{{ user `iso_checksum_type` }}",
@@ -51,8 +39,9 @@
             "ssh_username": "{{ user `ssh_username` }}",
             "ssh_timeout": "{{user `ssh_timeout`}}"
         },
+
         {
-            "type": "virtualbox-iso",
+            "type": "virtualbox-ovf",
             "boot_wait": "10s",
             "export_opts": [
                 "--vsys",
@@ -60,11 +49,9 @@
             ],
             "format": "ova",
             "guest_additions_mode": "disable",
-            "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
-            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
-            "hard_drive_interface": "sata",
             "output_directory": "virtualbox/{{ user `vm_name` }}",
             "post_shutdown_delay": "1m",
+            "source_path": "virtualbox/{{ user `ubuntu_name` }}/{{ user `ubuntu_name` }}.ova",
             "vboxmanage": [
                 [
                     "modifyvm",
@@ -84,37 +71,15 @@
             "virtualbox_version_file": ".vbox_version",
             "vm_name": "{{ user `vm_name` }}",
             "boot_command": [
-                "{{ user `boot_command_prefix` }}",
-                "/install/vmlinuz noapic ",
-                "initrd=/install/initrd.gz ",
-                "file=/floppy/{{ user `preseed` }} ",
-                "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
-                "hostname={{ user `hostname` }} ",
-                "grub-installer/bootdev=/dev/sda<wait> ",
-                "fb=false debconf/frontend=noninteractive ",
-                "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
-                "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
-                "passwd/user-fullname={{ user `ssh_fullname` }} ",
-                "passwd/user-password={{ user `ssh_password` }} ",
-                "passwd/user-password-again={{ user `ssh_password` }} ",
-                "passwd/username={{ user `ssh_username` }} ",
-                "-- <enter>"
-            ],
-            "disk_size": "{{ user `disk_size` }}",
-            "floppy_files": [
-                "http/{{ user `preseed` }}"
+                "<enter>"
             ],
             "headless": "{{ user `headless` }}",
-            "iso_checksum": "{{ user `iso_checksum` }}",
-            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
-            "iso_urls": [
-                "{{ user `iso_path` }}/{{ user `iso_name` }}",
-                "{{ user `iso_url` }}"
-            ],
+            "checksum": "{{ user `checksum` }}",
+            "checksum_type": "{{ user `checksum_type` }}",
             "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_timeout": "{{user `ssh_timeout`}}"
+            "ssh_timeout": "{{user `ssh_timeout`}}"     
         }
     ],
     "post-processors": [
@@ -122,7 +87,7 @@
             "environment_vars": [
                 "IMAGENAME={{user `vm_name`}}",
                 "OUTPUT=qemu/{{ user `vm_name` }}",
-                "DEST=image/{{ user `vm_name` }}"
+                "DEST=image/{{ user `ubuntu_name` }}"
             ],
             "type": "shell-local",
             "only": [
@@ -138,24 +103,26 @@
                 "[ -f $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz ] || xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz"
             ]
         },
+     
         {
             "environment_vars": [
                 "IMAGENAME={{user `vm_name`}}",
                 "OUTPUT=virtualbox/{{ user `vm_name` }}",
-                "DEST=image/{{ user `vm_name` }}"
+                "DEST=image/{{ user `ubuntu_name` }}"
             ],
             "type": "shell-local",
             "only": [
-                "virtualbox-iso"
+                "virtualbox-ovf"
             ],
             "inline": [
                 "mkdir -p $DEST",
                 "cp -pr $OUTPUT/$IMAGENAME.ova $DEST/$IMAGENAME-virtualbox-{{user `version`}}.ova"
             ]
         },
+
         {
             "keep_input_artifact": false,
-            "output": "box/{{ user `vm_name` }}/{{user `vm_name`}}-{{user `version`}}-{{.Provider}}.box",
+            "output": "box/{{ user `ubuntu_name` }}/{{user `vm_name`}}-{{user `version`}}-{{.Provider}}.box",
             "type": "vagrant",
             "vagrantfile_template": "{{ user `vagrantfile_template` }}"
         }
@@ -182,14 +149,9 @@
                 "custom/setup-repos.sh",
                 "custom/setup-proxy.sh",
                 "custom/setup.sh",
-                "scripts/update.sh",
-                "scripts/vagrant.sh",
-                "scripts/sshd.sh",
-                "scripts/virtualbox.sh",
-                "scripts/motd.sh",
-                "custom/setup-repos.sh",
+                "custom/disable-cloud-init.sh",
                 "custom/clean.sh",
-                "scripts/cleanup.sh"
+                "scripts/cleanup.sh"                
             ],
             "type": "shell"
         }
@@ -198,8 +160,8 @@
         "apt_mirror_server": "",
         "apt_mirror_path": "",
         "apt_proxy": "",
-        "boot_command_prefix": "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "cleanup_pause": "",
+        "checksum": "",
+        "checksum_type": "sha256",
         "cpus": "1",
         "disk_size": "16384",
         "ftp_proxy": "{{env `ftp_proxy`}}",
@@ -208,24 +170,21 @@
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",
         "install_vagrant_key": "true",
-        "iso_checksum": "",
-        "iso_checksum_type": "sha1",
-        "iso_name": "",
+        "iso_checksum": "6d3dd685ac6eeca8a0b75cc47add6e4e6a433c13a80712b4bc4b22480542fdf4",
+        "iso_checksum_type": "sha256",
+        "iso_name": "xenial-server-cloudimg-amd64-disk1.img",
         "iso_path": "",
-        "iso_url": "",
-        "locale": "en_US",
+        "iso_url": "https://cloud-images.ubuntu.com/xenial/20170830.1/xenial-server-cloudimg-amd64-disk1.img",
         "memory": "1024",
         "no_proxy": "{{env `no_proxy`}}",
-        "preseed": "preseed.cfg",
         "rsync_proxy": "{{env `rsync_proxy`}}",
-        "ssh_fullname": "vagrant",
-        "ssh_password": "vagrant",
-        "ssh_username": "vagrant",
+        "ssh_fullname": "ubuntu",
+        "ssh_password": "ubuntu",
+        "ssh_username": "ubuntu",
         "ssh_timeout": "150m",
-        "update": "true",
         "vagrantfile_template": "",
         "version": "{{isotime \"20060102\"}}",
-        "virtualbox_guest_os_type": "Ubuntu_64",
-        "vm_name": ""
+        "ubuntu_name": "ubuntu1604",
+        "vm_name": "ubuntu1604"
     }
 }

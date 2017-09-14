@@ -2,14 +2,24 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-    config.vm.define ""
-    config.vm.box = "liaoya/alpiine"
+  config.vm.define 'alpine' do |alpine|
+    alpine.vm.box = 'alpine/3.6.2'
+    # alpine.ssh.username = 'vagrant'
+    # alpine.ssh.password = 'vagrant'
 
-    config.vm.provider :virtualbox do |v, override|
-        v.customize ["modifyvm", :id, "--memory", 128]
-        v.customize ["modifyvm", :id, "--cpus", 1]
-        v.customize ["modifyvm", :id, "--nictype1", "virtio"]
-        v.customize ["modifyvm", :id, "--audio", "none"]
-        v.customize ["modifyvm", :id, "--usb", "off"]
+    alpine.vm.provider 'virtualbox' do |vb|
+      vb.name = 'Alpine'
+      vb.cpus = 1
+      vb.memory = 128
+      vb.customize [
+        'modifyvm', :id,
+        '--nic1', 'nat',
+        "--nictype1", "virtio",
+        '--natdnshostresolver1', 'on',
+        '--cableconnected1', 'on',
+        "--audio", "none",
+        "--usb", "off"
+      ]
     end
+  end
 end

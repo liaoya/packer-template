@@ -1,5 +1,7 @@
 set -ux
 
+# This script must be decorated with 'set -ux'
+
 case "$PACKER_BUILDER_TYPE" in
   qemu) exit 0 ;;
 esac
