@@ -7,7 +7,7 @@ echo "==> Customizing message of the day"
 MOTD_FILE=/etc/motd
 BANNER_WIDTH=64
 PLATFORM_RELEASE=$(lsb_release -sd)
-if [[ -n $VM_NAME && $(lsb_release -cs) != $VM_NAME ]]
+if [[ -n $VM_NAME && $(lsb_release -cs) != $VM_NAME ]]; then
     PLATFORM_MSG=$(printf '%s (On %s)' "$VM_NAME" "$PLATFORM_RELEASE")
 else
     PLATFORM_MSG=$(printf '%s' "$PLATFORM_RELEASE")

@@ -68,6 +68,7 @@ if [[ -n $LOCATION ]]; then
     echo "==> Download Build artifacts"
     scp -pqr root@$CACHE_SERVER:/var/www/html/saas/ovs/16.04-xenial/2.8.1/*.deb build/output/
     scp -pqr root@$CACHE_SERVER:/var/www/html/saas/binary/ubuntu-16.04/*.txz build/output/
+    scp -pqr root@$CACHE_SERVER:/var/www/html/saas/binary/docker/xenial/* download/
     [[ $LOCATION == "office" ]] && PACKERARGS='-var-file conf/office.json -var-file conf/jaist.json'
     [[ $LOCATION == "lab" ]] && PACKERARGS='-var-file conf/lab.json -var-file conf/jaist.json'
 else

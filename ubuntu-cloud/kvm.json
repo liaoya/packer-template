@@ -38,43 +38,8 @@
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
             "ssh_timeout": "{{user `ssh_timeout`}}"
-        },
-
-        {
-            "type": "virtualbox-ovf",
-            "boot_wait": "10s",
-            "export_opts": [
-                "--vsys",
-                "0"
-            ],
-            "format": "ova",
-            "guest_additions_mode": "disable",
-            "output_directory": "virtualbox/{{ user `vm_name` }}",
-            "post_shutdown_delay": "1m",
-            "source_path": "{{ user `source_path` }}",
-            "vboxmanage": [
-                [
-                    "modifyvm",
-                    "{{.Name}}",
-                    "--cpus",
-                    "{{user `cpus`}}",
-                    "--memory",
-                    "{{user `memory`}}"
-                ]
-            ],
-            "virtualbox_version_file": ".vbox_version",
-            "vm_name": "{{ user `vm_name` }}",
-            "boot_command": [
-                "<enter>"
-            ],
-            "headless": "{{ user `headless` }}",
-            "checksum": "{{ user `checksum` }}",
-            "checksum_type": "{{ user `checksum_type` }}",
-            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
-            "ssh_password": "{{ user `ssh_password` }}",
-            "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_timeout": "{{user `ssh_timeout`}}"     
         }
+
     ],
 
     "provisioners": [
@@ -109,6 +74,7 @@
                 "APT_MIRROR_SERVER={{user `apt_mirror_server`}}",
                 "APT_MIRROR_PATH={{user `apt_mirror_path`}}",
                 "APT_PROXY={{user `apt_proxy`}}",
+                "DEBIAN_FRONTEND=noninteractive",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
                 "VM_NAME={{user `vm_name`}}",
@@ -152,22 +118,6 @@
             ],
             "scripts": [
                 "post/backup-disk.sh"
-            ]
-        },
-
-        {
-            "environment_vars": [
-                "IMAGENAME={{user `vm_name`}}",
-                "OUTPUT=virtualbox/{{ user `vm_name` }}",
-                "DEST=image/{{ user `ubuntu_name` }}"
-            ],
-            "type": "shell-local",
-            "only": [
-                "virtualbox-ovf"
-            ],
-            "inline": [
-                "mkdir -p $DEST",
-                "cp -pr $OUTPUT/$IMAGENAME.ova $DEST/$IMAGENAME-virtualbox-{{user `version`}}.ova"
             ]
         },
 
