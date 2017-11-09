@@ -143,7 +143,7 @@
             "environment_vars": [
                 "IMAGENAME={{user `vm_name`}}",
                 "OUTPUT=qemu/{{ user `vm_name` }}",
-                "DEST=image/{{ user `vm_name` }}",
+                "DEST=image/{{ user `ubuntu_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
             ],
@@ -201,8 +201,8 @@
         "no_proxy": "{{env `no_proxy`}}",
         "rsync_proxy": "{{env `rsync_proxy`}}",
         "sparsify": "true",
-        "ssh_password": "ubuntu",
-        "ssh_username": "ubuntu",
+        "ssh_password": "vagrant",
+        "ssh_username": "vagrant",
         "ssh_timeout": "150m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "xenial64",

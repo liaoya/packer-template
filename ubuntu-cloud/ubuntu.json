@@ -1,0 +1,73 @@
+{
+    "_comment": "Build with `packer build ubuntu.json`",
+    "builders": [
+        {
+            "type": "qemu",
+            "accelerator": "kvm",
+            "boot_wait": "6s",
+            "disk_image": "true",
+            "format": "qcow2",
+            "output_directory": "qemu/{{ user `vm_name` }}",
+            "qemuargs": [
+                [
+                    "-m",
+                    "{{ user `memory` }}"
+                ],
+                [
+                    "-smp",
+                    "cpus={{ user `cpus` }}"
+                ],
+                [
+                    "-cdrom",
+                    "seed/seed.iso"
+                ]
+            ],
+            "vm_name": "{{ user `vm_name` }}.qcow2",
+            "boot_command": [
+                "<enter>"
+            ],
+            "disk_size": "{{ user `disk_size` }}",
+            "headless": "{{ user `headless` }}",
+            "iso_checksum": "{{ user `iso_checksum` }}",
+            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+            "iso_urls": [
+                "{{ user `iso_path` }}/{{ user `iso_name` }}",
+                "{{ user `iso_url` }}"
+            ],
+            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+            "ssh_password": "{{ user `ssh_password` }}",
+            "ssh_username": "{{ user `ssh_username` }}",
+            "ssh_timeout": "{{user `ssh_timeout`}}"
+        }
+    ],
+
+    "provisioners": [
+        {
+            "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+            "scripts": [
+                "custom/disable-cloud-init.sh",
+                "custom/setup.sh",
+                "custom/motd.sh",
+                "custom/cleanup.sh"
+            ],
+            "type": "shell"
+        }
+    ],
+
+    "variables": {
+        "cpus": "1",
+        "disk_size": "16384",
+        "headless": "true",
+        "install_vagrant_key": "true",
+        "iso_checksum": "2a75eebcd312f4d3ba299232d2c796a273b73cc934d44b66513fd7984f343f56",
+        "iso_checksum_type": "sha256",
+        "iso_name": "ubuntu-16.04-server-cloudimg-amd64-disk1.img",
+        "iso_path": "",
+        "iso_url": "http://cloud-images.ubuntu.com/releases/xenial/release-20171026.1/ubuntu-16.04-server-cloudimg-amd64-disk1.img",
+        "memory": "1024",
+        "ssh_password": "vagrant",
+        "ssh_username": "vagrant",
+        "ssh_timeout": "15m",
+        "vm_name": "xenial"
+    }
+}
