@@ -125,9 +125,8 @@
                 "custom/setup-repos.sh",
                 "custom/setup-proxy.sh",
                 "custom/setup-common.sh",
-                "custom/kvm.sh",
+                "custom/docker.sh",
                 "custom/ovs.sh",
-                "custom/openbox.sh",
                 "custom/setup-repos.sh",
                 "custom/clean-proxy.sh",
                 "custom/motd.sh",
@@ -205,6 +204,6 @@
         "ssh_timeout": "150m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "xenial64",
-        "vm_name": "kvm"
+        "vm_name": "docker"
     }
 }
