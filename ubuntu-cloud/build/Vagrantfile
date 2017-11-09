@@ -1,0 +1,27 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.box_version = "20171026.1.0"
+  config.vm.hostname = "ubuntu-build-machine"
+  
+  config.vm.synced_folder ".", "/vagrant", disabled: false
+
+  if Vagrant.has_plugin?("vagrant-proxyconf") and ENV['http_proxy'].to_s != ''
+    config.proxy.http     = ENV['http_proxy']
+    config.proxy.https    = ENV['https_proxy']
+    config.proxy.ftp      = ENV['ftp_proxy']    
+    config.proxy.no_proxy = ENV['no_proxy']
+    config.proxy.enabled = { docker: false }    
+  end
+
+  config.vm.provision "shell", inline: <<-SCRIPT
+[ -f /vagrant/script/setup-apt.sh ] && bash /vagrant/script/setup-apt.sh
+for elem in $(ls -1 /vagrant/script/build*.sh); do echo "Execute $elem"; bash $elem; done
+SCRIPT
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "ubuntu-build-machine"
+    vb.cpus = 4
+    vb.memory = 8192
+    vb.customize ["modifyvm", :id, "--vram", "16", "--nictype1", "virtio", "--uartmode1", "disconnected"]
+  end
+end

@@ -1,0 +1,4 @@
+{
+    "apt_proxy": "http://10.182.172.49:3128",
+    "docker_mirror_server": "http://10.182.172.49:5000"
+}

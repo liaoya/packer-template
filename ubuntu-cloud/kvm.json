@@ -1,0 +1,211 @@
+{
+    "_comment": "Build with `packer build ubuntu.json`",
+    "builders": [
+        {
+            "type": "qemu",
+            "accelerator": "kvm",
+            "boot_wait": "6s",
+            "disk_image": "true",
+            "format": "qcow2",
+            "output_directory": "qemu/{{ user `vm_name` }}",
+            "qemuargs": [
+                [
+                    "-m",
+                    "{{ user `memory` }}"
+                ],
+                [
+                    "-smp",
+                    "cpus={{ user `cpus` }}"
+                ],
+                [
+                    "-cdrom",
+                    "seed/seed.iso"
+                ]
+            ],
+            "vm_name": "{{ user `vm_name` }}.qcow2",
+            "boot_command": [
+                "<enter>"
+            ],
+            "disk_size": "{{ user `disk_size` }}",
+            "headless": "{{ user `headless` }}",
+            "iso_checksum": "{{ user `iso_checksum` }}",
+            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+            "iso_urls": [
+                "{{ user `iso_path` }}/{{ user `iso_name` }}",
+                "{{ user `iso_url` }}"
+            ],
+            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+            "ssh_password": "{{ user `ssh_password` }}",
+            "ssh_username": "{{ user `ssh_username` }}",
+            "ssh_timeout": "{{user `ssh_timeout`}}"
+        },
+
+        {
+            "type": "virtualbox-ovf",
+            "boot_wait": "10s",
+            "export_opts": [
+                "--vsys",
+                "0"
+            ],
+            "format": "ova",
+            "guest_additions_mode": "disable",
+            "output_directory": "virtualbox/{{ user `vm_name` }}",
+            "post_shutdown_delay": "1m",
+            "source_path": "{{ user `source_path` }}",
+            "vboxmanage": [
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--cpus",
+                    "{{user `cpus`}}",
+                    "--memory",
+                    "{{user `memory`}}"
+                ]
+            ],
+            "virtualbox_version_file": ".vbox_version",
+            "vm_name": "{{ user `vm_name` }}",
+            "boot_command": [
+                "<enter>"
+            ],
+            "headless": "{{ user `headless` }}",
+            "checksum": "{{ user `checksum` }}",
+            "checksum_type": "{{ user `checksum_type` }}",
+            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+            "ssh_password": "{{ user `ssh_password` }}",
+            "ssh_username": "{{ user `ssh_username` }}",
+            "ssh_timeout": "{{user `ssh_timeout`}}"     
+        }
+    ],
+
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "build/output",
+            "destination": "/tmp"
+        },
+
+        {
+            "type": "file",
+            "source": "download",
+            "destination": "/tmp"
+        },
+
+        {
+            "type": "file",
+            "source": "cmdlet",
+            "destination": "/tmp"
+        },
+
+        {
+            "type": "shell",
+            "inline": [
+                "chmod a+x /tmp/cmdlet/*.sh",
+                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin"
+            ]
+        },
+
+        {
+            "environment_vars": [
+                "APT_MIRROR_SERVER={{user `apt_mirror_server`}}",
+                "APT_MIRROR_PATH={{user `apt_mirror_path`}}",
+                "APT_PROXY={{user `apt_proxy`}}",
+                "DEBIAN_FRONTEND=noninteractive",
+                "SSH_USERNAME={{user `ssh_username`}}",
+                "SSH_PASSWORD={{user `ssh_password`}}",
+                "VM_NAME={{user `vm_name`}}",
+                "http_proxy={{user `http_proxy`}}",
+                "https_proxy={{user `https_proxy`}}",
+                "ftp_proxy={{user `ftp_proxy`}}",
+                "no_proxy={{user `no_proxy`}}",
+                "rsync_proxy={{user `rsync_proxy`}}"
+            ],
+            "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+            "scripts": [
+                "custom/disable-cloud-init.sh",
+                "custom/setup.sh",
+                "custom/setup-repos.sh",
+                "custom/setup-proxy.sh",
+                "custom/setup-common.sh",
+                "custom/kvm.sh",
+                "custom/ovs.sh",
+                "custom/openbox.sh",
+                "custom/setup-repos.sh",
+                "custom/clean-proxy.sh",
+                "custom/motd.sh",
+                "custom/cleanup.sh"
+            ],
+            "type": "shell"
+        }
+    ],
+
+    "post-processors": [
+        {
+            "environment_vars": [
+                "IMAGENAME={{user `vm_name`}}",
+                "OUTPUT=qemu/{{ user `vm_name` }}",
+                "DEST=image/{{ user `vm_name` }}",
+                "SPARSIFY={{ user `sparsify` }}",
+                "VERSION={{ user `version` }}"
+            ],
+            "type": "shell-local",
+            "only": [
+                "qemu"
+            ],
+            "scripts": [
+                "post/backup-disk.sh"
+            ]
+        },
+
+        {
+            "environment_vars": [
+                "IMAGENAME={{user `vm_name`}}",
+                "OUTPUT=virtualbox/{{ user `vm_name` }}",
+                "DEST=image/{{ user `ubuntu_name` }}"
+            ],
+            "type": "shell-local",
+            "only": [
+                "virtualbox-ovf"
+            ],
+            "inline": [
+                "mkdir -p $DEST",
+                "cp -pr $OUTPUT/$IMAGENAME.ova $DEST/$IMAGENAME-virtualbox-{{user `version`}}.ova"
+            ]
+        },
+
+        {
+            "keep_input_artifact": false,
+            "output": "box/{{ user `ubuntu_name` }}/{{user `vm_name`}}-{{.Provider}}-{{user `version`}}.box",
+            "type": "vagrant",
+            "vagrantfile_template": "{{ user `vagrantfile_template` }}"
+        }
+    ],
+
+    "variables": {
+        "apt_mirror_server": "",
+        "apt_mirror_path": "",
+        "apt_proxy": "{{env `http_proxy`}}",
+        "cpus": "2",
+        "disk_size": "16384",
+        "ftp_proxy": "{{env `ftp_proxy`}}",
+        "headless": "true",
+        "hostname": "ubuntu",
+        "http_proxy": "{{env `http_proxy`}}",
+        "https_proxy": "{{env `https_proxy`}}",
+        "install_vagrant_key": "true",
+        "iso_checksum": "2a75eebcd312f4d3ba299232d2c796a273b73cc934d44b66513fd7984f343f56",
+        "iso_checksum_type": "sha256",
+        "iso_name": "ubuntu-16.04-server-cloudimg-amd64-disk1.img",
+        "iso_path": "",
+        "iso_url": "http://cloud-images.ubuntu.com/releases/xenial/release-20171026.1/ubuntu-16.04-server-cloudimg-amd64-disk1.img",
+        "memory": "2048",
+        "no_proxy": "{{env `no_proxy`}}",
+        "rsync_proxy": "{{env `rsync_proxy`}}",
+        "sparsify": "true",
+        "ssh_password": "ubuntu",
+        "ssh_username": "ubuntu",
+        "ssh_timeout": "150m",
+        "version": "{{isotime \"20060102\"}}",
+        "ubuntu_name": "xenial64",
+        "vm_name": "kvm"
+    }
+}
