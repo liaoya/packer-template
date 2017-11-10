@@ -1,3 +1,3 @@
 #!/bin/sh
 
-cloud-localds seed.iso seed
+cloud-localds seed.iso user-data

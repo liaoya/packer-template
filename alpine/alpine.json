@@ -172,7 +172,7 @@
         "repository": "-1",
         "shutdown_command": "/sbin/poweroff",
         "ssh_username": "root",
-        "ssh_password": "vagrant",
+        "ssh_password": "alpine",
         "ssh_timeout": "10m",
         "timezone": "Asia/Shanghai",
         "vagrantfile_template": "",
