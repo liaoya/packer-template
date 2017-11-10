@@ -15,12 +15,8 @@ if [ -d /etc/apt ]; then # Debian like system
     fi
 fi
 
-if [ -f /etc/fedora-release ]; then
-    PLATFORM_MSG=$(cat /etc/fedora-release)
-fi
-
-if [ -f /etc/centos-release ]; then
-    PLATFORM_MSG=$(cat /etc/centos-release)
+if [ -f /etc/redhat-release ]; then
+    PLATFORM_MSG=$(rpm -qf --queryformat '%{NAME}' /etc/redhat-release | cut -f 1 -d '-')
 fi
 
 BUILT_MSG=$(printf 'built %s' $(date +%Y-%m-%d))
