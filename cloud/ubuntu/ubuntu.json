@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "qemu/{{ user `vm_name` }}",
+            "output_directory": "../qemu/{{ user `vm_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -19,7 +19,7 @@
                 ],
                 [
                     "-cdrom",
-                    "seed/seed.iso"
+                    "../seed/seed.iso"
                 ]
             ],
             "vm_name": "{{ user `vm_name` }}.qcow2",
@@ -45,10 +45,10 @@
         {
             "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
             "scripts": [
-                "custom/disable-cloud-init.sh",
-                "custom/setup.sh",
-                "custom/motd.sh",
-                "custom/cleanup.sh"
+                "../custom/disable-cloud-init.sh",
+                "../custom/ubuntu/setup.sh",
+                "../custom/motd.sh",
+                "../custom/ubuntu/cleanup.sh"
             ],
             "type": "shell"
         }

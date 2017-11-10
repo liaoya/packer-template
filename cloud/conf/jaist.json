@@ -1,0 +1,9 @@
+{
+  "apt_mirror_server": "http://ftp.jaist.ac.jp",
+  "apt_mirror_path": "/pub/Linux/ubuntu",
+  "dnf_mirror_server": "http://ftp.jaist.ac.jp",
+  "dnf_mirror_path": "/pub/Linux/Fedora",
+  "yum_mirror_server": "http://ftp.jaist.ac.jp",
+  "yum_mirror_epel_path": "/pub/Linux/Fedora",
+  "yum_mirror_path": "/pub/Linux/CentOS"
+}

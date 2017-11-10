@@ -1,8 +1,5 @@
 #!/bin/bash -eux
 
-# This script is not used for base ubuntu box
-[[ $VM_NAME =~ ubuntu ]] && exit 0
-
 echo "==> Run custom repository"
 
 [ -f /etc/apt/sources.list.origin ] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin

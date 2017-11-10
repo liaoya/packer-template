@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "qemu/{{ user `vm_name` }}",
+            "output_directory": "../qemu/{{ user `vm_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -19,7 +19,7 @@
                 ],
                 [
                     "-cdrom",
-                    "seed/seed.iso"
+                    "../seed/seed.iso"
                 ]
             ],
             "vm_name": "{{ user `vm_name` }}.qcow2",
@@ -38,8 +38,43 @@
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
             "ssh_timeout": "{{user `ssh_timeout`}}"
-        }
+        },
 
+        {
+            "type": "virtualbox-ovf",
+            "boot_wait": "10s",
+            "export_opts": [
+                "--vsys",
+                "0"
+            ],
+            "format": "ova",
+            "guest_additions_mode": "disable",
+            "output_directory": "../virtualbox/{{ user `vm_name` }}",
+            "post_shutdown_delay": "1m",
+            "source_path": "{{ user `source_path` }}",
+            "vboxmanage": [
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--cpus",
+                    "{{user `cpus`}}",
+                    "--memory",
+                    "{{user `memory`}}"
+                ]
+            ],
+            "virtualbox_version_file": ".vbox_version",
+            "vm_name": "{{ user `vm_name` }}",
+            "boot_command": [
+                "<enter>"
+            ],
+            "headless": "{{ user `headless` }}",
+            "checksum": "{{ user `checksum` }}",
+            "checksum_type": "{{ user `checksum_type` }}",
+            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+            "ssh_password": "{{ user `ssh_password` }}",
+            "ssh_username": "{{ user `ssh_username` }}",
+            "ssh_timeout": "{{user `ssh_timeout`}}"     
+        }
     ],
 
     "provisioners": [
@@ -57,7 +92,7 @@
 
         {
             "type": "file",
-            "source": "cmdlet",
+            "source": "../cmdlet",
             "destination": "/tmp"
         },
 
@@ -86,18 +121,18 @@
             ],
             "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
             "scripts": [
-                "custom/disable-cloud-init.sh",
-                "custom/setup.sh",
-                "custom/setup-repos.sh",
-                "custom/setup-proxy.sh",
-                "custom/setup-common.sh",
-                "custom/kvm.sh",
-                "custom/ovs.sh",
-                "custom/openbox.sh",
-                "custom/setup-repos.sh",
-                "custom/clean-proxy.sh",
-                "custom/motd.sh",
-                "custom/cleanup.sh"
+                "../custom/disable-cloud-init.sh",
+                "../custom/ubuntu/setup.sh",
+                "../custom/setup-repos.sh",
+                "../custom/clean-proxy.sh",
+                "../custom/setup-proxy.sh",
+                "../custom/ubuntu/setup-common.sh",
+                "../custom/ubuntu/docker.sh",
+                "../custom/ubuntu/ovs.sh",
+                "../custom/setup-repos.sh",
+                "../custom/clean-proxy.sh",
+                "../custom/motd.sh",
+                "../custom/ubuntu/cleanup.sh"
             ],
             "type": "shell"
         }
@@ -107,8 +142,8 @@
         {
             "environment_vars": [
                 "IMAGENAME={{user `vm_name`}}",
-                "OUTPUT=qemu/{{ user `vm_name` }}",
-                "DEST=image/{{ user `ubuntu_name` }}",
+                "OUTPUT=../qemu/{{ user `vm_name` }}",
+                "DEST=../image/{{ user `ubuntu_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
             ],
@@ -117,13 +152,29 @@
                 "qemu"
             ],
             "scripts": [
-                "post/backup-disk.sh"
+                "../post/backup-disk.sh"
+            ]
+        },
+
+        {
+            "environment_vars": [
+                "IMAGENAME={{user `vm_name`}}",
+                "OUTPUT=../virtualbox/{{ user `vm_name` }}",
+                "DEST=../image/{{ user `ubuntu_name` }}"
+            ],
+            "type": "shell-local",
+            "only": [
+                "virtualbox-ovf"
+            ],
+            "inline": [
+                "mkdir -p $DEST",
+                "cp -pr $OUTPUT/$IMAGENAME.ova $DEST/$IMAGENAME-virtualbox-{{user `version`}}.ova"
             ]
         },
 
         {
             "keep_input_artifact": false,
-            "output": "box/{{ user `ubuntu_name` }}/{{user `vm_name`}}-{{.Provider}}-{{user `version`}}.box",
+            "output": "../box/{{ user `ubuntu_name` }}/{{user `vm_name`}}-{{.Provider}}-{{user `version`}}.box",
             "type": "vagrant",
             "vagrantfile_template": "{{ user `vagrantfile_template` }}"
         }
@@ -133,6 +184,8 @@
         "apt_mirror_server": "",
         "apt_mirror_path": "",
         "apt_proxy": "{{env `http_proxy`}}",
+        "checksum": "",
+        "checksum_type": "sha256",
         "cpus": "2",
         "disk_size": "16384",
         "ftp_proxy": "{{env `ftp_proxy`}}",
@@ -155,6 +208,6 @@
         "ssh_timeout": "150m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "xenial64",
-        "vm_name": "kvm"
+        "vm_name": "docker"
     }
 }

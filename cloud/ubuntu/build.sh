@@ -53,13 +53,13 @@ done
 if [ $clean -gt 0 ]; then
     echo "==> Clean all the cache and build artifacts"
     rm -fr build/output/* download/*.deb 
-    [ -f seed/seed.iso ] && rm -f seed/seed.iso
+    [ -f ../seed/seed.iso ] && rm -f ../seed/seed.iso
     [ -f ova/ubuntu64.ova ] && rm -f ova/ubuntu64.ova
     if [[ -z $type ]] || [[ $type == "qemu" ]]; then
-        rm -fr qemu/* box/* image/*
+        rm -fr ../qemu/* ../box/* ../image/*
     fi
     if [[ -z $type ]] || [[ $type == "virtualbox" ]]; then
-        rm -fr virtualbox/* box/* image/*
+        rm -fr ../virtualbox/* ../box/* ../image/*
     fi
 fi
 
@@ -69,8 +69,8 @@ if [[ -n $LOCATION ]]; then
     scp -pqr root@$CACHE_SERVER:/var/www/html/saas/ovs/16.04-xenial/2.8.1/*.deb build/output/
     scp -pqr root@$CACHE_SERVER:/var/www/html/saas/binary/ubuntu-16.04/*.txz build/output/
     scp -pqr root@$CACHE_SERVER:/var/www/html/saas/binary/docker/xenial/* download/
-    [[ $LOCATION == "office" ]] && PACKERARGS='-var-file conf/office.json -var-file conf/jaist.json'
-    [[ $LOCATION == "lab" ]] && PACKERARGS='-var-file conf/lab.json -var-file conf/jaist.json'
+    [[ $LOCATION == "office" ]] && PACKERARGS='-var-file ../conf/office.json -var-file ../conf/jaist.json'
+    [[ $LOCATION == "lab" ]] && PACKERARGS='-var-file ../conf/lab.json -var-file ../conf/jaist.json'
 else
     (cd build; vagrant up && vagrant destory)
     (cd download; bash download.sh)
@@ -85,7 +85,7 @@ export PACKER_CACHE_DIR=~/.cache/packer
 export CURLOPT_SSL_VERIFYPEER=false
 
 if [[ -z $type ]] || [[ $type == "qemu" ]]; then
-    (cd seed; [ -f seed.iso ] || sh ./gen.sh)
+    (cd ../seed; [ -f seed.iso ] || sh ./gen.sh)
 fi
 
 if [[ -z $type ]] || [[ $type == "virtualbox" ]]; then
@@ -94,15 +94,15 @@ if [[ -z $type ]] || [[ $type == "virtualbox" ]]; then
 fi
 
 if [[ -z $type ]] || [[ $type == "qemu" ]]; then 
-    if [[ -d qemu/$name ]]; then
-        if [[ $force -eq 0 ]]; then echo "qemu/$name exist"; continue; else rm -fr qemu/$name; fi
+    if [[ -d ../qemu/$name ]]; then
+        if [[ $force -eq 0 ]]; then echo "../qemu/$name exist"; continue; else rm -fr qemu/$name; fi
     fi
     echo packer build -only qemu $PACKERARGS $name.json
     packer build -only qemu $PACKERARGS $name.json
 fi
 if [[ -z $type ]] || [[ $type == "virtualbox" ]]; then
-    if [[ -d virtualbox/$name ]]; then
-        if [[ $force -eq 0 ]]; then echo "virtualbox/$name exist"; continue; else rm -fr virtualbox/$name; fi
+    if [[ -d ../virtualbox/$name ]]; then
+        if [[ $force -eq 0 ]]; then echo "../virtualbox/$name exist"; continue; else rm -fr ../virtualbox/$name; fi
     fi
     echo packer build -only virtualbox-ovf $PACKERARGS -var source_path=$OVA_FILE -var checksum=$(sha256sum $OVA_FILE | cut -d ' ' -f 1) $name.json
     packer build -only virtualbox-ovf $PACKERARGS -var source_path=$OVA_FILE -var checksum=$(sha256sum $OVA_FILE | cut -d ' ' -f 1) $name.json
