@@ -65,7 +65,7 @@ if [[ -f /etc/fedora-release && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]];
     sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" /etc/yum.repos.d/fedora*.repo
 fi
 
-if [[ -f /etc/centos-release && -n && $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
+if [[ -f /etc/centos-release && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
     for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
     sed -i -e "s/^mirrorlist/#&/g" -e "s%^#baseurl=%baseurl=%" /etc/yum.repos.d/CentOS*.repo
     sed -i -e "s%^baseurl=.*%#&\n&%g" /etc/yum.repos.d/CentOS*.repo

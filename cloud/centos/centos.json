@@ -53,6 +53,22 @@
         }
     ],
 
+    "post-processors": [
+        {
+            "environment_vars": [
+                "IMAGENAME={{user `vm_name`}}",
+                "OUTPUT=../qemu/{{ user `vm_name` }}"
+            ],
+            "type": "shell-local",
+            "only": [
+                "qemu"
+            ],
+            "inline": [
+                "qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2"
+            ]
+        }
+    ],
+    
     "variables": {
         "cpus": "1",
         "disk_size": "16384",

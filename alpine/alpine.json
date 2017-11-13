@@ -126,10 +126,8 @@
                 "qemu"
             ],
             "inline": [
-                "qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2",
                 "[ -d $DEST ] || mkdir -p $DEST",
-                "[ $(command -v pxz) ] && pxz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz",
-                "[ -f $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz ] || xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz"
+                "qemu-img convert -c -O qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME-{{user `version`}}.qcow2c"
             ]
         },
         {
