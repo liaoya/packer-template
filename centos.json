@@ -27,7 +27,7 @@
       "shutdown_command": "{{user `shutdown_command`}}",
       "ssh_password": "{{user `ssh_password`}}",
       "ssh_username": "{{user `ssh_username`}}",
-      "ssh_timeout": "{{user `ssh_timeout`}}"
+      "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
     },
 
     {
@@ -66,7 +66,7 @@
       "shutdown_command": "{{user `shutdown_command`}}",
       "ssh_password": "{{user `ssh_password`}}",
       "ssh_username": "{{user `ssh_username`}}",
-      "ssh_timeout": "{{user `ssh_timeout`}}"        
+      "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"        
     }
   ],
 
@@ -140,7 +140,7 @@
     "shutdown_command": "shutdown -P now",
     "ssh_password": "packer",
     "ssh_username": "root",
-    "ssh_timeout": "1200s",
+    "ssh_wait_timeout": "1200s",
     "vm_name": "CentOS"
   }
 }

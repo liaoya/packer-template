@@ -49,7 +49,7 @@
             "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_timeout": "{{user `ssh_timeout`}}"
+            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
         },
         {
             "type": "virtualbox-iso",
@@ -114,7 +114,7 @@
             "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_timeout": "{{user `ssh_timeout`}}"
+            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
         }
     ],
     "post-processors": [
@@ -221,7 +221,7 @@
         "ssh_fullname": "vagrant",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
-        "ssh_timeout": "150m",
+        "ssh_wait_timeout": "150m",
         "update": "true",
         "vagrantfile_template": "",
         "version": "{{isotime \"20060102\"}}",

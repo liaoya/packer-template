@@ -6,7 +6,7 @@
 
 ### Prepare
 
-Packer 1.1.1 is required since `ssh_timeout` was renamed to `ssh_timeout`.
+Packer 1.1.1 is required since `ssh_timeout` was renamed to `ssh_wait_timeout`.
 
 Put the following in `~/.bash_profile` or in command line.
 If iso file hosts in intranet server, please add that server in no_proxy list.
@@ -18,10 +18,7 @@ export PACKER_CACHE_DIR=~/.cache/packer
 export CURLOPT_SSL_VERIFYPEER=false
 ```
 
-More boot time is required for virtualbox-iso. The following information is required for build
-
-- DNS nameserver
-- Proxy for apk
+More boot time is required for virtualbox-iso. Setup proper `http_proxy` if behind a firewall.
 
 if build at home, use `-var "iso_url=http://mirrors.ustc.edu.cn/alpine/v3.6/releases/x86_64/alpine-virt-3.6.2-x86_64.iso"`
 
@@ -30,9 +27,9 @@ if build at home, use `-var "iso_url=http://mirrors.ustc.edu.cn/alpine/v3.6/rele
 Use the following command to build  at Nanjing site, qcow2 file is under image/ and vagrant box is under box/
 
 ```shell
-export http_proxy=http://cn-proxy.jp.oracle.com:80
+export http_proxy=
 rm -fr qemu/* image/* box/*
-packer build -only qemu -var-file conf/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
+packer build -only qemu -var-file conf/3.6.2.json alpine.json
 ```
 
 ### Build virtualbox ova and its corresponding vagrant box
@@ -40,9 +37,9 @@ packer build -only qemu -var-file conf/3.6.2.json -var "nameserver=10.182.244.34
 Use the following command to build at Nanjing site, ova file is under image/ and vagrant box is under box/
 
 ```shell
-export http_proxy=http://cn-proxy.jp.oracle.com:80
+export http_proxy=
 rm -fr virtualbox/* image/* box/*
-packer build -only virtualbox-iso -var-file conf/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
+packer build -only virtualbox-iso -var-file conf/3.6.2.json alpine.json
 ```
 
 The root is disabled via ssh from remote. Please use vagrant/vagrant for login.

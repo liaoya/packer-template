@@ -1,7 +1,7 @@
 set -eux
 
 echo "==> Recording box generation date"
-date > /etc/vagrant_box_build_date
+date > /etc/box_build_date
 [ -f /etc/motd.origin ] || cp -pr /etc/motd /etc/motd.origin
 
 echo "==> Customizing message of the day"

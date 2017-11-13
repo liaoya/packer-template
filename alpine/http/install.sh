@@ -7,7 +7,7 @@ TEMP=`getopt -o d:n:p:P:r:z: --long domain:,nameserver:,passwrod:,proxy:,reposit
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
-DOMAIN="local" NAMESERVER="10.182.244.34" PASSWORD="packer" PROXY="http://10.113.69.79:3128" REPOSITORY="-1" TIMEZONE="Asia/Shanghai"
+DOMAIN="" NAMESERVER="" PASSWORD="alpine" PROXY="" REPOSITORY="-1" TIMEZONE=""
 while true ; do
     case "$1" in
         -d|--domain)
@@ -27,18 +27,22 @@ while true ; do
     esac
 done
 
+echo DOMAIN is \"$DOMAIN\" NAMESERVER is \"$NAMESERVER\" PASSWORD is \"$PASSWORD\" PROXY is \"$PROXY\" REPOSITORY is \"$REPOSITORY\" TIMEZONE is \"$TIMEZONE\"
+
 setup-keymap us us
 setup-hostname -n alpine
 echo -e "eth0\ndhcp\nno\n" | setup-interfaces
 /etc/init.d/networking --quiet start &
 sleep 10s
 echo -e "$PASSWORD\n$PASSWORD\n" | passwd
-setup-dns -d $DOMAIN $NAMESERVER
-setup-timezone -z $TIMEZONE
+[[ ! -z $NAMESERVER ]] && setup-dns -d $DOMAIN $NAMESERVER
+[[ ! -z $TIMEZONE ]] && setup-timezone -z $TIMEZONE
 setup-sshd -c openssh
 /etc/init.d/hostname --quiet restart
-setup-proxy -q $PROXY
-[ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
+if [[ ! -z $PROXY ]]; then
+    setup-proxy -q $PROXY
+    [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
+fi
 setup-apkrepos $REPOSITORY
 setup-ntp -c chrony
 # For virtualbox
