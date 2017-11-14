@@ -2,6 +2,16 @@
 
 echo "==> Run custom setup proxy script"
 
+sed -i "/^http_proxy/Id" /etc/environment
+sed -i "/^https_proxy/Id" /etc/environment
+sed -i "/^no_proxy/Id" /etc/environment
+[ -f /etc/yum.conf ] && sed -i "/^proxy/Id" /etc/yum.conf
+[ -f /etc/dnf/dnf.conf ] && sed -i "/^proxy/Id" /etc/dnf/yum.conf
+[ -f /etc/apt/apt.conf ] && sed -i "/::proxy/Id" /etc/apt/apt.conf
+[ -f /etc/apt/apt.conf.d/01proxy ] && rm -f /etc/apt/apt.conf.d/01proxy
+[ -f /etc/systemd/system/docker.service.d/http-proxy.conf ] && rm -f /etc/systemd/system/docker.service.d/http-proxy.conf
+[ -f /etc/docker/daemon.json ] && rm -f /etc/docker/daemon.json
+
 if [[ -n $http_proxy ]]; then
     echo "==> Put $http_proxy to /etc/environment"
     cat <<EOF > /etc/environment
@@ -44,33 +54,4 @@ mkdir -p /etc/docker
     "registry-mirrors": ["$DOCKER_MIRROR_SERVER"]
 }
 EOF
-[[ -n $DOCKER_MIRROR_SERVER ]] && sed "s/NO_PROXY=/&$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%' -e 's%:5000%%'),/" /etc/systemd/system/docker.service.d/http-proxy.conf
-
-systemctl daemon-reload
-
-if [[ -d /etc/apt && -n $APT_MIRROR_SERVER && -n $APT_MIRROR_PATH ]]; then
-    sed -i -e "s%http://us.archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
-    sed -i -e "s%http://jp.archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
-    sed -i -e "s%http://archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
-    sed -i -e "s%http://security.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
-    systemctl stop apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer
-    systemctl disable apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer    
-    apt-get update -qq
-fi
-
-if [[ -f /etc/fedora-release && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then
-    for item in $(ls -1 /etc/yum.repos.d/fedora*.repo); do [ -f ${item}.origin ] || cp ${item} ${item}.origin; done
-    sed -i -e "s%^metalink=https.*%#&%g" -e "s%^#baseurl=%baseurl=%" /etc/yum.repos.d/fedora*.repo
-    sed -i -e "s%^baseurl=.*%#&\n&%g" /etc/yum.repos.d/fedora*.repo
-    sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" /etc/yum.repos.d/fedora*.repo
-fi
-
-if [[ -f /etc/centos-release && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
-    for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
-    sed -i -e "s/^mirrorlist/#&/g" -e "s%^#baseurl=%baseurl=%" /etc/yum.repos.d/CentOS*.repo
-    sed -i -e "s%^baseurl=.*%#&\n&%g" /etc/yum.repos.d/CentOS*.repo
-    sed -i -e "s%^baseurl=http://mirror.centos.org/centos%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_PATH}%g" /etc/yum.repos.d/CentOS*.repo
-
-    [[ ! -f /etc/yum.repos.d/epel.repo.origin && -f /etc/yum.repos.d/epel.repo ]] && cp /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.origin
-    [ -f /etc/yum.repos.d/epel.repo ] && sed -i -e "s/^mirrorlist/#&/g" -e "s%^#baseurl=%baseurl=%" /etc/yum.repos.d/epel.repo && sed -i -e "s%^baseurl=.*%#&\n&%g" /etc/yum.repos.d/epel.repo && sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" /etc/yum.repos.d/epel.repo
-fi
+[[ -n $DOCKER_MIRROR_SERVER ]] && sed "s/NO_PROXY=/&$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%' -e 's%:5000%%'),/" /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload

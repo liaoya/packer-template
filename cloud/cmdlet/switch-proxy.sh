@@ -12,8 +12,8 @@ while true ; do
     esac
 done
 
-[[ $EUID -gt 0 ]] && exit 1
-[[ -n $LOCATION ]] || exit 1
+[[ $EUID -gt 0 ]] && { echo "Only root can run this script"; exit 1; }
+[[ -n $LOCATION ]] || { echo "Please specify a location"; exit 1; }
 
 HTTP_PROXY="http://cn-proxy.jp.oracle.com:80"
 NO_PROXY="localhost,127.0.0.1,.cn.oracle.com,.jp.oracle.com,.us.oracle.com,.oraclecorp.com"
@@ -35,8 +35,8 @@ FTP_PROXY=$HTTP_PROXY
 NO_PROXY="$NO_PROXY"
 EOF
 
-[ -f /etc/yum.conf ] && sed -i "/::proxy/Id" /etcyum.conf
-[ -f /etc/dnf/dnf.conf ] && sed -i "/::proxy/Id" /etc/dnf/yum.conf
+[ -f /etc/yum.conf ] && sed -i "/^proxy/Id" /etc/yum.conf
+[ -f /etc/dnf/dnf.conf ] && sed -i "/^proxy/Id" /etc/dnf/yum.conf
 [ -f /etc/apt/apt.conf ] && sed -i "/::proxy/Id" /etc/apt/apt.conf
 [ -f /etc/apt/apt.conf.d/01proxy ] && rm -f /etc/apt/apt.conf.d/01proxy
 [ -f /etc/systemd/system/docker.service.d/http-proxy.conf ] && rm -f /etc/systemd/system/docker.service.d/http-proxy.conf
@@ -50,14 +50,14 @@ if [[ $LOCATION == "office" ]]; then
 elif [[ $LOCATION == "lab" ]]; then
     APT_PROXY=http://10.113.69.101:3128
     DOCKER_MIRROR_SERVER=http://10.113.69.101:5000
-    YUM_PROXY=http://10.113.69.101:5000
+    YUM_PROXY=http://10.113.69.101:3128
     no_proxy="$no_proxy,10.113.69.101"
 fi
 
 echo "Set Proxy for $LOCATION"
 echo "\$APT_PROXY is $APT_PROXY"
 echo "\$DOCKER_MIRROR_SERVER is $DOCKER_MIRROR_SERVER"
-echo "\$YUM_PROXY is $YUM"
+echo "\$YUM_PROXY is $YUM_PROXY"
 
 [[ -d /etc/apt ]] && [[ -n $APT_PROXY ]] && cat <<EOF >> /etc/apt/apt.conf.d/01proxy
 Acquire::http::proxy "$APT_PROXY";
@@ -92,10 +92,7 @@ APT_MIRROR_PATH="/pub/Linux/ubuntu"
 
 if [[ -d /etc/apt ]]; then
     [ -f /etc/apt/sources.list.origin ] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
-    sed -i -e "s%http://us.archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
-    sed -i -e "s%http://jp.archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
-    sed -i -e "s%http://archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
-    sed -i -e "s%http://security.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
+    sed -i -e "s%http://.*archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" -e "s%http://security.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
     sed -i -e 's/^deb-src/#deb-src/' /etc/apt/sources.list
 fi
 
@@ -103,14 +100,27 @@ YUM_MIRROR_SERVER="http://ftp.jaist.ac.jp"
 YUM_MIRROR_EPEL_PATH="/pub/Linux/Fedora"
 YUM_MIRROR_PATH="/pub/Linux/CentOS"
 
+# (cd /etc/yum.repos.d; for elem in $(ls -1 *.origin); do yes | cp -f $elem $(basename -s .origin $elem); done)
+
 if [[ -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
     for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
-    sed -i -e "s/^mirrorlist/#&/g" -e "s%^#baseurl=%baseurl=%" /etc/yum.repos.d/CentOS*.repo
-    sed -i -e "s%^baseurl=.*%#&\n&%g" /etc/yum.repos.d/CentOS*.repo
-    sed -i -e "s%^baseurl=http://mirror.centos.org/centos%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_PATH}%g" /etc/yum.repos.d/CentOS*.repo
+    for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do 
+        grep -s -q -e "^mirrorlist=" ${elem} && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" ${elem}
+        grep -s -q -e "^#baseurl=" ${elem} && grep -s -q -e "^baseurl=" ${elem} && sed -i -e "/^baseurl=/d" ${elem};
+        grep -s -q -e "^#baseurl=" ${elem} && sed -i -e "s/^#baseurl=/baseurl=/g" ${elem}
+        sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
+        sed -i -e "s%^baseurl=http://mirror.centos.org/centos%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_PATH}%g" ${elem}
+    done
+    yum install -y -q epel-release
 
-    [[ ! -f /etc/yum.repos.d/epel.repo.origin && -f /etc/yum.repos.d/epel.repo ]] && cp /etc/yum.repos.d/epel.repo /etc/yum.repos.d/epel.repo.origin
-    [ -f /etc/yum.repos.d/epel.repo ] && sed -i -e "s/^mirrorlist/#&/g" -e "s%^#baseurl=%baseurl=%" /etc/yum.repos.d/epel.repo && sed -i -e "s%^baseurl=.*%#&\n&%g" /etc/yum.repos.d/epel.repo && sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" /etc/yum.repos.d/epel.repo
+    for elem in $(ls -1 /etc/yum.repos.d/epel*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
+    for elem in $(ls -1 /etc/yum.repos.d/epel*.repo); do
+        grep -s -q -e "^mirrorlist=" ${elem} && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" ${elem}
+        grep -s -q -e "^#baseurl=" ${elem} && grep -s -q -e "^baseurl=" ${elem} && sed -i -e "/^baseurl=/d" ${elem};
+        grep -s -q -e "^#baseurl=" ${elem} && sed -i -e "s/^#baseurl=/baseurl=/g" ${elem}
+        sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
+        sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" ${elem}    
+    done
 fi
 
 DNF_MIRROR_SERVER="http://ftp.jaist.ac.jp"
@@ -118,7 +128,11 @@ DNF_MIRROR_PATH="/pub/Linux/Fedora"
 
 if [[ -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then
     for item in $(ls -1 /etc/yum.repos.d/fedora*.repo); do [ -f ${item}.origin ] || cp ${item} ${item}.origin; done
-    sed -i -e "s%^metalink=https.*%#&%g" -e "s%^#baseurl=%baseurl=%" /etc/yum.repos.d/fedora*.repo
-    sed -i -e "s%^baseurl=.*%#&\n&%g" /etc/yum.repos.d/fedora*.repo
-    sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" /etc/yum.repos.d/fedora*.repo
+    for item in $(ls -1 /etc/yum.repos.d/fedora*.repo); do
+        grep -s -q -e "^metalink=" ${elem} && sed -i -e "s/^metalink=/#metalink=/g" ${elem}
+        grep -s -q -e "^#baseurl=" ${elem} && grep -s -q -e "^baseurl=" ${elem} && sed -i -e "/^baseurl=/d" ${elem};
+        grep -s -q -e "^#baseurl=" ${elem} && sed -i -e "s/^#baseurl=/baseurl=/g" ${elem}
+        sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
+        sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" ${elem}
+    done
 fi

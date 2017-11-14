@@ -2,21 +2,44 @@
 
 echo "==> Run custom repository"
 
-[ -f /etc/apt/sources.list.origin ] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
-cat <<EOF > /etc/apt/sources.list
-deb http://archive.ubuntu.com/ubuntu xenial main restricted
-deb http://archive.ubuntu.com/ubuntu xenial-updates main restricted
-deb http://archive.ubuntu.com/ubuntu xenial universe
-deb http://archive.ubuntu.com/ubuntu xenial-updates universe
-deb http://archive.ubuntu.com/ubuntu xenial multiverse
-deb http://archive.ubuntu.com/ubuntu xenial-updates multiverse
-deb http://archive.ubuntu.com/ubuntu xenial-backports main restricted universe multiverse
-deb http://security.ubuntu.com/ubuntu xenial-security main restricted
-deb http://security.ubuntu.com/ubuntu xenial-security universe
-deb http://security.ubuntu.com/ubuntu xenial-security multiverse
-# deb http://archive.canonical.com/ubuntu xenial partner
-EOF
+if [[ -d /etc/apt && -n $APT_MIRROR_SERVER && -n $APT_MIRROR_PATH ]]; then
+    [ -f /etc/apt/sources.list.origin ] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
+    sed -i -e "s%http://us.archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
+    sed -i -e "s%http://jp.archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
+    sed -i -e "s%http://archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
+    sed -i -e "s%http://security.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
+    systemctl stop apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer
+    systemctl disable apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer    
+    apt-get update -qq
+fi
 
-. /etc/lsb-release
+if [[ -f /etc/fedora-release && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then
+    for item in $(ls -1 /etc/yum.repos.d/fedora*.repo); do [ -f ${item}.origin ] || cp ${item} ${item}.origin; done
+    for item in $(ls -1 /etc/yum.repos.d/fedora*.repo); do
+        grep -s -q -e "^metalink=" ${elem} && sed -i -e "s/^metalink=/#metalink=/g" ${elem}
+        grep -s -q -e "^#baseurl=" ${elem} && grep -s -q -e "^baseurl=" ${elem} && sed -i -e "/^baseurl=/d" ${elem};
+        grep -s -q -e "^#baseurl=" ${elem} && sed -i -e "s/^#baseurl=/baseurl=/g" ${elem}
+        sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
+        sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" ${elem}
+    done
+fi
 
-sed -i -e "s%xenial%$DISTRIB_CODENAME%" /etc/apt/sources.list
+if [[ -f /etc/centos-release && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
+    for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
+    for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do 
+        grep -s -q -e "^mirrorlist=" ${elem} && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" ${elem}
+        grep -s -q -e "^#baseurl=" ${elem} && grep -s -q -e "^baseurl=" ${elem} && sed -i -e "/^baseurl=/d" ${elem};
+        grep -s -q -e "^#baseurl=" ${elem} && sed -i -e "s/^#baseurl=/baseurl=/g" ${elem}
+        sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
+        sed -i -e "s%^baseurl=http://mirror.centos.org/centos%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_PATH}%g" ${elem}
+    done
+
+    for elem in $(ls -1 /etc/yum.repos.d/epel*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
+    for elem in $(ls -1 /etc/yum.repos.d/epel*.repo); do
+        grep -s -q -e "^mirrorlist=" ${elem} && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" ${elem}
+        grep -s -q -e "^#baseurl=" ${elem} && grep -s -q -e "^baseurl=" ${elem} && sed -i -e "/^baseurl=/d" ${elem};
+        grep -s -q -e "^#baseurl=" ${elem} && sed -i -e "s/^#baseurl=/baseurl=/g" ${elem}
+        sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
+        sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" ${elem}    
+    done
+fi
