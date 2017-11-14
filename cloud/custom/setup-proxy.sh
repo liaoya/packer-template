@@ -2,16 +2,6 @@
 
 echo "==> Run custom setup proxy script"
 
-sed -i "/^http_proxy/Id" /etc/environment
-sed -i "/^https_proxy/Id" /etc/environment
-sed -i "/^no_proxy/Id" /etc/environment
-[ -f /etc/yum.conf ] && sed -i "/^proxy/Id" /etc/yum.conf
-[ -f /etc/dnf/dnf.conf ] && sed -i "/^proxy/Id" /etc/dnf/yum.conf
-[ -f /etc/apt/apt.conf ] && sed -i "/::proxy/Id" /etc/apt/apt.conf
-[ -f /etc/apt/apt.conf.d/01proxy ] && rm -f /etc/apt/apt.conf.d/01proxy
-[ -f /etc/systemd/system/docker.service.d/http-proxy.conf ] && rm -f /etc/systemd/system/docker.service.d/http-proxy.conf
-[ -f /etc/docker/daemon.json ] && rm -f /etc/docker/daemon.json
-
 if [[ -n $http_proxy ]]; then
     echo "==> Put $http_proxy to /etc/environment"
     cat <<EOF > /etc/environment
@@ -36,8 +26,8 @@ EOF
 fi
 
 [[ ! -n $YUM_PROXY && -n $http_proxy ]] && YUM_PROXY=$http_proxy
-[[ -f /etc/yum.conf && -n $YUM_PROXY ]] && { echo "==> Use $YUM_PROXY for yum"; sed -i "/^installonly_limit/i proxy=$YUM_PROXY" /etc/yum.conf; }
-[[ -f /etc/dnf/dnf.conf && -n $YUM_PROXY ]] && { echo "==> Use $YUM_PROXY for dnf"; sed -i "/^installonly_limit/i proxy=$YUM_PROXY" /etc/dnf/dnf.conf; }
+[[ -f /etc/yum.conf && -n $YUM_PROXY ]] && { echo "==> Use $YUM_PROXY for yum"; sed -i "/^installonly_limit/i proxy=$YUM_PROXY" /etc/yum.conf; } || true
+[[ -f /etc/dnf/dnf.conf && -n $YUM_PROXY ]] && { echo "==> Use $YUM_PROXY for dnf"; sed -i "/^installonly_limit/i proxy=$YUM_PROXY" /etc/dnf/dnf.conf; } || true
 
 mkdir -p /etc/systemd/system/docker.service.d/
 [[ -n $http_proxy ]] && cat <<EOF >/etc/systemd/system/docker.service.d/http-proxy.conf
@@ -54,4 +44,4 @@ mkdir -p /etc/docker
     "registry-mirrors": ["$DOCKER_MIRROR_SERVER"]
 }
 EOF
-[[ -n $DOCKER_MIRROR_SERVER ]] && sed "s/NO_PROXY=/&$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%' -e 's%:5000%%'),/" /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload
+[[ -n $DOCKER_MIRROR_SERVER ]] && sed -i -e "s/NO_PROXY=/&$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%' -e 's%:5000%%'),/" /etc/systemd/system/docker.service.d/http-proxy.conf || true

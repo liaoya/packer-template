@@ -142,11 +142,11 @@
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",
         "install_vagrant_key": "true",
-        "iso_checksum": "2a75eebcd312f4d3ba299232d2c796a273b73cc934d44b66513fd7984f343f56",
+        "iso_checksum": "",
         "iso_checksum_type": "sha256",
         "iso_name": "ubuntu-16.04-server-cloudimg-amd64-disk1.img",
         "iso_path": "",
-        "iso_url": "http://cloud-images.ubuntu.com/releases/xenial/release-20171026.1/ubuntu-16.04-server-cloudimg-amd64-disk1.img",
+        "iso_url": "",
         "memory": "2048",
         "no_proxy": "{{env `no_proxy`}}",
         "rsync_proxy": "{{env `rsync_proxy`}}",
@@ -155,7 +155,7 @@
         "ssh_username": "vagrant",
         "ssh_wait_timeout": "150m",
         "version": "{{isotime \"20060102\"}}",
-        "ubuntu_name": "xenial64",
+        "ubuntu_name": "",
         "vm_name": "kvm"
     }
 }

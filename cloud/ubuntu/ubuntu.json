@@ -85,15 +85,18 @@
         "disk_size": "16384",
         "headless": "true",
         "install_vagrant_key": "true",
-        "iso_checksum": "2a75eebcd312f4d3ba299232d2c796a273b73cc934d44b66513fd7984f343f56",
+        "iso_checksum": "",
         "iso_checksum_type": "sha256",
         "iso_name": "ubuntu-16.04-server-cloudimg-amd64-disk1.img",
         "iso_path": "",
-        "iso_url": "http://cloud-images.ubuntu.com/releases/xenial/release-20171026.1/ubuntu-16.04-server-cloudimg-amd64-disk1.img",
+        "iso_url": "",
         "memory": "1024",
+        "sparsify": "false",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
         "ssh_wait_timeout": "15m",
+        "version": "{{isotime \"20060102\"}}",
+        "ubuntu_name": "",
         "vm_name": "xenial"
     }
 }

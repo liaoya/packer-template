@@ -1,14 +1,16 @@
 #!/bin/bash
 
-usage="Usage: -h(help) -c[lean] -f[orce] -n [name] -s[unsparsify] -t [qemu|virtualbox] -v [version]"
+usage="Usage: -h(help) -c[lean] -f[orce] -n [name] -s[unsparsify] -t [qemu|virtualbox] -u [ubuntu code name] -v [version]"
 
 clean=0
 force=0
 name=""
 sparsify=1
 type=""
+ubuntu="xenial64"
 version=""
 
+PACKERARGS=""
 CACHE_SERVER="10.113.69.79"
 # https://stackoverflow.com/questions/13322485/how-to-get-the-primary-ip-address-of-the-local-machine-on-linux-and-os-x
 IPADDR=$(hostname -I | cut -d' ' -f1)
@@ -16,7 +18,7 @@ LOCATION=""
 if [[ $IPADDR =~ '10.113' ]]; then LOCATION="lab"; fi
 if [[ $IPADDR =~ '10.182.17' ]]; then LOCATION="office"; fi
 
-while getopts "cfsn:t:v:h" arg
+while getopts "cfsn:t:u:v:h" arg
 do
     case $arg in
         c):
@@ -34,6 +36,9 @@ do
         t):
             type=$OPTARG
             ;;
+        u):
+            ubuntu=$OPTARG
+            ;;
         v):
             version=$OPTARG
             ;;
@@ -49,6 +54,11 @@ do
 done
 
 [[ -z $name || ! -f ${name}.json ]] && { echo "There is no json file \"${name}.json\""; exit 1; }
+if [[ -f ../conf/${ubuntu}.json ]]; then
+    PACKERARGS="$PACKERARGS -var-file ../conf/${ubuntu}.json -var \"ubuntu_name=$ubuntu\""
+else
+    echo "There is no ../conf/${ubuntu}.json" && exit 1
+fi
 
 if [ $clean -gt 0 ]; then
     echo "==> Clean all the cache and build artifacts"
@@ -63,14 +73,13 @@ if [ $clean -gt 0 ]; then
     fi
 fi
 
-PACKERARGS=""
 if [[ -n $LOCATION ]]; then
     echo "==> Download Build artifacts"
     scp -pqr root@$CACHE_SERVER:/var/www/html/saas/ovs/16.04-xenial/2.8.1/*.deb build/output/
     scp -pqr root@$CACHE_SERVER:/var/www/html/saas/binary/ubuntu-16.04/*.txz build/output/
     scp -pqr root@$CACHE_SERVER:/var/www/html/saas/binary/docker/xenial/* download/
-    [[ $LOCATION == "office" ]] && PACKERARGS='-var-file ../conf/office.json -var-file ../conf/jaist.json'
-    [[ $LOCATION == "lab" ]] && PACKERARGS='-var-file ../conf/lab.json -var-file ../conf/jaist.json'
+    [[ $LOCATION == "office" ]] && PACKERARGS="$PACKERARGS -var-file ../conf/office.json -var-file ../conf/jaist.json"
+    [[ $LOCATION == "lab" ]] && PACKERARGS="$PACKERARGS -var-file ../conf/lab.json -var-file ../conf/jaist.json"
 else
     (cd build; vagrant up && vagrant destory)
     (cd download; bash download.sh)
@@ -95,15 +104,15 @@ fi
 
 if [[ -z $type ]] || [[ $type == "qemu" ]]; then 
     if [[ -d ../qemu/$name ]]; then
-        if [[ $force -eq 0 ]]; then echo "../qemu/$name exist"; continue; else rm -fr qemu/$name; fi
+        if [[ $force -eq 0 ]]; then echo "../qemu/$name exist"; else rm -fr ../qemu/$name; fi
     fi
-    echo packer build -only qemu $PACKERARGS $name.json
-    packer build -only qemu $PACKERARGS $name.json
+    echo packer build -on-error=ask -only qemu $PACKERARGS $name.json
+    packer build -on-error=ask -only qemu $PACKERARGS $name.json
 fi
 if [[ -z $type ]] || [[ $type == "virtualbox" ]]; then
     if [[ -d ../virtualbox/$name ]]; then
-        if [[ $force -eq 0 ]]; then echo "../virtualbox/$name exist"; continue; else rm -fr ../virtualbox/$name; fi
+        if [[ $force -eq 0 ]]; then echo "../virtualbox/$name exist"; else rm -fr ../virtualbox/$name; fi
     fi
-    echo packer build -only virtualbox-ovf $PACKERARGS -var source_path=$OVA_FILE -var checksum=$(sha256sum $OVA_FILE | cut -d ' ' -f 1) $name.json
-    packer build -only virtualbox-ovf $PACKERARGS -var source_path=$OVA_FILE -var checksum=$(sha256sum $OVA_FILE | cut -d ' ' -f 1) $name.json
+    echo packer build -on-error=ask -only virtualbox-ovf $PACKERARGS -var source_path=$OVA_FILE -var checksum=$(sha256sum $OVA_FILE | cut -d ' ' -f 1) $name.json
+    packer build -on-error= -only virtualbox-ovf $PACKERARGS -var source_path=$OVA_FILE -var checksum=$(sha256sum $OVA_FILE | cut -d ' ' -f 1) $name.json
 fi
