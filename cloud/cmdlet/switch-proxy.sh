@@ -13,7 +13,7 @@ while true ; do
 done
 
 [[ $EUID -gt 0 ]] && { echo "Only root can run this script"; exit 1; }
-[[ -n $LOCATION ]] || { echo "Please specify a location"; exit 1; }
+[[ -n $LOCATION ]] || { echo "Please specify a location (lab|office)"; exit 1; }
 
 HTTP_PROXY="http://cn-proxy.jp.oracle.com:80"
 NO_PROXY="localhost,127.0.0.1,.cn.oracle.com,.jp.oracle.com,.us.oracle.com,.oraclecorp.com"

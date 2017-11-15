@@ -44,6 +44,12 @@
     "provisioners": [
         {
             "type": "file",
+            "source": "build/output",
+            "destination": "/tmp"
+        },
+
+        {
+            "type": "file",
             "source": "../cmdlet",
             "destination": "/tmp"
         },
@@ -70,7 +76,7 @@
                 "ftp_proxy={{user `ftp_proxy`}}",
                 "no_proxy={{user `no_proxy`}}",
                 "rsync_proxy={{user `rsync_proxy`}}"
-            ],
+            ],            
             "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
             "scripts": [
                 "../custom/disable-cloud-init.sh",
@@ -78,7 +84,10 @@
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
                 "../custom/centos/setup-openstack-repo.sh",
+                "../custom/centos/setup-libvirt-repo.sh",
                 "../custom/setup-repos.sh",
+                "../custom/centos/setup-common.sh",
+                "../custom/centos/kvm.sh",
                 "../custom/motd.sh",
                 "../custom/centos/cleanup.sh"
             ],
@@ -107,25 +116,27 @@
     
     "variables": {
         "centos_name": "",
-        "cpus": "2",
+        "cpus": "1",
         "disk_size": "32768",
         "ftp_proxy": "{{env `ftp_proxy`}}",
         "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",
-        "https_proxy": "{{env `https_proxy`}}",        
+        "https_proxy": "{{env `https_proxy`}}",
         "install_vagrant_key": "true",
         "iso_checksum": "",
         "iso_checksum_type": "sha256",
         "iso_name": "",
         "iso_path": "",
         "iso_url": "",
-        "memory": "8192",
+        "memory": "2048",
         "no_proxy": "{{env `no_proxy`}}",
         "rsync_proxy": "{{env `rsync_proxy`}}",
+        "sparsify": "true",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
         "ssh_wait_timeout": "15m",
-        "vm_name": "controller",
+        "version": "{{isotime \"20060102\"}}",
+        "vm_name": "centos-kvm",
         "yum_mirror_server": "{{env `yum_mirror_server`}}",
         "yum_mirror_epel_path": "{{env `yum_mirror_epel_path`}}",
         "yum_mirror_path": "{{env `yum_mirror_path`}}",

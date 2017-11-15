@@ -58,7 +58,7 @@
             "environment_vars": [
                 "IMAGENAME={{user `vm_name`}}",
                 "OUTPUT=../qemu/{{ user `vm_name` }}",
-                "DEST=image/{{ user `vm_name` }}"
+                "DEST=image/{{ user `centos_name` }}"
             ],
             "type": "shell-local",
             "only": [
@@ -72,6 +72,7 @@
     ],
     
     "variables": {
+        "centos_name": "",
         "cpus": "1",
         "disk_size": "16384",
         "headless": "true",

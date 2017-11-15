@@ -182,9 +182,9 @@
     ],
 
     "variables": {
-        "apt_mirror_server": "",
-        "apt_mirror_path": "",
-        "apt_proxy": "{{env `http_proxy`}}",
+        "apt_mirror_server": "{{en `apt_mirror_server`}}",
+        "apt_mirror_path": "{{en `apt_mirror_server`}}",
+        "apt_proxy": "{{env `apt_proxy`}}",
         "checksum": "",
         "checksum_type": "sha256",
         "cpus": "2",
@@ -210,6 +210,6 @@
         "ssh_wait_timeout": "150m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "",
-        "vm_name": "docker"
+        "vm_name": "ubuntu-docker"
     }
 }

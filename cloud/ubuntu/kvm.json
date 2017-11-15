@@ -121,19 +121,12 @@
                 "../post/backup-disk.sh"
             ]
         },
-
-        {
-            "keep_input_artifact": false,
-            "output": "../box/{{ user `ubuntu_name` }}/{{user `vm_name`}}-{{.Provider}}-{{user `version`}}.box",
-            "type": "vagrant",
-            "vagrantfile_template": "{{ user `vagrantfile_template` }}"
-        }
     ],
 
     "variables": {
-        "apt_mirror_server": "",
-        "apt_mirror_path": "",
-        "apt_proxy": "{{env `http_proxy`}}",
+        "apt_mirror_server": "{{en `apt_mirror_server`}}",
+        "apt_mirror_path": "{{en `apt_mirror_server`}}",
+        "apt_proxy": "{{env `apt_proxy`}}",
         "cpus": "2",
         "disk_size": "16384",
         "ftp_proxy": "{{env `ftp_proxy`}}",
@@ -156,6 +149,6 @@
         "ssh_wait_timeout": "150m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "",
-        "vm_name": "kvm"
+        "vm_name": "ubuntu-kvm"
     }
 }
