@@ -97,6 +97,6 @@
         "ssh_wait_timeout": "15m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "",
-        "vm_name": "xenial"
+        "vm_name": "xenial64"
     }
 }

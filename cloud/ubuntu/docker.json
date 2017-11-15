@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "../qemu/{{ user `vm_name` }}",
+            "output_directory": "../qemu/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -22,7 +22,7 @@
                     "../seed/seed.iso"
                 ]
             ],
-            "vm_name": "{{ user `vm_name` }}.qcow2",
+            "vm_name": "{{ user `ubuntu_name` }}-{{ user `vm_name` }}.qcow2",
             "boot_command": [
                 "<enter>"
             ],
@@ -49,7 +49,7 @@
             ],
             "format": "ova",
             "guest_additions_mode": "disable",
-            "output_directory": "../virtualbox/{{ user `vm_name` }}",
+            "output_directory": "../virtualbox/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
             "post_shutdown_delay": "1m",
             "source_path": "{{ user `source_path` }}",
             "vboxmanage": [
@@ -63,7 +63,7 @@
                 ]
             ],
             "virtualbox_version_file": ".vbox_version",
-            "vm_name": "{{ user `vm_name` }}",
+            "vm_name": "{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
             "boot_command": [
                 "<enter>"
             ],
@@ -142,8 +142,8 @@
     "post-processors": [
         {
             "environment_vars": [
-                "IMAGENAME={{user `vm_name`}}",
-                "OUTPUT=../qemu/{{ user `vm_name` }}",
+                "IMAGENAME={{ user `ubuntu_name` }}-{{user `vm_name`}}",
+                "OUTPUT=../qemu/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
                 "DEST=../image/{{ user `ubuntu_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
@@ -159,8 +159,8 @@
 
         {
             "environment_vars": [
-                "IMAGENAME={{user `vm_name`}}",
-                "OUTPUT=../virtualbox/{{ user `vm_name` }}",
+                "IMAGENAME={{ user `ubuntu_name` }}-{{user `vm_name`}}",
+                "OUTPUT=../virtualbox/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
                 "DEST=../image/{{ user `ubuntu_name` }}"
             ],
             "type": "shell-local",
@@ -210,6 +210,6 @@
         "ssh_wait_timeout": "150m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "",
-        "vm_name": "ubuntu-docker"
+        "vm_name": "docker"
     }
 }

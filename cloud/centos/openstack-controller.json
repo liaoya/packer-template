@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "../qemu/{{ user `vm_name` }}",
+            "output_directory": "../qemu/{{user `centos_name`}}-{{ user `vm_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -80,6 +80,7 @@
                 "../custom/centos/setup-openstack-repo.sh",
                 "../custom/setup-repos.sh",
                 "../custom/motd.sh",
+                "../custom/clean-proxy.sh",
                 "../custom/centos/cleanup.sh"
             ],
             "type": "shell"
@@ -90,7 +91,7 @@
         {
             "environment_vars": [
                 "IMAGENAME={{user `vm_name`}}",
-                "OUTPUT=../qemu/{{ user `vm_name` }}",
+                "OUTPUT=../qemu/{{user `centos_name`}}-{{ user `vm_name` }}",
                 "DEST=../image/{{ user `centos_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"

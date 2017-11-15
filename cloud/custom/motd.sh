@@ -17,6 +17,7 @@ fi
 
 if [ -f /etc/redhat-release ]; then
     PLATFORM_MSG=$(rpm -qf --queryformat '%{NAME}' /etc/redhat-release | cut -f 1 -d '-')
+    PLATFORM_MSG="$VM_NAME (On $PLATFORM_MSG)"
 fi
 
 BUILT_MSG=$(printf 'built %s' $(date +%Y-%m-%d))

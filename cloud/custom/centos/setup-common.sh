@@ -1,6 +1,6 @@
 #! /bin/bash
 
-hostnamectl set-hostname centos
+[[ -n $VM_NAME ]] && hostnamectl set-hostname $VM_NAME || true
 
 yum install -y -q sshpass screen
 
