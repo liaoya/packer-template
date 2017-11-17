@@ -37,7 +37,7 @@
             "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
+            "ssh_timeout": "{{user `ssh_timeout`}}"
         },
 
         {
@@ -79,7 +79,7 @@
             "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"     
+            "ssh_timeout": "{{user `ssh_timeout`}}"     
         }
     ],
     "post-processors": [
@@ -181,7 +181,7 @@
         "ssh_fullname": "ubuntu",
         "ssh_password": "ubuntu",
         "ssh_username": "ubuntu",
-        "ssh_wait_timeout": "150m",
+        "ssh_timeout": "150m",
         "vagrantfile_template": "",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "ubuntu1604",

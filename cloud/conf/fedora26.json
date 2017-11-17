@@ -1,0 +1,8 @@
+{
+    "fedora_name": "fedora26",
+    "iso_checksum": "37a621dda65b04e8b6eee207088ff7697795cb2affdac13ed77166453989557c",
+    "iso_checksum_type": "sha256",
+    "iso_name": "Fedora-Cloud-Base-26-1.5.x86_64.qcow2",
+    "iso_path": "",
+    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/26/CloudImages/x86_64/images/Fedora-Cloud-Base-26-1.5.x86_64.qcow2"
+}

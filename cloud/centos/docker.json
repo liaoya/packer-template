@@ -37,7 +37,7 @@
             "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
+            "ssh_timeout": "{{user `ssh_timeout`}}"
         }
     ],
 
@@ -80,6 +80,7 @@
             "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
             "scripts": [
                 "../custom/disable-cloud-init.sh",
+                "../custom/install-vagrant-key.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
@@ -134,7 +135,7 @@
         "sparsify": "true",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
-        "ssh_wait_timeout": "15m",
+        "ssh_timeout": "15m",
         "version": "{{isotime \"20060102\"}}",
         "vm_name": "docker",
         "yum_mirror_server": "{{env `yum_mirror_server`}}",

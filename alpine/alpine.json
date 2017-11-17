@@ -36,7 +36,7 @@
             "shutdown_command": "{{user `shutdown_command`}}",
             "ssh_password": "{{user `ssh_password`}}",
             "ssh_username": "{{user `ssh_username`}}",
-            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
+            "ssh_timeout": "{{user `ssh_timeout`}}"
         },
         {
             "type": "virtualbox-iso",
@@ -88,7 +88,7 @@
             "shutdown_command": "{{user `shutdown_command`}}",
             "ssh_password": "{{user `ssh_password`}}",
             "ssh_username": "{{user `ssh_username`}}",
-            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
+            "ssh_timeout": "{{user `ssh_timeout`}}"
         }
     ],
     "provisioners": [
@@ -169,7 +169,7 @@
         "shutdown_command": "/sbin/poweroff",
         "ssh_username": "root",
         "ssh_password": "alpine",
-        "ssh_wait_timeout": "10m",
+        "ssh_timeout": "10m",
         "timezone": "Asia/Shanghai",
         "vagrantfile_template": "",
         "version": "{{isotime \"20060102\"}}",

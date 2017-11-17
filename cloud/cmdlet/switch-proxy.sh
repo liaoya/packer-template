@@ -127,8 +127,8 @@ DNF_MIRROR_SERVER="http://ftp.jaist.ac.jp"
 DNF_MIRROR_PATH="/pub/Linux/Fedora"
 
 if [[ -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then
-    for item in $(ls -1 /etc/yum.repos.d/fedora*.repo); do [ -f ${item}.origin ] || cp ${item} ${item}.origin; done
-    for item in $(ls -1 /etc/yum.repos.d/fedora*.repo); do
+    for elem in $(ls -1 /etc/yum.repos.d/fedora*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
+    for elem in $(ls -1 /etc/yum.repos.d/fedora*.repo); do
         grep -s -q -e "^metalink=" ${elem} && sed -i -e "s/^metalink=/#metalink=/g" ${elem}
         grep -s -q -e "^#baseurl=" ${elem} && grep -s -q -e "^baseurl=" ${elem} && sed -i -e "/^baseurl=/d" ${elem};
         grep -s -q -e "^#baseurl=" ${elem} && sed -i -e "s/^#baseurl=/baseurl=/g" ${elem}

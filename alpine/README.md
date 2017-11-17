@@ -6,7 +6,7 @@
 
 ### Prepare
 
-Packer 1.1.1 is required since `ssh_timeout` was renamed to `ssh_wait_timeout`.
+Packer 1.1.1 is required since `ssh_timeout` was renamed to `ssh_timeout`.
 
 Put the following in `~/.bash_profile` or in command line.
 If iso file hosts in intranet server, please add that server in no_proxy list.

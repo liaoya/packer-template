@@ -37,16 +37,37 @@
             "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
             "ssh_password": "{{ user `ssh_password` }}",
             "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}"
+            "ssh_timeout": "{{user `ssh_timeout`}}"
         }
     ],
 
     "provisioners": [
         {
+            "type": "file",
+            "source": "../cmdlet",
+            "destination": "/tmp"
+        },
+
+        {
+            "type": "shell",
+            "inline": [
+                "chmod a+x /tmp/cmdlet/*.sh",
+                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin"
+            ]
+        },
+
+        {
+            "environment_vars": [
+                "SSH_USERNAME={{user `ssh_username`}}",
+                "http_proxy={{user `http_proxy`}}",
+                "https_proxy={{user `https_proxy`}}",
+                "no_proxy={{user `no_proxy`}}"
+            ],            
             "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
             "scripts": [
                 "../custom/disable-cloud-init.sh",
                 "../custom/ubuntu/setup.sh",
+                "../custom/install-vagrant-key.sh",
                 "../custom/motd.sh",
                 "../custom/ubuntu/cleanup.sh"
             ],
@@ -84,6 +105,8 @@
         "cpus": "1",
         "disk_size": "16384",
         "headless": "true",
+        "http_proxy": "{{env `http_proxy`}}",
+        "https_proxy": "{{env `https_proxy`}}",        
         "install_vagrant_key": "true",
         "iso_checksum": "",
         "iso_checksum_type": "sha256",
@@ -91,12 +114,13 @@
         "iso_path": "",
         "iso_url": "",
         "memory": "1024",
+        "no_proxy": "{{env `no_proxy`}}",
         "sparsify": "false",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
-        "ssh_wait_timeout": "15m",
+        "ssh_timeout": "15m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "",
-        "vm_name": "xenial64"
+        "vm_name": "ubuntu"
     }
 }
