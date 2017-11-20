@@ -1,9 +1,8 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
-  config.vm.box_version = "20171026.1.0"
   config.vm.hostname = "ubuntu-build-machine"
   
-  config.vm.synced_folder ".", "/vagrant", disabled: false
+  config.vm.synced_folder "..", "/vagrant", disabled: false
 
   if Vagrant.has_plugin?("vagrant-proxyconf") and ENV['http_proxy'].to_s != ''
     config.proxy.http     = ENV['http_proxy']

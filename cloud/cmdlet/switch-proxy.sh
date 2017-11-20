@@ -81,13 +81,11 @@ Environment="HTTPS_PROXY=$http_proxy"
 Environment="NO_PROXY=$no_proxy"
 EOF
 mkdir -p /etc/docker
-[[ -n $DOCKER_MIRROR_SERVER ]] && cat <<EOF >> /etc/docker/daemon.json
+[[ -n $DOCKER_MIRROR_SERVER ]] && cat <<EOF > /etc/docker/daemon.json
 {
     "disable-legacy-registry": true,
     "insecure-registries": ["$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%')"],
     "registry-mirrors": ["$DOCKER_MIRROR_SERVER"]
 }
 EOF
-[[ -n $http_proxy && -n $DOCKER_MIRROR_SERVER ]] && sed "s/NO_PROXY=/&$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%' -e 's%:5000%%'),/" /etc/systemd/system/docker.service.d/http-proxy.conf
-
-systemctl daemon-reload
+[[ -n $http_proxy && -n $DOCKER_MIRROR_SERVER ]] && sed "s/NO_PROXY=/&$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%' -e 's%:5000%%'),/" /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload && systemctl restart docker
