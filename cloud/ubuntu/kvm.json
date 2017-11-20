@@ -94,7 +94,7 @@
                 "../custom/setup-repos.sh",
                 "../custom/ubuntu/setup-common.sh",
                 "../custom/ubuntu/kvm.sh",
-                "../custom/ubuntu/ovs.sh",
+                "../custom/ubuntu/openvswitch.sh",
                 "../custom/ubuntu/openbox.sh",
                 "../custom/setup-repos.sh",
                 "../custom/clean-proxy.sh",
