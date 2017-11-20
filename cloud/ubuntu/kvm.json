@@ -45,7 +45,7 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "build/output",
+            "source": "build/{{ user `ubuntu_name` }}/output",
             "destination": "/tmp"
         },
 
@@ -75,6 +75,7 @@
                 "APT_MIRROR_PATH={{user `apt_mirror_path`}}",
                 "APT_PROXY={{user `apt_proxy`}}",
                 "DEBIAN_FRONTEND=noninteractive",
+                "OFFICIAL_BUILD={{user `official_build`}}",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
                 "VM_NAME={{user `vm_name`}}",
@@ -95,7 +96,6 @@
                 "../custom/ubuntu/setup-common.sh",
                 "../custom/ubuntu/kvm.sh",
                 "../custom/ubuntu/openvswitch.sh",
-                "../custom/ubuntu/openbox.sh",
                 "../custom/setup-repos.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
@@ -143,6 +143,7 @@
         "iso_url": "",
         "memory": "2048",
         "no_proxy": "{{env `no_proxy`}}",
+        "official_build": "1",
         "rsync_proxy": "{{env `rsync_proxy`}}",
         "sparsify": "true",
         "ssh_password": "vagrant",
