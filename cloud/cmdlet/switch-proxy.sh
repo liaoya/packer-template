@@ -17,9 +17,11 @@ done
 
 # Remove the previous settings
 
+sed -i "/^ftp_proxy/Id" /etc/environment
 sed -i "/^http_proxy/Id" /etc/environment
 sed -i "/^https_proxy/Id" /etc/environment
 sed -i "/^no_proxy/Id" /etc/environment
+sed -i "/^rysnc_proxy/Id" /etc/environment
 [ -f /etc/yum.conf ] && sed -i "/^proxy/Id" /etc/yum.conf
 [ -f /etc/dnf/dnf.conf ] && sed -i "/^proxy/Id" /etc/dnf/yum.conf
 [ -f /etc/apt/apt.conf ] && sed -i "/::proxy/Id" /etc/apt/apt.conf
@@ -80,12 +82,17 @@ Environment="HTTP_PROXY=$http_proxy"
 Environment="HTTPS_PROXY=$http_proxy"
 Environment="NO_PROXY=$no_proxy"
 EOF
-mkdir -p /etc/docker
-[[ -n $DOCKER_MIRROR_SERVER ]] && cat <<EOF > /etc/docker/daemon.json
+
+if [[ -n $DOCKER_MIRROR_SERVER ]]; then
+    mkdir -p /etc/docker
+    DOCKER_MIRROR_SERVER_IP=$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%')
+    cat <<EOF > /etc/docker/daemon.json
 {
     "disable-legacy-registry": true,
-    "insecure-registries": ["$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%')"],
+    "insecure-registries": ["$DOCKER_MIRROR_SERVER_IP"],
     "registry-mirrors": ["$DOCKER_MIRROR_SERVER"]
 }
 EOF
-[[ -n $http_proxy && -n $DOCKER_MIRROR_SERVER ]] && sed "s/NO_PROXY=/&$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%' -e 's%:5000%%'),/" /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload && systemctl restart docker
+    [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf ]] && { grep -s -q $DOCKER_MIRROR_SERVER_IP /etc/systemd/system/docker.service.d/http-proxy.conf ||  sed -i "s/NO_PROXY=/&$DOCKER_MIRROR_SERVER_IP,/" /etc/systemd/system/docker.service.d/http-proxy.conf; }
+    [[ $(command -v docker) ]] && systemctl daemon-reload && systemctl restart docker
+fi

@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "../qemu/{{ user `vm_name` }}",
+            "output_directory": "../qemu/{{ user `centos_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -22,7 +22,7 @@
                     "../seed/seed.iso"
                 ]
             ],
-            "vm_name": "{{ user `vm_name` }}.qcow2",
+            "vm_name": "{{ user `centos_name` }}.qcow2",
             "boot_command": [
                 "<enter>"
             ],
@@ -44,6 +44,12 @@
     "provisioners": [
         {
             "type": "file",
+            "source": "build/output",
+            "destination": "/tmp"
+        },
+
+        {
+            "type": "file",
             "source": "../cmdlet",
             "destination": "/tmp"
         },
@@ -59,14 +65,26 @@
         {
             "environment_vars": [
                 "SSH_USERNAME={{user `ssh_username`}}",
+                "SSH_PASSWORD={{user `ssh_password`}}",
+                "VM_NAME={{user `centos_name`}}",
+                "YUM_MIRROR_SERVER={{user `yum_mirror_server`}}",
+                "YUM_MIRROR_EPEL_PATH={{user `yum_mirror_epel_path`}}",
+                "YUM_MIRROR_PATH={{user `yum_mirror_path`}}",
+                "YUM_PROXY={{user `yum_proxy`}}",
                 "http_proxy={{user `http_proxy`}}",
                 "https_proxy={{user `https_proxy`}}",
-                "no_proxy={{user `no_proxy`}}"
-            ],            
+                "ftp_proxy={{user `ftp_proxy`}}",
+                "no_proxy={{user `no_proxy`}}",
+                "rsync_proxy={{user `rsync_proxy`}}"
+            ],          
             "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
             "scripts": [
                 "../custom/disable-cloud-init.sh",
                 "../custom/install-vagrant-key.sh",
+                "../custom/clean-proxy.sh",
+                "../custom/setup-proxy.sh",
+                "../custom/setup-repos.sh",
+                "../custom/centos/setup-common.sh",                
                 "../custom/motd.sh",
                 "../custom/centos/cleanup.sh"
             ],
@@ -77,8 +95,8 @@
     "post-processors": [
         {
             "environment_vars": [
-                "IMAGENAME={{user `vm_name`}}",
-                "OUTPUT=../qemu/{{ user `vm_name` }}",
+                "IMAGENAME={{user `centos_name`}}",
+                "OUTPUT=../qemu/{{ user `centos_name` }}",
                 "DEST=../image/{{ user `centos_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
@@ -108,11 +126,10 @@
         "iso_url": "",
         "memory": "1024",
         "no_proxy": "{{env `no_proxy`}}",
-        "sparsify": "false",
+        "sparsify": "true",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
         "ssh_timeout": "15m",
-        "version": "{{isotime \"20060102\"}}",
-        "vm_name": "centos"
+        "version": "{{isotime \"20060102\"}}"
     }
 }

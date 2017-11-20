@@ -84,12 +84,11 @@
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
-                "../custom/centos/setup-openstack-repo.sh",
-                "../custom/setup-repos.sh",
                 "../custom/centos/setup-common.sh",
+                "../custom/centos/setup-openstack-repo.sh",
                 "../custom/centos/docker.sh",
-                "../custom/motd.sh",
                 "../custom/clean-proxy.sh",
+                "../custom/motd.sh",
                 "../custom/centos/cleanup.sh"
             ],
             "type": "shell"

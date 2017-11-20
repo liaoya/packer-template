@@ -2,9 +2,11 @@
 
 echo "==> Run clean proxy script"
 
+sed -i "/^ftp_proxy/Id" /etc/environment
 sed -i "/^http_proxy/Id" /etc/environment
 sed -i "/^https_proxy/Id" /etc/environment
 sed -i "/^no_proxy/Id" /etc/environment
+sed -i "/^rysnc_proxy/Id" /etc/environment
 
 [ -f /etc/apt/apt.conf ] && sed -i "/::proxy/Id" /etc/apt/apt.conf || true
 [ -f /etc/apt/apt.conf.d/01proxy ] && rm -f /etc/apt/apt.conf.d/01proxy  || true
