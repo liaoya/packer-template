@@ -58,7 +58,13 @@
 
         {
             "environment_vars": [
+                "APT_MIRROR_SERVER={{user `apt_mirror_server`}}",
+                "APT_MIRROR_PATH={{user `apt_mirror_path`}}",
+                "APT_PROXY={{user `apt_proxy`}}",
+                "DEBIAN_FRONTEND=noninteractive",
                 "SSH_USERNAME={{user `ssh_username`}}",
+                "SSH_PASSWORD={{user `ssh_password`}}",
+                "VM_NAME={{user `ubuntu_name`}}",
                 "http_proxy={{user `http_proxy`}}",
                 "https_proxy={{user `https_proxy`}}",
                 "no_proxy={{user `no_proxy`}}"
@@ -68,6 +74,12 @@
                 "../custom/disable-cloud-init.sh",
                 "../custom/ubuntu/setup.sh",
                 "../custom/install-vagrant-key.sh",
+                "../custom/install-custome.sh",
+                "../custom/clean-proxy.sh",
+                "../custom/setup-proxy.sh",
+                "../custom/setup-repos.sh",
+                "../custom/ubuntu/setup-common.sh",
+                "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/ubuntu/cleanup.sh"
             ],
@@ -102,6 +114,9 @@
     ],
 
     "variables": {
+        "apt_mirror_server": "{{en `apt_mirror_server`}}",
+        "apt_mirror_path": "{{en `apt_mirror_server`}}",
+        "apt_proxy": "{{env `apt_proxy`}}",
         "cpus": "1",
         "disk_size": "16384",
         "headless": "true",
