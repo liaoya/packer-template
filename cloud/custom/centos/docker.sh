@@ -7,8 +7,13 @@ echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
 
 yum install -y -q openvswitch-ovn-docker bridge-utils
 systemctl enable openvswitch
-yum install -y -q yum-utils && yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo && yum install -y -q docker-ce || true
-# yum install -y -q docker
+if [[ -n $OFFICIAL_DOCKER && "$OFFICIAL_DOCKER" == "true" ]]; then
+    yum install -y -q yum-utils
+    yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo
+    yum install -y -q docker-ce
+else
+    yum install -y -q docker
+fi
 systemctl enable docker
 
 curl -LsS https://raw.githubusercontent.com/openvswitch/ovs/master/utilities/ovs-docker -o /usr/local/bin/ovs-docker && chmod a+x /usr/local/bin/ovs-docker || true
