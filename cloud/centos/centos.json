@@ -84,7 +84,8 @@
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
-                "../custom/centos/setup-common.sh",                
+                "../custom/centos/setup-common.sh",
+                "../custom/clean-proxy.sh",              
                 "../custom/motd.sh",
                 "../custom/centos/cleanup.sh"
             ],
