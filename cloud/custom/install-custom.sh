@@ -1,6 +1,8 @@
 #! /bin/bash
 
-[[ -n $VM_NAME && $(command -v hostnamectl) ]] && hostnamectl set-hostname $VM_NAME || true
+[[ -n $VM_NAME && $(command -v hostnamectl) ]] && echo "Set hostname to $VM_NAME" && hostnamectl set-hostname $VM_NAME || true
+
+# sed -i "s/^SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config
 
 echo "==> Install self built software"
 declare -a pkgs=($(ls -1 /tmp/output/fish*.txz | sort | tail -n 1) \

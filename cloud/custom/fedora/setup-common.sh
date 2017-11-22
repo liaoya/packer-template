@@ -1,4 +1,4 @@
 #! /bin/bash
 
-echo "==> Install common packages"
+echo "==> Install Fedora common packages"
 

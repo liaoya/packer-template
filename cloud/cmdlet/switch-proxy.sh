@@ -29,14 +29,12 @@ sed -i "/^rysnc_proxy/Id" /etc/environment
 [ -f /etc/systemd/system/docker.service.d/http-proxy.conf ] && rm -f /etc/systemd/system/docker.service.d/http-proxy.conf
 [ -f /etc/docker/daemon.json ] && rm -f /etc/docker/daemon.json
 
-if 
-
 HTTP_PROXY="http://cn-proxy.jp.oracle.com:80"
 NO_PROXY="localhost,127.0.0.1,.cn.oracle.com,.jp.oracle.com,.us.oracle.com,.oraclecorp.com"
 http_proxy=$HTTP_PROXY
 no_proxy=$NO_PROXY
 
-echo "==> Put proxy to /etc/environment"
+echo "Put proxy to /etc/environment"
 
 cat <<EOF >> /etc/environment
 http_proxy=$HTTP_PROXY
@@ -53,12 +51,12 @@ if [[ $LOCATION == "office" ]]; then
     APT_PROXY=http://10.182.172.49:3128
     DOCKER_MIRROR_SERVER=http://10.182.172.49:5000
     YUM_PROXY=http://10.182.172.49:3128
-    no_proxy="$no_proxy,10.182.172.49"
+    no_proxy="$no_proxy,10.182.172.79"
 elif [[ $LOCATION == "lab" ]]; then
     APT_PROXY=http://10.113.69.101:3128
     DOCKER_MIRROR_SERVER=http://10.113.69.101:5000
     YUM_PROXY=http://10.113.69.101:3128
-    no_proxy="$no_proxy,10.113.69.101"
+    no_proxy="$no_proxy,10.113.69.79"
 fi
 
 echo "Set Proxy for $LOCATION"
@@ -75,15 +73,19 @@ EOF
 
 [[ -f /etc/dnf/dnf.conf && -n $YUM_PROXY ]] && sed -i "/^installonly_limit/i proxy=$YUM_PROXY" /etc/dnf/dnf.conf
 
-mkdir -p /etc/systemd/system/docker.service.d/
-[[ -n $http_proxy ]] && cat <<EOF >/etc/systemd/system/docker.service.d/http-proxy.conf
+if [[ -n $http_proxy ]]; then
+    echo "Use $http_proxy for /etc/systemd/system/docker.service.d/http-proxy.conf"
+    mkdir -p /etc/systemd/system/docker.service.d/
+    cat <<EOF >/etc/systemd/system/docker.service.d/http-proxy.conf
 [Service]
 Environment="HTTP_PROXY=$http_proxy"
 Environment="HTTPS_PROXY=$http_proxy"
 Environment="NO_PROXY=$no_proxy"
 EOF
+fi
 
 if [[ -n $DOCKER_MIRROR_SERVER ]]; then
+    echo "Use $DOCKER_MIRROR_SERVER for /etc/docker/daemon.json"
     mkdir -p /etc/docker
     DOCKER_MIRROR_SERVER_IP=$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%')
     cat <<EOF > /etc/docker/daemon.json
@@ -93,6 +95,9 @@ if [[ -n $DOCKER_MIRROR_SERVER ]]; then
     "registry-mirrors": ["$DOCKER_MIRROR_SERVER"]
 }
 EOF
-    [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf ]] && { grep -s -q $DOCKER_MIRROR_SERVER_IP /etc/systemd/system/docker.service.d/http-proxy.conf ||  sed -i "s/NO_PROXY=/&$DOCKER_MIRROR_SERVER_IP,/" /etc/systemd/system/docker.service.d/http-proxy.conf; }
-    [[ $(command -v docker) ]] && systemctl daemon-reload && systemctl restart docker
+    if [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf && ! $(grep -q $DOCKER_MIRROR_SERVER_IP /etc/systemd/system/docker.service.d/http-proxy.conf) ]]; then
+        echo "Add $DOCKER_MIRROR_SERVER_IP to /etc/systemd/system/docker.service.d/http-proxy.conf NO_PROXY list"
+        sed -i "s/NO_PROXY=/&$DOCKER_MIRROR_SERVER_IP,/" /etc/systemd/system/docker.service.d/http-proxy.conf
+    fi
+    [[ $(command -v docker) ]] && echo "Restart docker daemon" && systemctl daemon-reload && systemctl restart docker || true
 fi

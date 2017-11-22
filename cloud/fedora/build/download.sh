@@ -22,6 +22,6 @@ CACHE_SERVER="10.113.69.79"
 
 declare -a pkgs=(fish mc nano sshpass tmux)
 for folder in $(ls -1d $(dirname $(readlink -f $0))/fedora*/); do
-    for elem in ${pkgs[@]}; do scp -pqr root@$CACHE_SERVER:/var/www/html/saas/binary/$(basename $folder)/${elem}* $(dirname $(readlink -f $0))/$(basename $folder)/output; done
+    for elem in ${pkgs[@]}; do [ -d $folder/output ] && scp -pqr root@$CACHE_SERVER:/var/www/html/saas/binary/$(basename $folder)/${elem}* $(dirname $(readlink -f $0))/$(basename $folder)/output; done
 done
 

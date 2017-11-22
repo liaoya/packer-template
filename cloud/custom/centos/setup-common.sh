@@ -1,3 +1,3 @@
 #! /bin/bash
 
-echo "==> Install common packages"
+echo "==> Install CentOS common packages"

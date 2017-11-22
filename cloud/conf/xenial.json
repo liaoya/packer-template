@@ -1,8 +1,8 @@
 {
-    "iso_checksum": "df920257937c753d5adc8e7ba5b851dd97e7761a6083833078c6461da5fbda4d",
+    "iso_checksum": "e6a085120a281e13a289a891f9f084da18542722297bf30cd05b905a274738b2",
     "iso_checksum_type": "sha256",
     "iso_name": "ubuntu-16.04-server-cloudimg-amd64-disk1.img",
     "iso_path": "",
     "iso_url": "http://cloud-images.ubuntu.com/releases/xenial/release-20171116/ubuntu-16.04-server-cloudimg-amd64-disk1.img",
-    "ubuntu_name": "xenial64"
+    "ubuntu_name": "xenial"
 }

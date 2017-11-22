@@ -6,8 +6,6 @@ if [[ -d /etc/apt && -n $APT_MIRROR_SERVER && -n $APT_MIRROR_PATH ]]; then
     echo "APT_MIRROR_SERVER is \"$APT_MIRROR_SERVER\", APT_MIRROR_PATH is \"$APT_MIRROR_PATH\""
     [ -f /etc/apt/sources.list.origin ] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
     sed -i -e "s%http://.*archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
-    systemctl stop apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer
-    systemctl disable apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer    
     apt-get update -qq
 fi
 

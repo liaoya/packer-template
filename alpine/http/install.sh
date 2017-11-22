@@ -40,6 +40,7 @@ echo -e "$PASSWORD\n$PASSWORD\n" | passwd
 setup-sshd -c openssh
 /etc/init.d/hostname --quiet restart
 if [[ ! -z $PROXY ]]; then
+    echo "==> Use Proxy $PROXY"
     setup-proxy -q $PROXY
     [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 fi
