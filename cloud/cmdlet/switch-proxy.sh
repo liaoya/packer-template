@@ -87,14 +87,16 @@ fi
 if [[ -n $DOCKER_MIRROR_SERVER ]]; then
     echo "Use $DOCKER_MIRROR_SERVER for /etc/docker/daemon.json"
     mkdir -p /etc/docker
-    DOCKER_MIRROR_SERVER_IP=$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%')
+    DOCKER_MIRROR_SERVER_IP_PORT=$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%')
     cat <<EOF > /etc/docker/daemon.json
 {
     "disable-legacy-registry": true,
-    "insecure-registries": ["$DOCKER_MIRROR_SERVER_IP"],
-    "registry-mirrors": ["$DOCKER_MIRROR_SERVER"]
+    "insecure-registries": ["$DOCKER_MIRROR_SERVER_IP_PORT"],
+    "registry-mirrors": ["$DOCKER_MIRROR_SERVER_IP_PORT"]
 }
 EOF
+# https://unix.stackexchange.com/questions/312280/split-string-by-delimiter-and-get-n-th-element
+    DOCKER_MIRROR_SERVER_IP=$(cut -d':' -f1 <<<$DOCKER_MIRROR_SERVER_IP)
     if [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf && ! $(grep -q $DOCKER_MIRROR_SERVER_IP /etc/systemd/system/docker.service.d/http-proxy.conf) ]]; then
         echo "Add $DOCKER_MIRROR_SERVER_IP to /etc/systemd/system/docker.service.d/http-proxy.conf NO_PROXY list"
         sed -i "s/NO_PROXY=/&$DOCKER_MIRROR_SERVER_IP,/" /etc/systemd/system/docker.service.d/http-proxy.conf
