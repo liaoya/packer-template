@@ -9,9 +9,11 @@ while getopts "ch" o; do
             ;;
         h):
             echo $USAGE
+            exit 0
             ;;
         *)
             echo $USAGE
+            exit 1
             ;;
     esac
 done
