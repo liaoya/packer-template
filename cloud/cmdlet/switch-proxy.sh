@@ -1,16 +1,9 @@
 #!/bin/bash
 
-TEMP=`getopt -o l: --long location: -- "$@"`
-eval set -- "$TEMP"
-
-while true ; do
-    case "$1" in
-        -l|--location)
-            LOCATION=$2 ; shift 2 ;;
-        --) shift ; break ;;
-        *) echo "Internal error!" ; exit 1 ;;
-    esac
-done
+IPADDR=$(hostname -I | cut -d' ' -f1)
+LOCATION=""
+if [[ $IPADDR =~ '10.113' ]]; then LOCATION="lab"; fi
+if [[ $IPADDR =~ '10.182.17' ]]; then LOCATION="office"; fi
 
 [[ $EUID -gt 0 ]] && { echo "Only root can run this script"; exit 1; }
 [[ -n $LOCATION ]] || { echo "Please specify a location (lab|office)"; exit 1; }
@@ -84,7 +77,7 @@ Environment="NO_PROXY=$no_proxy"
 EOF
 fi
 
-if [[ -n $DOCKER_MIRROR_SERVER ]]; then
+if [[ $(command -v docker) && -n $DOCKER_MIRROR_SERVER ]]; then
     echo "Use $DOCKER_MIRROR_SERVER for /etc/docker/daemon.json"
     mkdir -p /etc/docker
     DOCKER_MIRROR_SERVER_IP_PORT=$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%')
@@ -92,14 +85,14 @@ if [[ -n $DOCKER_MIRROR_SERVER ]]; then
 {
     "disable-legacy-registry": true,
     "insecure-registries": ["$DOCKER_MIRROR_SERVER_IP_PORT"],
-    "registry-mirrors": ["$DOCKER_MIRROR_SERVER_IP_PORT"]
+    "registry-mirrors": ["$DOCKER_MIRROR_SERVER"]
 }
 EOF
 # https://unix.stackexchange.com/questions/312280/split-string-by-delimiter-and-get-n-th-element
-    DOCKER_MIRROR_SERVER_IP=$(cut -d':' -f1 <<<$DOCKER_MIRROR_SERVER_IP)
+    DOCKER_MIRROR_SERVER_IP=$(cut -d':' -f1 <<<$DOCKER_MIRROR_SERVER_IP_PORT)
     if [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf && ! $(grep -q $DOCKER_MIRROR_SERVER_IP /etc/systemd/system/docker.service.d/http-proxy.conf) ]]; then
         echo "Add $DOCKER_MIRROR_SERVER_IP to /etc/systemd/system/docker.service.d/http-proxy.conf NO_PROXY list"
         sed -i "s/NO_PROXY=/&$DOCKER_MIRROR_SERVER_IP,/" /etc/systemd/system/docker.service.d/http-proxy.conf
     fi
-    [[ $(command -v docker) ]] && echo "Restart docker daemon" && systemctl daemon-reload && systemctl restart docker || true
+    echo "Restart docker daemon" && systemctl daemon-reload && systemctl restart docker || true
 fi
