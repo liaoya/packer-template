@@ -117,13 +117,20 @@
             "scripts": [
                 "../post/backup-disk.sh"
             ]
+        },
+
+        {
+            "keep_input_artifact": false,
+            "output": "../box/{{ user `centos_name` }}/{{user `centos_name`}}-{{ user `vm_name` }}-{{.Provider}}-{{user `version`}}.box",
+            "type": "vagrant",
+            "vagrantfile_template": "{{ user `vagrantfile_template` }}"
         }
     ],
     
     "variables": {
         "centos_name": "",
         "cpus": "1",
-        "disk_size": "32768",
+        "disk_size": "16384",
         "ftp_proxy": "{{env `ftp_proxy`}}",
         "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",

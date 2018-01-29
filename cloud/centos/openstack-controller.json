@@ -111,7 +111,7 @@
     "variables": {
         "centos_name": "",
         "cpus": "2",
-        "disk_size": "32768",
+        "disk_size": "16384",
         "ftp_proxy": "{{env `ftp_proxy`}}",
         "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",
