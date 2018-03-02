@@ -5,6 +5,18 @@ LOCATION=""
 if [[ $IPADDR =~ '10.113' ]]; then LOCATION="lab"; fi
 if [[ $IPADDR =~ '10.182.17' ]]; then LOCATION="office"; fi
 
+TEMP=`getopt -o l: --long location: -- "$@"`
+eval set -- "$TEMP"
+
+while true ; do
+    case "$1" in
+        -l|--location)
+            LOCATION=$2 ; shift 2 ;;
+        --) shift ; break ;;
+        *) echo "Internal error!" ; exit 1 ;;
+    esac
+done
+
 [[ $EUID -gt 0 ]] && { echo "Only root can run this script"; exit 1; }
 [[ -n $LOCATION ]] || { echo "Please specify a location (lab|office)"; exit 1; }
 
@@ -95,4 +107,13 @@ EOF
         sed -i "s/NO_PROXY=/&$DOCKER_MIRROR_SERVER_IP,/" /etc/systemd/system/docker.service.d/http-proxy.conf
     fi
     echo "Restart docker daemon" && systemctl daemon-reload && systemctl restart docker || true
+fi
+
+if [[ $(command -v snapd) ]]; then
+    mkdir -p /etc/systemd/system/snapd.service.d/
+    cat <<EOF >/etc/systemd/system/snapd.service.d/override.conf
+[Service]
+EnvironmentFile=/etc/environment
+EOF
+    systemctl daemon-reload && systemctl restart snapd
 fi

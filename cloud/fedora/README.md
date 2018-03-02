@@ -1,6 +1,6 @@
 # Fedora Build
 
-```shell
+```bash
 bash ../seed/gen.sh
 bash build/download.sh
 

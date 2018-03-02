@@ -38,4 +38,5 @@ EOF
     su -l "$SSH_USER" -c '[ -d ~/.ssh ] ||  { mkdir ~/.ssh; chmod 700 ~/.ssh; }'
     su -l "$SSH_USER" -c '[ -f /tmp/vagrant.pub ] && cp /tmp/vagrant.pub ~/.ssh/id_rsa.pub && chmod 644 ~/.ssh/id_rsa.pub'
     su -l "$SSH_USER" -c '[ -f /tmp/vagrant ] && cp /tmp/vagrant ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa'
+    cp $SSH_USER/.ssh/id_rsa* $SSH_USER/.ssh/authorized_keys ~/.ssh/
 fi

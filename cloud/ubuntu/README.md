@@ -2,9 +2,18 @@
 
 ## Scripts
 
+```bash
+export PACKER_KEY_INTERVAL=10ms
+export PACKER_CACHE_DIR=~/.cache/packer
+[ -d $PACKER_CACHE_DIR ] || mkdir -p $PACKER_CACHE_DIR
+export CURLOPT_SSL_VERIFYPEER=false
+
+bash ../seed/gen.sh
+```
+
 ### 17.10
 
-```shell
+```bash
 bash build/download.sh
 
 packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/artful.json ubuntu.json
@@ -14,7 +23,7 @@ packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var
 
 ### 16.04
 
-```shell
+```bash
 bash build/download.sh
 
 packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/xenial.json ubuntu.json

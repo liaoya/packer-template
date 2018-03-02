@@ -56,7 +56,7 @@ The following information is required for build
 
 Use the following command to build  at Nanjing site, qcow2 file is under images/qemu and vagrant box is under box/
 
-```shell
+```bash
 mkdir -p qemu
 rm -fr images/alpine* box/alpine*
 packer build -only qemu -var-file conf/alpine/3.6.2.json -var "nameserver=10.182.244.34" alpine.json
@@ -66,7 +66,7 @@ packer build -only qemu -var-file conf/alpine/3.6.2.json -var "nameserver=10.182
 
 Use the following command to build at Nanjing site, ova file is under virtualbox and vagrant box is under box/
 
-```shell
+```bash
 export http_proxy=http://10.182.172.49:3128
 mkdir -p virtualbox
 rm -fr images/alpine* box/alpine* virtualbox/alpine*
