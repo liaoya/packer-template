@@ -2,11 +2,13 @@
 
 # This script use change qcow2 to 0.10 format, run virt-sparsify to decrease disk size and compress image for backup
 
+set -x
+
 SPARSIFY=${SPARSIFY:-false}
 VERSION=${VERSION:-""}
 if [[ -n $VERSION ]]; then VERSION="-$VERSION"; fi
 
-echo "backup-disk.sh $OUTPUT $IMAGENAME $DEST $SPARSIFY $VERSION"
+echo "$(basename $0) $OUTPUT $IMAGENAME $DEST $SPARSIFY $VERSION"
 [[ -d $DEST ]] || mkdir -p $DEST
 export LIBGUESTFS_BACKEND=direct
 if [[ $SPARSIFY  =~ true || $SPARSIFY =~ 1 || $SPARSIFY =~ yes ]] && [[ $(command -v virt-sparsify) ]]; then
