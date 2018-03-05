@@ -83,6 +83,7 @@
             "scripts": [
                 "../custom/disable-cloud-init.sh",
                 "../custom/install-vagrant-key.sh",
+                "../custom/setup-suders.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
