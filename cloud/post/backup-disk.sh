@@ -11,7 +11,7 @@ if [[ -n $VERSION ]]; then VERSION="-$VERSION"; fi
 echo "$(basename $0) $OUTPUT $IMAGENAME $DEST $SPARSIFY $VERSION"
 [[ -d $DEST ]] || mkdir -p $DEST
 export LIBGUESTFS_BACKEND=direct
-if [[ $SPARSIFY  =~ true || $SPARSIFY =~ 1 || $SPARSIFY =~ yes ]] && [[ $(command -v virt-sparsify) ]]; then
+if [[ $SPARSIFY =~ true || $SPARSIFY =~ 1 || $SPARSIFY =~ yes ]] && [[ $(command -v virt-sparsify) ]]; then
      [[ $EUID -eq 0 ]] && virt-sparsify $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME.qcow2
      [[ $EUID -gt 0 ]] && sudo virt-sparsify $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME.qcow2 && sudo chown "$(id -un):$(id -gn)" $DEST/$IMAGENAME.qcow2
      [[ -f $DEST/$IMAGENAME.qcow2 ]] && mv -f $DEST/$IMAGENAME.qcow2 $OUTPUT/$IMAGENAME.qcow2

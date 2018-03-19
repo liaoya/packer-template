@@ -15,14 +15,8 @@ export SDKMAN_DIR=/opt/sdkman
 curl -sL "https://get.sdkman.io" | bash
 chown -R "$(id -u):$(id -g)" $SDKMAN_DIR
 
-echo "==> Install Server JRE"
-. $JABBA_HOME/jabba.sh
-jabba install $(jabba ls-remote | grep -e "^sjre" | tail -n 1)
-jabba alias default $(jabba ls | grep -e "^sjre" | tail -n 1)
-
-echo "==> Install Gradle"
-. $SDKMAN_DIR/bin/sdkman-init.sh
-sdk install gradle
+sed -i "/jabba.sh/d" ~/.bashrc
+sed -i "/sdkman/Id" ~/.bashrc
 
 cat << 'EOF' > /etc/profile.d/sdkman.sh
 export SDKMAN_DIR="/opt/sdkman"

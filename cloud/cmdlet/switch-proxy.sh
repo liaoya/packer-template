@@ -52,6 +52,24 @@ FTP_PROXY=$HTTP_PROXY
 NO_PROXY="$NO_PROXY"
 EOF
 
+cat <<EOF > /etc/profile.d/proxy.sh
+setup_proxy() {
+    HTTP_PROXY="$HTTP_PROXY"
+    NO_PROXY="$NO_PROXY"
+    export http_proxy=$HTTP_PROXY
+    export https_proxy=$HTTP_PROXY
+    export ftp_proxy=$HTTP_PROXY
+    export no_proxy="$NO_PROXY"
+    export HTTP_PROXY=$HTTP_PROXY
+    export HTTPS_PROXY=$HTTP_PROXY
+    export FTP_PROXY=$HTTP_PROXY
+    export NO_PROXY="$NO_PROXY"
+}
+proxy_off() {
+    unset ftp_proxy http_proxy https_proxy no_proxy FTP_PROXY HTTPS_PROXY HTTP_PROXY NO_PROXY 
+}
+EOF
+
 if [[ $LOCATION == "office" ]]; then
     APT_PROXY=http://10.182.172.49:3128
     DOCKER_MIRROR_SERVER=http://10.182.172.49:5000
