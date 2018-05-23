@@ -93,7 +93,7 @@
                 "../custom/centos/setup-libvirt-repo.sh",
                 "../custom/setup-repos.sh",
                 "../custom/centos/openvswitch.sh",
-                "../custom/centos/kvm.sh",
+                "../custom/centos/setup-libvirt.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/centos/cleanup.sh"

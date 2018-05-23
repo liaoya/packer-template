@@ -19,6 +19,7 @@ if [[ -f /etc/fedora-release && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]];
         sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
         sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" ${elem}
     done
+    dnf install -y -q yum-utils
 fi
 
 if [[ -f /etc/centos-release && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
@@ -32,7 +33,7 @@ if [[ -f /etc/centos-release && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PAT
         sed -i -e "s%^baseurl=http://mirror.centos.org/centos%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_PATH}%g" ${elem}
     done
 
-    yum install -y -q epel-release
+    yum install -y -q yum-utils epel-release
 
     for elem in $(ls -1 /etc/yum.repos.d/epel*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
     for elem in $(ls -1 /etc/yum.repos.d/epel*.repo); do

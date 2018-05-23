@@ -84,8 +84,8 @@
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
-                "../custom/fedora/setup-common.sh",
-                "../custom/fedora/setup-kubernetes.sh",
+                "../custom/fedora/install-common.sh",
+                "../custom/fedora/install-kubernetes.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/fedora/cleanup.sh"

@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "../qemu/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
+            "output_directory": "../qemu/{{user `centos_name`}}-{{ user `vm_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -22,7 +22,7 @@
                     "../seed/seed.iso"
                 ]
             ],
-            "vm_name": "{{ user `ubuntu_name` }}-{{ user `vm_name` }}.qcow2",
+            "vm_name": "{{user `centos_name`}}-{{ user `vm_name` }}.qcow2",
             "boot_command": [
                 "<enter>"
             ],
@@ -40,19 +40,12 @@
             "ssh_timeout": "{{user `ssh_timeout`}}",
             "ssh_wait_timeout": "{{user `ssh_timeout`}}"
         }
-
     ],
 
     "provisioners": [
         {
             "type": "file",
-            "source": "build/{{ user `ubuntu_name` }}/output",
-            "destination": "/tmp"
-        },
-
-        {
-            "type": "file",
-            "source": "download",
+            "source": "build/output",
             "destination": "/tmp"
         },
 
@@ -72,37 +65,38 @@
 
         {
             "environment_vars": [
-                "APT_MIRROR_SERVER={{user `apt_mirror_server`}}",
-                "APT_MIRROR_PATH={{user `apt_mirror_path`}}",
-                "APT_PROXY={{user `apt_proxy`}}",
-                "DEBIAN_FRONTEND=noninteractive",
                 "OVS_BUILD={{user `ovs_build`}}",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
-                "VM_NAME={{ user `ubuntu_name` }}-{{user `vm_name`}}",
+                "VM_NAME={{user `centos_name`}}-{{user `vm_name`}}",
+                "YUM_MIRROR_SERVER={{user `yum_mirror_server`}}",
+                "YUM_MIRROR_EPEL_PATH={{user `yum_mirror_epel_path`}}",
+                "YUM_MIRROR_PATH={{user `yum_mirror_path`}}",
+                "YUM_PROXY={{user `yum_proxy`}}",
                 "http_proxy={{user `http_proxy`}}",
                 "https_proxy={{user `https_proxy`}}",
                 "ftp_proxy={{user `ftp_proxy`}}",
                 "no_proxy={{user `no_proxy`}}",
                 "rsync_proxy={{user `rsync_proxy`}}"
-            ],
+            ],            
             "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
             "scripts": [
                 "../custom/disable-cloud-init.sh",
-                "../custom/ubuntu/setup.sh",
                 "../custom/install-vagrant-key.sh",
                 "../custom/setup-sudoers.sh",
-                "../custom/install-custom.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
+                "../custom/centos/setup-openstack-repo.sh",
+                "../custom/centos/setup-libvirt-repo.sh",
                 "../custom/setup-repos.sh",
-                "../custom/ubuntu/docker.sh",
-                "../custom/ubuntu/setup-common.sh",
-                "../custom/ubuntu/kvm.sh",
-                "../custom/ubuntu/openvswitch.sh",
+                "../custom/install-custom.sh",
+                "../custom/centos/install-common.sh",
+                "../custom/centos/install-openvswitch.sh",
+                "../custom/centos/install-libvirt.sh",
+                "../custom/centos/install-docker.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
-                "../custom/ubuntu/cleanup.sh"
+                "../custom/centos/cleanup.sh"
             ],
             "type": "shell"
         }
@@ -111,9 +105,9 @@
     "post-processors": [
         {
             "environment_vars": [
-                "IMAGENAME={{ user `ubuntu_name` }}-{{user `vm_name`}}",
-                "OUTPUT=../qemu/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
-                "DEST=../image/{{ user `ubuntu_name` }}",
+                "IMAGENAME={{user `centos_name`}}-{{user `vm_name`}}",
+                "OUTPUT=../qemu/{{user `centos_name`}}-{{ user `vm_name` }}",
+                "DEST=../image/{{ user `centos_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
             ],
@@ -124,18 +118,22 @@
             "scripts": [
                 "../post/backup-disk.sh"
             ]
+        },
+
+        {
+            "keep_input_artifact": false,
+            "output": "../box/{{ user `centos_name` }}/{{user `centos_name`}}-{{ user `vm_name` }}-{{.Provider}}-{{user `version`}}.box",
+            "type": "vagrant",
+            "vagrantfile_template": "{{ user `vagrantfile_template` }}"
         }
     ],
-
+    
     "variables": {
-        "apt_mirror_server": "{{en `apt_mirror_server`}}",
-        "apt_mirror_path": "{{en `apt_mirror_server`}}",
-        "apt_proxy": "{{env `apt_proxy`}}",
+        "centos_name": "",
         "cpus": "2",
         "disk_size": "16384",
         "ftp_proxy": "{{env `ftp_proxy`}}",
         "headless": "true",
-        "hostname": "ubuntu",
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",
         "install_vagrant_key": "true",
@@ -146,15 +144,18 @@
         "iso_url": "",
         "memory": "2048",
         "no_proxy": "{{env `no_proxy`}}",
-        "ovs_build": "false",
         "official_docker": "false",
+        "ovs_build": "true",
         "rsync_proxy": "{{env `rsync_proxy`}}",
         "sparsify": "true",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
-        "ssh_timeout": "150m",
+        "ssh_timeout": "15m",
         "version": "{{isotime \"20060102\"}}",
-        "ubuntu_name": "",
-        "vm_name": "kvm"
+        "vm_name": "minikube",
+        "yum_mirror_server": "{{env `yum_mirror_server`}}",
+        "yum_mirror_epel_path": "{{env `yum_mirror_epel_path`}}",
+        "yum_mirror_path": "{{env `yum_mirror_path`}}",
+        "yum_proxy": "{{env `yum_proxy`}}"
     }
 }

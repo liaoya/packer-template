@@ -99,7 +99,6 @@
                 "../custom/ubuntu/docker.sh",
                 "../custom/ubuntu/setup-common.sh",
                 "../custom/ubuntu/kvm.sh",
-                "../custom/ubuntu/openvswitch.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/ubuntu/cleanup.sh"
@@ -155,6 +154,6 @@
         "ssh_timeout": "150m",
         "version": "{{isotime \"20060102\"}}",
         "ubuntu_name": "",
-        "vm_name": "kvm"
+        "vm_name": "minikube"
     }
 }
