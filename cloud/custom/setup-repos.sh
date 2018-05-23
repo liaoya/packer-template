@@ -32,6 +32,8 @@ if [[ -f /etc/centos-release && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PAT
         sed -i -e "s%^baseurl=http://mirror.centos.org/centos%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_PATH}%g" ${elem}
     done
 
+    yum install -y -q epel-release
+
     for elem in $(ls -1 /etc/yum.repos.d/epel*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
     for elem in $(ls -1 /etc/yum.repos.d/epel*.repo); do
         grep -s -q -e "^mirrorlist=" ${elem} && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" ${elem}

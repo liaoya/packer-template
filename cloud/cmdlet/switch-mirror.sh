@@ -28,7 +28,7 @@ elif [[ $LOCATION == "cn" ]]; then
     APT_MIRROR_PATH="/ubuntu"
     DNF_MIRROR_SERVER="http://mirrors.ustc.edu.cn/"
     DNF_MIRROR_PATH="/fedora"
-    DOCKER_MIRROR_SERVER="472pok68.mirror.aliyuncs.com"
+    DOCKER_MIRROR_SERVER="registry.docker-cn.com"
     NPM_MIRROR_SERVER="https://registry.npm.taobao.org"
     PIP_MIRROR_SERVER="http://mirrors.aliyun.com/pypi/simple"
     YUM_MIRROR_SERVER="http://mirrors.ustc.edu.cn/"
