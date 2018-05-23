@@ -1,5 +1,5 @@
 {
-    "_comment": "Build with `packer build ubuntu.json`",
+    "_comment": "Build with `packer build centos.json`",
     "builders": [
         {
             "type": "qemu",
