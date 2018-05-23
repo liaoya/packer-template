@@ -11,14 +11,14 @@ export CURLOPT_SSL_VERIFYPEER=false
 bash ../seed/gen.sh
 ```
 
-### 17.10
+### 18.04
 
 ```bash
 bash build/download.sh
 
-packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/artful.json ubuntu.json
-packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/artful.json ubuntu-docker.json
-packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/artful.json ubuntu-kvm.json
+packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu-docker.json
+packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu-kvm.json
 ```
 
 ### 16.04
@@ -26,9 +26,9 @@ packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var
 ```bash
 bash build/download.sh
 
-packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/xenial.json ubuntu.json
-packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/xenial.json ubuntu-docker.json
-packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/xenial.json ubuntu-kvm.json
+packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1604.json ubuntu.json
+packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1604.json ubuntu-docker.json
+packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1604.json ubuntu-kvm.json
 ```
 
 Download the latest official **ubuntu/xenial64** vagrant box and export for packer virtualbox-ovf build.
