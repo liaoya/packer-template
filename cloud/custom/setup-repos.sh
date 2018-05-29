@@ -20,6 +20,8 @@ if [[ -f /etc/fedora-release && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]];
         sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" ${elem}
     done
     dnf install -y -q yum-utils
+    # I find the issue when use a specific mirror on Fedora 28
+    sed -i "s%os/%%g" /etc/yum.repos.d/fedora-updates.repo
 fi
 
 if [[ -f /etc/centos-release && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then

@@ -76,6 +76,8 @@ if [[ -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; t
         sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
         sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" ${elem}
     done
+    # I find the issue when use a specific mirror on Fedora 28
+    sed -i "s%os/%%g" /etc/yum.repos.d/fedora-updates.repo
 fi
 
 [[ -n $DOCKER_MIRROR_SERVER ]] && cat <<EOF >> /etc/docker/daemon.json

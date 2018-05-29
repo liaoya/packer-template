@@ -18,7 +18,7 @@ SSH_USER="vagrant"
 SSH_GROUP="users"
 SSH_PASS="vagrant"
 
-adduser -D -s /bin/bash -G $SSH_GROUP $SSH_USER
+adduser -D -G $SSH_GROUP -g "${SSH_USER}" -s /bin/bash $SSH_USER
 echo "$SSH_USER:$SSH_PASS" | chpasswd
 
 mkdir -pm 700 /home/vagrant/.ssh
