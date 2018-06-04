@@ -32,7 +32,7 @@ if build at home, use `-var "iso_url=http://mirrors.ustc.edu.cn/alpine/v3.7.0/re
 
 ### Build qcow2 file and its corresponding vagrant box
 
-Use the following command to build  at Nanjing site, qcow2 file is under image/ and vagrant box is under box/
+Use the following command to build at Nanjing site, qcow2 file is under image/ and vagrant box is under box/
 
 ```bash
 export http_proxy=
