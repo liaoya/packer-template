@@ -61,6 +61,7 @@
             "environment_vars": [
                 "DNF_MIRROR_PATH={{user `dnf_mirror_path`}}",
                 "DNF_MIRROR_SERVER={{user `dnf_mirror_server`}}",
+                "OFFICIAL_DOCKER={{user `official_docker`}}",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
                 "VM_NAME={{user `fedora_name`}}-{{ user `vm_name` }}",
@@ -79,6 +80,7 @@
                 "../custom/setup-repos.sh",
                 "../custom/fedora/install-common.sh",
                 "../custom/fedora/install-libvirt.sh",
+                "../custom/fedora/install-docker.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/fedora/cleanup.sh"
@@ -130,6 +132,7 @@
         "iso_url": "",
         "memory": "4096",
         "no_proxy": "{{env `no_proxy`}}",
+        "official_docker": "true",
         "sparsify": "true",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",

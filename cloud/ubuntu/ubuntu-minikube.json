@@ -96,9 +96,9 @@
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
-                "../custom/ubuntu/docker.sh",
-                "../custom/ubuntu/setup-common.sh",
-                "../custom/ubuntu/kvm.sh",
+                "../custom/ubuntu/install-docker.sh",
+                "../custom/ubuntu/install-common.sh",
+                "../custom/ubuntu/install-kvm.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/ubuntu/cleanup.sh"
