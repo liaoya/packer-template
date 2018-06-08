@@ -1,10 +1,9 @@
 #!/bin/bash -eux
 
-echo '==> Install libvirt for Fedora'
+[[ -n ${CUSTOM_LIBVIRT} && "${CUSTOM_LIBVIRT}" == "true" ]] || exit 0
+echo "==> Install Orace Linux docker packages"
 
-dnf install -y -q qemu-kvm libvirt virt-install bridge-utils
-systemctl enable libvirtd
-systemctl start libvirtd
+yum install -y -q libvirt qemu-kvm libguestfs virt-install
 
 [[ -n ${SSH_USERNAME} ]] && getent group libvirt && usermod -aG libvirt ${SSH_USERNAME} || true
 [[ -n ${SSH_USERNAME} ]] && getent group kvm && usermod -aG kvm ${SSH_USERNAME} || true

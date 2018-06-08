@@ -9,7 +9,7 @@ fi
 
 [[ $(command -v ovs-vsctl) ]] || { echo '==> Install Unbuntu OpenvSwitch'; apt-get install -y -qq -o "Dpkg::Use-Pty=0" openvswitch-switch >/dev/null; }
 
-[[ -n $SSH_USERNAME ]] && getent group openvswitch && usermod -aG openvswitch $SSH_USERNAME || true
+[[ -n ${SSH_USERNAME} ]] && getent group openvswitch && usermod -aG openvswitch ${SSH_USERNAME} || true
 
 apt list --installed 2>/dev/null | grep openvswitch
 apt-get install -y -qq -o "Dpkg::Use-Pty=0" bridge-utils >/dev/null

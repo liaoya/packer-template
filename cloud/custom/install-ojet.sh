@@ -1,9 +1,10 @@
 #!/bin/bash -eux
 
+if [[ -n ${CUSTOM_OJET} && ${CUSTOM_OJET} == true ]] || exit 0
 echo "==> Install OJet"
 
-export NVM_DIR=/opt/nvm
-export NODE_VERSION=8.9.4
+NVM_DIR=${NVM_DIR:-/opt/nvm}
+NODE_VERSION=8.9.4
 
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
     . "$NVM_DIR/nvm.sh"
@@ -12,5 +13,5 @@ if [[ -s "$NVM_DIR/nvm.sh" ]]; then
     npm -g install @oracle/ojet-cli
 else
     echo "Can not found nvm"
-    exit 1
+    exit 0
 fi

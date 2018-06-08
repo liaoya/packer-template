@@ -8,7 +8,7 @@ fi
 [[ $(command -v ovs-vsctl) ]] || { echo '==> Install OpenvSwitch from CentOS OpenStack'; yum install -y -q openvswitch; }
 systemctl enable openvswitch
 
-[[ -n $SSH_USERNAME ]] && getent group openvswitch && usermod -aG openvswitch $SSH_USERNAME || true
+[[ -n ${SSH_USERNAME} ]] && getent group openvswitch && usermod -aG openvswitch ${SSH_USERNAME} || true
 
 sed -i "/net.ipv4.ip_forward/d" /etc/sysctl.conf
 echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf

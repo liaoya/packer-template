@@ -10,21 +10,21 @@ sed -i "/^http_proxy/Id" /etc/environment
 sed -i "/^https_proxy/Id" /etc/environment
 sed -i "/^no_proxy/Id" /etc/environment
 
-if [[ -n $APT_PROXY ]]; then
+if [[ -n ${APT_PROXY} ]]; then
     cat <<EOF >> /etc/apt/apt.conf.d/01proxy
-Acquire::http::proxy "$APT_PROXY";
-Acquire::https::proxy "$APT_PROXY";
+Acquire::http::proxy "${APT_PROXY}";
+Acquire::https::proxy "${APT_PROXY}";
 EOF
 fi
 
-if [[ -n $http_proxy ]]; then
+if [[ -n ${http_proxy} ]]; then
     cat <<EOF >> /etc/environment
-http_proxy=$http_proxy
-https_proxy=$https_proxy
-no_proxy="$no_proxy"
-HTTP_PROXY=$http_proxy
-HTTPS_PROXY=$https_proxy
-NO_PROXY="$no_proxy"
+http_proxy=${http_proxy}
+https_proxy=${https_proxy}
+no_proxy="${no_proxy}"
+HTTP_PROXY=${http_proxy}
+HTTPS_PROXY=${https_proxy}
+NO_PROXY="${no_proxy}"
 EOF
 
 fi

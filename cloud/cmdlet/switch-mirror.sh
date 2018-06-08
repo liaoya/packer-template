@@ -98,10 +98,10 @@ if [[ -f /etc/fedora-release && -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER &&
     sed -i "s%os/%%g" /etc/yum.repos.d/fedora-updates.repo
 fi
 
-[[ -n $DOCKER_MIRROR_SERVER ]] && cat <<EOF >> /etc/docker/daemon.json
+[[ -n ${DOCKER_MIRROR_SERVER} ]] && cat <<EOF >> /etc/docker/daemon.json
 {
     "disable-legacy-registry": true,
-    "insecure-registries": ["$(echo $DOCKER_MIRROR_SERVER | sed -e 's%http://%%' -e 's%https://%%')"],
-    "registry-mirrors": ["$DOCKER_MIRROR_SERVER"]
+    "insecure-registries": ["$(echo ${DOCKER_MIRROR_SERVER} | sed -e 's%http://%%' -e 's%https://%%')"],
+    "registry-mirrors": ["${DOCKER_MIRROR_SERVER}"]
 }
 EOF

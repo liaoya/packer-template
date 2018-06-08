@@ -1,12 +1,13 @@
 #!/bin/bash -eux
 
+if [[ -n ${CUSTOM_NVM} && ${CUSTOM_NVM} == true ]] || exit 0
 echo "==> Install nvm"
 
-export NVM_VERSION=0.33.8
+export NVM_VERSION=$(curl -s "https://api.github.com/repos/creationix/nvm/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 export NVM_DIR=/opt/nvm
 
 curl -s -o- https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash
-chown -R "$(id -u):$(id -g)" ${NVM_DIR}
+[[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" ${NVM_DIR}
 
 sed -i "/NVM_DIR/d" ~/.bashrc
 

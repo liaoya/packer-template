@@ -17,4 +17,4 @@ sed -i "/^rysnc_proxy/Id" /etc/environment
 [ -f /etc/systemd/system/docker.service.d/http-proxy.conf ] && rm -f /etc/systemd/system/docker.service.d/http-proxy.conf && systemctl daemon-reload || true
 
 [ -f /etc/apt/sources.list.origin ] && yes | cp -pr /etc/apt/sources.list.origin /etc/apt/sources.list || true
-[ -d /etc/yum.repos.d ] && { cd /etc/yum.repos.d; [[ -n "$(ls -1 *.origin)c" ]] && for elem in $(ls -1 *.origin); do yes | cp -f $elem $(basename -s .origin $elem); done } || true
+[ -d /etc/yum.repos.d ] && { cd /etc/yum.repos.d; ls -1 *.origin 1>/dev/null 2&>1 && for elem in $(ls -1 *.origin); do yes | cp -f $elem $(basename -s .origin $elem); done } || true

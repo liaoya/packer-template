@@ -2,7 +2,7 @@
 
 # The proxy must be setup by vagrant-proxyconf plugin
 
-if [[ $http_proxy =~ "cn-proxy.jp.oracle.com" || $http_proxy =~ "10.182.17" || $http_proxy =~ "10.113" ]]; then
+if [[ ${http_proxy} =~ "cn-proxy.jp.oracle.com" || ${http_proxy} =~ "10.182.17" || ${http_proxy} =~ "10.113" ]]; then
     echo "==> Use Jaist as Ubuntu mirror"
     [ -f /etc/apt/sources.list.origin ] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
     sed -i -e 's%jp.archive.ubuntu.com%ftp.jaist.ac.jp/pub/Linux%' /etc/apt/sources.list
