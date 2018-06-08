@@ -50,5 +50,17 @@ fi
 if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
     sed -i "s/https:/http:/g" /etc/yum.repos.d/public-yum-ol7.repo
     yum install -y -q yum-utils
-    yum repolist disabled | grep -s -q ol7_developer_EPEL &&  yum-config-manager --enable "ol7_developer_EPEL"
+    version=$(cat /etc/oracle-release | cut -d " " -f 5)
+    if [[ "$(echo "$(cat /etc/oracle-release | cut -d " " -f 5)" | gawk -F. '{ printf("%02d%02d\n", $1,$2); }')" < "0705" ]]; then
+        cat << 'EOF' >>/etc/yum.repos.d/public-yum-ol7.repo
+[ol7_developer_EPEL]
+name=Oracle Linux $releasever Development Packages ($basearch)
+baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+gpgcheck=1
+enabled=1
+EOF
+    else
+        yum repolist disabled | grep -s -q ol7_developer_EPEL &&  yum-config-manager --enable "ol7_developer_EPEL" || true
+    fi
 fi
