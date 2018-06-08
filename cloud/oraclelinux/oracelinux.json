@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "../qemu/{{user `centos_name`}}-{{ user `vm_name` }}",
+            "output_directory": "../qemu/{{ user `oracle_name` }}-{{ user `vm_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -22,7 +22,7 @@
                     "../seed/seed.iso"
                 ]
             ],
-            "vm_name": "{{user `centos_name`}}-{{ user `vm_name` }}.qcow2",
+            "vm_name": "{{ user `oracle_name` }}-{{ user `vm_name` }}.qcow2",
             "boot_command": [
                 "<enter>"
             ],
@@ -45,12 +45,6 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "build/output",
-            "destination": "/tmp"
-        },
-
-        {
-            "type": "file",
             "source": "../cmdlet",
             "destination": "/tmp"
         },
@@ -59,27 +53,24 @@
             "type": "shell",
             "inline": [
                 "chmod a+x /tmp/cmdlet/*.sh",
-                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin"
+                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin",
+                "sudo chown root:root /usr/local/bin/*.sh"
             ]
         },
-
+        
         {
             "environment_vars": [
-                "OFFICIAL_DOCKER={{user `official_docker`}}",
-                "OVS_BUILD={{user `ovs_build`}}",
+                "CUSTOM_DOCKER={{user `custom_docker`}}",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
-                "VM_NAME={{user `centos_name`}}-{{user `vm_name`}}",
-                "YUM_MIRROR_SERVER={{user `yum_mirror_server`}}",
-                "YUM_MIRROR_EPEL_PATH={{user `yum_mirror_epel_path`}}",
-                "YUM_MIRROR_PATH={{user `yum_mirror_path`}}",
+                "VM_NAME={{user `oracle_name`}}",
                 "YUM_PROXY={{user `yum_proxy`}}",
                 "http_proxy={{user `http_proxy`}}",
                 "https_proxy={{user `https_proxy`}}",
                 "ftp_proxy={{user `ftp_proxy`}}",
                 "no_proxy={{user `no_proxy`}}",
                 "rsync_proxy={{user `rsync_proxy`}}"
-            ],            
+            ],          
             "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
             "scripts": [
                 "../custom/disable-cloud-init.sh",
@@ -87,15 +78,13 @@
                 "../custom/setup-sudoers.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
-                "../custom/centos/setup-openstack-repo.sh",
                 "../custom/setup-repos.sh",
-                "../custom/install-custom.sh",
-                "../custom/centos/install-common.sh",
-                "../custom/centos/install-openvswitch.sh",
-                "../custom/centos/install-docker.sh",
-                "../custom/clean-proxy.sh",
+                "../custom/oraclelinux/setup.sh",
+                "../custom/oraclelinux/install-common.sh",
+                "../custom/oraclelinux/install-docker.sh",
+                "../custom/clean-proxy.sh",              
                 "../custom/motd.sh",
-                "../custom/centos/cleanup.sh"
+                "../custom/oraclelinux/cleanup.sh"
             ],
             "type": "shell"
         }
@@ -104,9 +93,9 @@
     "post-processors": [
         {
             "environment_vars": [
-                "IMAGENAME={{user `centos_name`}}-{{ user `vm_name` }}",
-                "OUTPUT=../qemu/{{user `centos_name`}}-{{ user `vm_name` }}",
-                "DEST=../image/{{ user `centos_name` }}",
+                "IMAGENAME={{user `oracle_name`}}-{{ user `vm_name` }}",
+                "OUTPUT=../qemu/{{ user `oracle_name` }}-{{ user `vm_name` }}",
+                "DEST=../image/{{ user `oracle_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
             ],
@@ -121,17 +110,16 @@
 
         {
             "keep_input_artifact": false,
-            "output": "../box/{{ user `centos_name` }}/{{user `centos_name`}}-{{ user `vm_name` }}-{{.Provider}}-{{user `version`}}.box",
+            "output": "../box/{{ user `oracle_name` }}/{{user `oracle_name`}}-{{ user `vm_name` }}-{{.Provider}}-{{user `version`}}.box",
             "type": "vagrant",
             "vagrantfile_template": "{{ user `vagrantfile_template` }}"
         }
     ],
     
     "variables": {
-        "centos_name": "",
-        "cpus": "1",
-        "disk_size": "16384",
-        "ftp_proxy": "{{env `ftp_proxy`}}",
+        "cpus": "2",
+        "custom_docker": "false",
+        "disk_size": "32768",
         "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",
@@ -139,22 +127,16 @@
         "iso_checksum": "",
         "iso_checksum_type": "sha256",
         "iso_name": "",
-        "iso_path": "",
+        "iso_path": "{{env `HOME`}}/.cache/packer",
         "iso_url": "",
-        "memory": "2048",
+        "memory": "4096",
         "no_proxy": "{{env `no_proxy`}}",
-        "official_docker": "false",
-        "ovs_build": "true",
-        "rsync_proxy": "{{env `rsync_proxy`}}",
+        "oracle_name": "",
         "sparsify": "true",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
         "ssh_timeout": "15m",
         "version": "{{isotime \"20060102\"}}",
-        "vm_name": "docker",
-        "yum_mirror_server": "{{env `yum_mirror_server`}}",
-        "yum_mirror_epel_path": "{{env `yum_mirror_epel_path`}}",
-        "yum_mirror_path": "{{env `yum_mirror_path`}}",
-        "yum_proxy": "{{env `yum_proxy`}}"
+        "vm_name": "base"
     }
 }

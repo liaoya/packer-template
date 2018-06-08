@@ -45,7 +45,7 @@ fi
 
 # (cd /etc/yum.repos.d; for elem in $(ls -1 *.origin); do yes | cp -f $elem $(basename -s .origin $elem); done)
 
-if [[ -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
+if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
     for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
     for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do 
         grep -s -q -e "^mirrorlist=" ${elem} && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" ${elem}
@@ -67,7 +67,14 @@ if [[ -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -
     done
 fi
 
-if [[ -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then
+if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
+    sed -i "s/https:/http:/g" /etc/yum.repos.d/public-yum-ol7.repo
+    yum install -y -q yum-utils
+    yum repolist disabled | grep -s -q ol7_developer_EPEL &&  yum-config-manager --enable "ol7_developer_EPEL"
+    yum repolist disabled | grep -s -w -q ol7_addons | sudo yum-config-manager --enable grep ol7_addons
+fi
+
+if [[ -f /etc/fedora-release && -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then
     for elem in $(ls -1 /etc/yum.repos.d/fedora*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
     for elem in $(ls -1 /etc/yum.repos.d/fedora*.repo); do
         grep -s -q -e "^metalink=" ${elem} && sed -i -e "s/^metalink=/#metalink=/g" ${elem}

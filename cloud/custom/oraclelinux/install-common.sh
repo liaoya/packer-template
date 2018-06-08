@@ -1,6 +1,6 @@
-#! /bin/bash
+! /bin/bash
 
-echo "==> Install CentOS common packages"
+echo "==> Install Oracle Linux common packages"
 
 [[ -n $VM_NAME && $(command -v hostnamectl) ]] && hostnamectl set-hostname $VM_NAME || true
 

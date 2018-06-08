@@ -46,3 +46,9 @@ if [[ -f /etc/centos-release && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PAT
         sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" ${elem}    
     done
 fi
+
+if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
+    sed -i "s/https:/http:/g" /etc/yum.repos.d/public-yum-ol7.repo
+    yum install -y -q yum-utils
+    yum repolist disabled | grep -s -q ol7_developer_EPEL &&  yum-config-manager --enable "ol7_developer_EPEL"
+fi
