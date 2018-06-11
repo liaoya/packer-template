@@ -1,9 +1,0 @@
-{
-  "iso_checksum": "d2ec6cfa7cf6d89e484aa2d9f830517c",
-  "iso_checksum_type": "md5",
-  "iso_name": "CentOS-7-x86_64-Minimal-1611.iso",
-  "iso_path": "/var/mirror/isos/CentOS/7.3",
-  "iso_url": "",
-  "kickstart": "",
-  "vm_name": "c7-1611-minimal"
-}

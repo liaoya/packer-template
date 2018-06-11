@@ -1,9 +1,0 @@
-{
-  "iso_checksum": "e44eff40f3a16ffa008285e5c52e1199",
-  "iso_checksum_type": "md5",
-  "iso_name": "V834394-01.iso",
-  "iso_path": "/var/mirror/isos/OracleLinux/7.3",
-  "iso_url": "",
-  "kickstart": "",
-  "vm_name": "ol73-minimal"
-}
