@@ -45,12 +45,6 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "build/{{ user `ubuntu_name` }}/output",
-            "destination": "/tmp"
-        },
-
-        {
-            "type": "file",
             "source": "../cmdlet",
             "destination": "/tmp"
         },
@@ -75,6 +69,7 @@
                 "CUSTOM_NVM={{user `custom_nvm`}}",
                 "CUSTOM_OJET={{user `custom_ojet`}}",
                 "CUSTOM_OPENVSWITCH={{user `custom_openvswitch`}}",
+                "CUSTOM_PYTHON_VIRTUALENV={{user `custom_python_virtualenv`}}",
                 "CUSTOM_UPDATE={{user `custom_update`}}",
                 "DEBIAN_FRONTEND=noninteractive",
                 "SSH_USERNAME={{user `ssh_username`}}",
@@ -103,6 +98,7 @@
                 "../custom/ubuntu/install-libvirt.sh",
                 "../custom/install-nvm.sh",
                 "../custom/install-ojet.sh",
+                "../custom/ubuntu/install-python-virtualenv.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/ubuntu/cleanup.sh"
@@ -149,6 +145,7 @@
         "custom_nvm": "false",
         "custom_ojet": "false",
         "custom_openvswitch": "false",
+        "custom_python_virtualenv": "false",
         "custom_update": "false",
         "disk_size": "32768",
         "headless": "true",
