@@ -1,6 +1,8 @@
 #!/bin/bash -eux
 
+[[ -n ${CUSTOM_OPENBOX} && "${CUSTOM_OPENBOX}" == "true" ]] || exit 0
 echo "==> Install OpenBox and VNC"
+
 apt-get install -y -qq -o "Dpkg::Use-Pty=0" xorg openbox xdm xcompmgr cairo-dock vnc4server >/dev/null
 [[ -n ${SSH_USERNAME} ]] && su -l ${SSH_USERNAME} -c 'mkdir -p ~/.config/openbox; echo "xcompmgr &" >> ~/.config/openbox/autostart; echo "cairo-dock &" >> ~/.config/openbox/autostart'
 [[ -n ${SSH_USERNAME} ]] && su -l ${SSH_USERNAME} -c 'mkdir -p $HOME/.vnc; echo -e "123456\n123456\n" | vncpasswd'

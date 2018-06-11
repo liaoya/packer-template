@@ -68,6 +68,7 @@
                 "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
                 "CUSTOM_NVM={{user `custom_nvm`}}",
                 "CUSTOM_OJET={{user `custom_ojet`}}",
+                "CUSTOM_OPENBOX={{user `custom_openbox`}}"
                 "CUSTOM_OPENVSWITCH={{user `custom_openvswitch`}}",
                 "CUSTOM_PYTHON_VIRTUALENV={{user `custom_python_virtualenv`}}",
                 "CUSTOM_UPDATE={{user `custom_update`}}",
@@ -143,6 +144,7 @@
         "custom_libvirt": "false",
         "custom_nvm": "false",
         "custom_ojet": "false",
+        "custom_openbox": "false",
         "custom_openvswitch": "false",
         "custom_python_virtualenv": "false",
         "custom_update": "false",
