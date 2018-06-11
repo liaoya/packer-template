@@ -1,11 +1,12 @@
 #!/bin/bash -eux
 
+[[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]] || exit 0
 echo "==> Install Centos docker packages"
 
 yum install -y -q bridge-utils
 
-if [[ -n $OFFICIAL_DOCKER && "$OFFICIAL_DOCKER" == "true" ]]; then
-    echo '==> Install docker-ce for Fedora'
+if [[ -n  ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
+    echo '==> Install docker-ce for CentOS'
     yum install -y -q yum-utils
     yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo
     yum install -y -q docker-ce

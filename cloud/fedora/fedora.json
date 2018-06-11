@@ -53,12 +53,21 @@
             "type": "shell",
             "inline": [
                 "chmod a+x /tmp/cmdlet/*.sh",
-                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin"
+                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin",
+                "sudo chown root:root /usr/local/bin/*.sh"
             ]
         },
 
         {
             "environment_vars": [
+                "CUSTOM_ASDF={{user `custom_asdf`}}",
+                "CUSTOM_DOCKER={{user `custom_docker`}}",
+                "CUSTOM_DOCKER_CE={{user `custom_docker_ce`}}",
+                "CUSTOM_JAVA={{user `custom_java`}}",
+                "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
+                "CUSTOM_NVM={{user `custom_nvm`}}",
+                "CUSTOM_OJET={{user `custom_ojet`}}",
+                "CUSTOM_UPDATE={{user `custom_update`}}",
                 "DNF_MIRROR_PATH={{user `dnf_mirror_path`}}",
                 "DNF_MIRROR_SERVER={{user `dnf_mirror_server`}}",
                 "SSH_USERNAME={{user `ssh_username`}}",
@@ -78,6 +87,12 @@
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
                 "../custom/fedora/install-common.sh",
+                "../custom/install-asdf.sh",
+                "../custom/fedora/install-docker.sh",
+                "../custom/install-java.sh",
+                "../custom/fedora/install-libvirt.sh",
+                "../custom/install-nvm.sh",
+                "../custom/install-ojet.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/fedora/cleanup.sh"
@@ -113,8 +128,16 @@
     ],
 
     "variables": {
-        "cpus": "1",
-        "disk_size": "16384",
+        "cpus": "2",
+        "custom_asdf": "true",
+        "custom_docker": "false",
+        "custom_docker_ce": "false",
+        "custom_java": "false",
+        "custom_libvirt": "false",
+        "custom_ojet": "false",
+        "custom_nvm": "false",
+        "custom_update": "false",
+        "disk_size": "32768",
         "dnf_mirror_path":"",
         "dnf_mirror_server":"",
         "fedora_name": "",
@@ -127,7 +150,7 @@
         "iso_name": "",
         "iso_path": "",
         "iso_url": "",
-        "memory": "1024",
+        "memory": "4096",
         "no_proxy": "{{env `no_proxy`}}",
         "sparsify": "true",
         "ssh_password": "vagrant",

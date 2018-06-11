@@ -11,24 +11,9 @@ export CURLOPT_SSL_VERIFYPEER=false
 bash ../seed/gen.sh
 ```
 
-### 18.04
-
 ```bash
-bash build/download.sh
-
 packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu.json
-packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu-docker.json
-packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu-kvm.json
-```
-
-### 16.04
-
-```bash
-bash build/download.sh
-
-packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1604.json ubuntu.json
-packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1604.json ubuntu-docker.json
-packer build -only qemu -var "disk_size=32768" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1604.json ubuntu-kvm.json
+packer build -only qemu -var "vm_name=minikube" -var "custom_libvirt=true" -var "custom_docker=true" -var "disk_size=65536"  -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 ```
 
 Download the latest official **ubuntu/xenial64** vagrant box and export for packer virtualbox-ovf build.

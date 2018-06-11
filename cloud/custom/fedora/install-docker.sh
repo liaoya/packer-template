@@ -1,8 +1,9 @@
 #! /bin/bash
 
+[[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]] || exit 0
 echo "==> Install Fedora docker packages"
 
-if [[ -n $OFFICIAL_DOCKER && "$OFFICIAL_DOCKER" == "true" ]]; then
+if [[ -n  ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
     dnf -y -q install dnf-plugins-core
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     dnf -y -q install docker-ce

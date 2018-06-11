@@ -45,12 +45,6 @@
     "provisioners": [
         {
             "type": "file",
-            "source": "build/output",
-            "destination": "/tmp"
-        },
-
-        {
-            "type": "file",
             "source": "../cmdlet",
             "destination": "/tmp"
         },
@@ -59,12 +53,21 @@
             "type": "shell",
             "inline": [
                 "chmod a+x /tmp/cmdlet/*.sh",
-                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin"
+                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin",
+                "sudo chown root:root /usr/local/bin/*.sh"
             ]
         },
         
         {
             "environment_vars": [
+                "CUSTOM_ASDF={{user `custom_asdf`}}",
+                "CUSTOM_DOCKER={{user `custom_docker`}}",
+                "CUSTOM_DOCKER_CE={{user `custom_docker_ce`}}",
+                "CUSTOM_JAVA={{user `custom_java`}}",
+                "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
+                "CUSTOM_NVM={{user `custom_nvm`}}",
+                "CUSTOM_OJET={{user `custom_ojet`}}",
+                "CUSTOM_UPDATE={{user `custom_update`}}",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
                 "VM_NAME={{user `centos_name`}}",
@@ -86,8 +89,13 @@
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
-                "../custom/install-custom.sh",
                 "../custom/centos/install-common.sh",
+                "../custom/install-asdf.sh",
+                "../custom/centos/install-docker.sh",
+                "../custom/install-java.sh",
+                "../custom/centos/install-libvirt.sh",
+                "../custom/install-nvm.sh",
+                "../custom/install-ojet.sh",
                 "../custom/clean-proxy.sh",              
                 "../custom/motd.sh",
                 "../custom/centos/cleanup.sh"
@@ -124,8 +132,16 @@
     
     "variables": {
         "centos_name": "",
-        "cpus": "1",
-        "disk_size": "16384",
+        "cpus": "2",
+        "custom_asdf": "true",
+        "custom_docker": "false",
+        "custom_docker_ce": "false",
+        "custom_java": "false",
+        "custom_libvirt": "false",
+        "custom_ojet": "false",
+        "custom_nvm": "false",
+        "custom_update": "false",
+        "disk_size": "32768",
         "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",

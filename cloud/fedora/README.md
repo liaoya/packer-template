@@ -1,16 +1,14 @@
 # Fedora Build
 
 ```bash
-yum install -y cloud-utils
-
+dnf install -y -q cloud-utils
 bash ../seed/gen.sh
 
-packer build -var-file ../conf/fedora27.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
-packer build -var "disk_size=32768" -var-file ../conf/fedora27.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora-kubernetes.json
+export PACKER_KEY_INTERVAL=10ms
+export PACKER_CACHE_DIR=~/.cache/packer
+[ -d $PACKER_CACHE_DIR ] || mkdir -p $PACKER_CACHE_DIR
+export CURLOPT_SSL_VERIFYPEER=false
 
 packer build -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
-packer build -var "disk_size=32768"  -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora-kubernetes.json
-
-packer build -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
-packer build -var "disk_size=65536"  -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora-minikube.json
+packer build -var "vm_name=minikube" -var "custom_libvirt=true" -var "custom_docker=true" -var "disk_size=65536" -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
 ```

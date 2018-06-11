@@ -1,5 +1,6 @@
 #!/bin/bash -eux
 
+[[ -n ${CUSTOM_KUBENETES} && "${CUSTOM_KUBENETES}" == "true" ]] || exit 0
 echo "==> Install Fedora Kubernetes packages"
 
 dnf install -y -q kubernetes etcd

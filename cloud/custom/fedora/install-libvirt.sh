@@ -1,5 +1,6 @@
 #!/bin/bash -eux
 
+[[ -n ${CUSTOM_LIBVIRT} && "${CUSTOM_LIBVIRT}" == "true" ]] || exit 0
 echo '==> Install libvirt for Fedora'
 
 dnf install -y -q qemu-kvm libvirt virt-install bridge-utils

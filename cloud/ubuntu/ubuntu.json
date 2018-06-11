@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "../qemu/{{ user `ubuntu_name` }}",
+            "output_directory": "../qemu/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -22,7 +22,7 @@
                     "../seed/seed.iso"
                 ]
             ],
-            "vm_name": "{{ user `ubuntu_name` }}.qcow2",
+            "vm_name": "{{ user `ubuntu_name` }}-{{ user `vm_name` }}.qcow2",
             "boot_command": [
                 "<enter>"
             ],
@@ -68,10 +68,18 @@
                 "APT_MIRROR_SERVER={{user `apt_mirror_server`}}",
                 "APT_MIRROR_PATH={{user `apt_mirror_path`}}",
                 "APT_PROXY={{user `apt_proxy`}}",
+                "CUSTOM_ASDF={{user `custom_asdf`}}",
+                "CUSTOM_DOCKER={{user `custom_docker`}}",
+                "CUSTOM_JAVA={{user `custom_java`}}",
+                "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
+                "CUSTOM_NVM={{user `custom_nvm`}}",
+                "CUSTOM_OJET={{user `custom_ojet`}}",
+                "CUSTOM_UPDATE={{user `custom_update`}}",
                 "DEBIAN_FRONTEND=noninteractive",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
-                "VM_NAME={{user `ubuntu_name`}}",
+                "UBUNTU_NAME={{user `ubuntu_name`}}",
+                "VM_NAME={{user `vm_name`}}",
                 "http_proxy={{user `http_proxy`}}",
                 "https_proxy={{user `https_proxy`}}",
                 "no_proxy={{user `no_proxy`}}"
@@ -86,7 +94,14 @@
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
+                "../custom/ubuntu/setup.sh",
                 "../custom/ubuntu/install-common.sh",
+                "../custom/install-asdf.sh",
+                "../custom/ubuntu/install-docker.sh",
+                "../custom/install-java.sh",
+                "../custom/ubuntu/install-libvirt.sh",
+                "../custom/install-nvm.sh",
+                "../custom/install-ojet.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/ubuntu/cleanup.sh"
@@ -98,9 +113,9 @@
     "post-processors": [
         {
             "environment_vars": [
-                "IMAGENAME={{user `ubuntu_name`}}",
-                "OUTPUT=../qemu/{{ user `ubuntu_name` }}",
-                "DEST=../image/{{ user `ubuntu_name` }}",
+                "IMAGENAME={{user `ubuntu_name`}}-{{ user `vm_name` }}",
+                "OUTPUT=../qemu/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
+                "DEST=../image/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
             ],
@@ -125,24 +140,32 @@
         "apt_mirror_server": "{{en `apt_mirror_server`}}",
         "apt_mirror_path": "{{en `apt_mirror_server`}}",
         "apt_proxy": "{{env `apt_proxy`}}",
-        "cpus": "1",
-        "disk_size": "16384",
+        "cpus": "2",
+        "custom_asdf": "true",
+        "custom_docker": "false",
+        "custom_java": "false",
+        "custom_libvirt": "false",
+        "custom_ojet": "false",
+        "custom_nvm": "false",
+        "custom_update": "false",
+        "disk_size": "32768",
         "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",        
         "install_vagrant_key": "true",
         "iso_checksum": "",
         "iso_checksum_type": "sha256",
-        "iso_name": "ubuntu-16.04-server-cloudimg-amd64-disk1.img",
+        "iso_name": "",
         "iso_path": "",
         "iso_url": "",
-        "memory": "1024",
+        "memory": "4096",
         "no_proxy": "{{env `no_proxy`}}",
         "sparsify": "true",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
         "ssh_timeout": "15m",
         "version": "{{isotime \"20060102\"}}",
-        "ubuntu_name": ""
+        "ubuntu_name": "",
+        "vm_name": "base"
     }
 }
