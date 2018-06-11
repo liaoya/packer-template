@@ -68,15 +68,14 @@
                 "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
                 "CUSTOM_NVM={{user `custom_nvm`}}",
                 "CUSTOM_OJET={{user `custom_ojet`}}",
-                "CUSTOM_OPENBOX={{user `custom_openbox`}}"
+                "CUSTOM_OPENBOX={{user `custom_openbox`}}",
                 "CUSTOM_OPENVSWITCH={{user `custom_openvswitch`}}",
                 "CUSTOM_PYTHON_VIRTUALENV={{user `custom_python_virtualenv`}}",
                 "CUSTOM_UPDATE={{user `custom_update`}}",
                 "DEBIAN_FRONTEND=noninteractive",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
-                "UBUNTU_NAME={{user `ubuntu_name`}}",
-                "VM_NAME={{user `vm_name`}}",
+                "VM_NAME={{user `ubuntu_name`}}-{{user `vm_name`}}",
                 "http_proxy={{user `http_proxy`}}",
                 "https_proxy={{user `https_proxy`}}",
                 "no_proxy={{user `no_proxy`}}"

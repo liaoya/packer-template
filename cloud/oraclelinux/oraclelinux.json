@@ -69,7 +69,7 @@
                 "CUSTOM_UPDATE={{user `custom_update`}}",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
-                "VM_NAME={{user `oracle_name`}}",
+                "VM_NAME={{user `oracle_name`}}-{{user `vm_name`}}",
                 "YUM_PROXY={{user `yum_proxy`}}",
                 "http_proxy={{user `http_proxy`}}",
                 "https_proxy={{user `https_proxy`}}",
