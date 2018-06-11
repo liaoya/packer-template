@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-if [[ -n ${CUSTOM_JAVA} && "${CUSTOM_JAVA}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_JAVA} && "${CUSTOM_JAVA}" == "true" ]] || exit 0
 echo "==> Run custom Java script"
 
 echo "==> Install Jabba"

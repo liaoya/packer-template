@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-if [[ -n ${CUSTOM_OJET} && ${CUSTOM_OJET} == true ]] || exit 0
+[[ -n ${CUSTOM_OJET} && ${CUSTOM_OJET} == true ]] || exit 0
 echo "==> Install OJet"
 
 NVM_DIR=${NVM_DIR:-/opt/nvm}
