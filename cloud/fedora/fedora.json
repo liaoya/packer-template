@@ -7,7 +7,7 @@
             "boot_wait": "6s",
             "disk_image": "true",
             "format": "qcow2",
-            "output_directory": "../qemu/{{ user `fedora_name` }}",
+            "output_directory": "../qemu/{{ user `fedora_name` }}-{{ user `vm_name` }}",
             "qemuargs": [
                 [
                     "-m",
@@ -22,7 +22,7 @@
                     "../seed/seed.iso"
                 ]
             ],
-            "vm_name": "{{ user `fedora_name` }}.qcow2",
+            "vm_name": "{{ user `fedora_name` }}-{{ user `vm_name` }}.qcow2",
             "boot_command": [
                 "<enter>"
             ],
@@ -106,9 +106,9 @@
     "post-processors": [
         {
             "environment_vars": [
-                "IMAGENAME={{user `fedora_name`}}",
-                "OUTPUT=../qemu/{{ user `fedora_name` }}",
-                "DEST=../image/{{ user `fedora_name` }}",
+                "IMAGENAME={{user `fedora_name`}}-{{ user `vm_name` }}",
+                "OUTPUT=../qemu/{{ user `fedora_name` }}-{{ user `vm_name` }}",
+                "DEST=../image/{{ user `fedora_name` }}-{{ user `vm_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
             ],
