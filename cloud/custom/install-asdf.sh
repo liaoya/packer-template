@@ -5,7 +5,7 @@ echo "==> Install asdf"
 
 [[ $(command -v git) ]] || { echo "git is required"; exit 0; }
 git clone https://github.com/asdf-vm/asdf.git /opt/asdf --branch v0.5.0
-if [[ -z "$(ls -A /opt/asdf)" ]]; then
+if [[ -n "$(ls -A /opt/asdf)" ]]; then
     [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" /opt/asdf
 
     echo '[[ -s /opt/asdf/asdf.sh ]] && export ASDF_HOME=/opt/asdf && . ${ASDF_HOME}/asdf.sh' | tee /etc/profile.d/asdf.sh
