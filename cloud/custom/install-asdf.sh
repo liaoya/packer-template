@@ -3,7 +3,7 @@
 [[ -n ${CUSTOM_ASDF} && ${CUSTOM_ASDF} == true ]] || exit 0
 echo "==> Install asdf"
 
-if [[ $(command -v git) ]] || { echo "git is required"; exit 0; }
+[[ $(command -v git) ]] || { echo "git is required"; exit 0; }
 git clone https://github.com/asdf-vm/asdf.git /opt/asdf --branch v0.5.0
 if [[ -z "$(ls -A /opt/asdf)" ]]; then
     [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" /opt/asdf

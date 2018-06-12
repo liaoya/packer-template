@@ -17,7 +17,7 @@ fi
 
 echo "==> Install sdkman"
 export SDKMAN_DIR=/opt/sdkman
-[[ $(command -v) unzip || $(command -v) zip ]] || { echo "unzip is required"; exit 0 }
+[[ $(command -v unzip) || $(command -v zip) ]] || { echo "unzip is required"; exit 0; }
 [ -d ${SDKMAN_DIR} ] && rm -fr ${SDKMAN_DIR}
 curl -sL "https://get.sdkman.io" | bash
 if [[ -z "$(ls -A ${SDKMAN_DIR})" ]]; then
