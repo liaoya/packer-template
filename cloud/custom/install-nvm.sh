@@ -7,12 +7,11 @@ export NVM_VERSION=$(curl -s "https://api.github.com/repos/creationix/nvm/releas
 export NVM_DIR=/opt/nvm
 
 curl -s -o- https://raw.githubusercontent.com/creationix/nvm/v${NVM_VERSION}/install.sh | bash
-[[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" ${NVM_DIR}
 
-sed -i "/NVM_DIR/d" ~/.bashrc
-
-cat << 'EOF' > /etc/profile.d/nvm.sh
-export NVM_DIR=/opt/nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-EOF
+if [[ -z "$(ls -A ${NVM_DIR})" ]]; then
+    sed -i "/${NVM_DIR}/d" ~/.bashrc
+    [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" ${NVM_DIR}
+fi
+echo "[[ -s $NVM_DIR/nvm.sh ]] && export NVM_DIR=$NVM_DIR && \. \$NVM_DIR/nvm.sh" | tee /etc/profile.d/nvm.sh
+[[ -d /etc/bash_completion ]] || mkdir -p /etc/bash_completion
+[ -s $NVM_DIR/bash_completion ] && cp $NVM_DIR/bash_completion /etc/bash_completion/asdf_completion
