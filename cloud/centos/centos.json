@@ -67,6 +67,7 @@
                 "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
                 "CUSTOM_NVM={{user `custom_nvm`}}",
                 "CUSTOM_OJET={{user `custom_ojet`}}",
+                "CUSTOM_PYTHON_VIRTUALENV={{user `custom_python_virtualenv`}}",
                 "CUSTOM_UPDATE={{user `custom_update`}}",
                 "SSH_USERNAME={{user `ssh_username`}}",
                 "SSH_PASSWORD={{user `ssh_password`}}",
@@ -96,6 +97,7 @@
                 "../custom/centos/install-libvirt.sh",
                 "../custom/install-nvm.sh",
                 "../custom/install-ojet.sh",
+                "../custom/centos/install-python-virtualenv.sh",
                 "../custom/clean-proxy.sh",              
                 "../custom/motd.sh",
                 "../custom/centos/cleanup.sh"
@@ -140,6 +142,7 @@
         "custom_libvirt": "false",
         "custom_nvm": "false",
         "custom_ojet": "false",
+        "custom_python_virtualenv": "false",
         "custom_update": "false",
         "disk_size": "32768",
         "headless": "true",

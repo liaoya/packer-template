@@ -1,0 +1,10 @@
+{
+    "apt_mirror_server": "http://mirrors.ustc.edu.cn",
+    "apt_mirror_path": "/ubuntu",
+    "dnf_mirror_server": "http://mirrors.ustc.edu.cn",
+    "dnf_mirror_path": "/fedora",
+    "yum_mirror_server": "http://mirrors.ustc.edu.cn",
+    "yum_mirror_epel_path": "/pub/Linux/Fedora",
+    "yum_mirror_path": "/centos"
+  }
+  
