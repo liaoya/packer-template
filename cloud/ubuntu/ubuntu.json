@@ -111,7 +111,7 @@
             "environment_vars": [
                 "IMAGENAME={{user `ubuntu_name`}}-{{ user `vm_name` }}",
                 "OUTPUT=../qemu/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
-                "DEST=../image/{{ user `ubuntu_name` }}-{{ user `vm_name` }}",
+                "DEST=../image/{{ user `ubuntu_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
             ],

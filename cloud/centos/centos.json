@@ -111,7 +111,7 @@
             "environment_vars": [
                 "IMAGENAME={{user `centos_name`}}-{{ user `vm_name` }}",
                 "OUTPUT=../qemu/{{ user `centos_name` }}-{{ user `vm_name` }}",
-                "DEST=../image/{{ user `centos_name` }}-{{ user `vm_name` }}",
+                "DEST=../image/{{ user `centos_name` }}",
                 "SPARSIFY={{ user `sparsify` }}",
                 "VERSION={{ user `version` }}"
             ],
