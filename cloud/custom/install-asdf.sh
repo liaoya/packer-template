@@ -9,8 +9,8 @@ if [[ -n "$(ls -A /opt/asdf)" ]]; then
     [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" /opt/asdf
 
     echo '[[ -s /opt/asdf/asdf.sh ]] && export ASDF_HOME=/opt/asdf && . ${ASDF_HOME}/asdf.sh' | tee /etc/profile.d/asdf.sh
-    [[ -d /etc/bash_completion ]] || mkdir -p /etc/bash_completion
-    [[ -f ${ASDF_HOME}/completions/asdf.bash ]] && cp -pr ${ASDF_HOME}/completions/asdf.bash /etc/bash_completion
+    [[ -d /etc/bash_completion.d ]] || mkdir -p /etc/bash_completion.d
+    [[ -f ${ASDF_HOME}/completions/asdf.bash ]] && cp -pr ${ASDF_HOME}/completions/asdf.bash /etc/bash_completion.d
 
     [[ -d /etc/fish/conf.d ]] || mkdir -p /etc/fish/conf.d
     echo '[[ -s /opt/asdf/asdf.fish ]]; set -xg ASDF_HOME /opt/asdf && source $ASDF_HOME/asdf.fish' | tee /etc/fish/conf.d/asdf.fish
