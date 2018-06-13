@@ -16,7 +16,7 @@ packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json 
 
 packer build -only qemu -var "vm_name=minikube" -var "custom_libvirt=true" -var "custom_docker=true" -var "disk_size=65536"  -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
-packer build -only qemu -var "vm_name=develop" -var "custom_java=true" -var "custom_nvm=true" -var "custom_docker=true" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+packer build -only qemu -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var "custom_python_virtualenv=true" -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
 packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804-i386.json ubuntu.json
 ```

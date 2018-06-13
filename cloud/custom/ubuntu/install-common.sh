@@ -8,6 +8,6 @@ grep -s -q -w "swapfile" /etc/fstab && { echo "==> Disable swapfile"; swapoff /s
 systemctl stop apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer || true
 systemctl disable apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer || true
 
-apt-get install -y -qq -o "Dpkg::Use-Pty=0" zip unzip httpie fish git tig jq sshpass tmux >/dev/null
+apt-get install -y -qq -o "Dpkg::Use-Pty=0" zip unzip bzip2 xz screen httpie fish git tig jq sshpass tmux >/dev/null
 
 [[ -n ${CUSTOM_UPDATE} && "${CUSTOM_UPDATE}" == "true" ]] || apt upgrade -y -qq -o "Dpkg::Use-Pty=0" >/dev/null
