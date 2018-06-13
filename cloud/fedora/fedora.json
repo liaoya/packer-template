@@ -123,7 +123,7 @@
 
         {
             "keep_input_artifact": false,
-            "output": "../box/{{ user `fedora_name` }}/{{user `fedora_name`}}-{{.Provider}}-{{user `version`}}.box",
+            "output": "../box/{{ user `fedora_name` }}/{{user `fedora_name`}}-{{ user `vm_name` }}-{{.Provider}}-{{user `version`}}.box",
             "type": "vagrant",
             "vagrantfile_template": "{{ user `vagrantfile_template` }}"
         }

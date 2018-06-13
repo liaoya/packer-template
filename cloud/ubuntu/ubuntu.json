@@ -126,7 +126,7 @@
 
         {
             "keep_input_artifact": false,
-            "output": "../box/{{ user `ubuntu_name` }}/{{user `ubuntu_name`}}-{{.Provider}}-{{user `version`}}.box",
+            "output": "../box/{{ user `ubuntu_name` }}/{{user `ubuntu_name`}}-{{ user `vm_name` }}-{{.Provider}}-{{user `version`}}.box",
             "type": "vagrant",
             "vagrantfile_template": "{{ user `vagrantfile_template` }}"
         }

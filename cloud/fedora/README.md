@@ -11,7 +11,7 @@ export CURLOPT_SSL_VERIFYPEER=false
 
 packer build -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
 
-packer build -var "vm_name=minikube" -var "custom_libvirt=true" -var "custom_docker_ce=true" -var "disk_size=65536" -var "custom_python_virtualenv=true" -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
+packer build -var "vm_name=minikube" -var "custom_docker_ce=true" -var "custom_libvirt=true" -var "custom_python_virtualenv=true" -var "disk_size=65536" -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
 
 packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var "custom_python_virtualenv=true" -var "disk_size=65536" -var "custom_python_virtualenv=true" -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
 ```
