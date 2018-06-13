@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 
 [[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]] || exit 0
-echo "==> Install Centos docker packages"
+echo "==> Install CentOS docker packages"
 
 yum install -y -q bridge-utils
 

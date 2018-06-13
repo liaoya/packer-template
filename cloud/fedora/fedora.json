@@ -153,7 +153,7 @@
         "iso_name": "",
         "iso_path": "",
         "iso_url": "",
-        "memory": "4096",
+        "memory": "2048",
         "no_proxy": "{{env `no_proxy`}}",
         "sparsify": "true",
         "ssh_password": "vagrant",
