@@ -10,4 +10,4 @@ systemctl disable apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.
 
 apt-get install -y -qq -o "Dpkg::Use-Pty=0" zip unzip bzip2 xz-utils screen httpie fish git tig jq sshpass tmux >/dev/null
 
-[[ -n ${CUSTOM_UPDATE} && "${CUSTOM_UPDATE}" == "true" ]] && apt upgrade -y -qq -o "Dpkg::Use-Pty=0" >/dev/null
+[[ -n ${CUSTOM_UPDATE} && "${CUSTOM_UPDATE}" == "true" ]] && apt upgrade -y -qq -o "Dpkg::Use-Pty=0" >/dev/null || true

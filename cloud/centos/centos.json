@@ -82,7 +82,7 @@
                 "no_proxy={{user `no_proxy`}}",
                 "rsync_proxy={{user `rsync_proxy`}}"
             ],          
-            "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+            "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash -x '{{.Path}}'",
             "scripts": [
                 "../custom/disable-cloud-init.sh",
                 "../custom/install-vagrant-key.sh",
