@@ -8,4 +8,4 @@ apt-get install -y -qq -o "Dpkg::Use-Pty=0" openvswitch-switch bridge-utils >/de
 [[ -n ${SSH_USERNAME} ]] && getent group openvswitch && usermod -aG openvswitch ${SSH_USERNAME} || true
 
 echo "==> Enable net.ipv4.ip_forward"
-echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.d/ovs.conf

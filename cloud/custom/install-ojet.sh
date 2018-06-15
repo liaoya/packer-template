@@ -4,9 +4,9 @@
 echo "==> Install OJet"
 
 NVM_DIR=${NVM_DIR:-/opt/nvm}
-NODE_VERSION=8.11.2
+NODE_VERSION=8.11.3
 
-[[ $(command nvm) ]] || { [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"; }
+[[ $(command nvm) ]] || { [[ -s "${NVM_DIR}/nvm.sh" ]] && . "${NVM_DIR}/nvm.sh"; }
 
 if [[ $(command nvm) ]]; then
     nvm install ${NODE_VERSION}

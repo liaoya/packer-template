@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+[[ -f /etc/selinux/config ]] && sed -i "s/^SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config && sed -i "s/^SELINUX=permissive/SELINUX=disabled/g" /etc/selinux/config
+
 dnf -y -q clean all
 
 # Clean up network interface persistence

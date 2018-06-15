@@ -7,3 +7,4 @@ yum install -y -q yum-utils
 yum repolist disabled | grep -s -w -q ol7_addons | sudo yum-config-manager --enable grep ol7_addons
 yum install -y -q docker-engine
 
+[[ $(command -v docker) ]] && systemctl enable docker && [[ -n ${SSH_USERNAME} ]] && getent group docker && usermod -aG docker ${SSH_USERNAME} || true

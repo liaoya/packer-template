@@ -4,7 +4,7 @@
 distro="`rpm -qf --queryformat '%{NAME}' /etc/redhat-release | cut -f 1 -d '-'`"
 
 if [ "$distro" != 'redhat' ]; then
-  yum -y -q clean all;
+    yum -y -q clean all;
 fi
 
 [ -f /etc/NetworkManager/NetworkManager.conf ] && sed -i '/^plugins=ifcfg-rh/a dns=none' /etc/NetworkManager/NetworkManager.conf

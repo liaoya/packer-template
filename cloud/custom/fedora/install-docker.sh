@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash -eux
 
 [[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]] || exit 0
 echo "==> Install Fedora docker packages"
