@@ -13,7 +13,7 @@ if [[ -n "$(ls -A /opt/asdf)" ]]; then
     [[ -f ${ASDF_HOME}/completions/asdf.bash ]] && cp -pr ${ASDF_HOME}/completions/asdf.bash /etc/bash_completion.d
 
     [[ -d /etc/fish/conf.d ]] || mkdir -p /etc/fish/conf.d
-    echo '[[ -s /opt/asdf/asdf.fish ]]; set -xg ASDF_HOME /opt/asdf && source $ASDF_HOME/asdf.fish' | tee /etc/fish/conf.d/asdf.fish
+    echo '[ -s /opt/asdf/asdf.fish ]; and set -xg ASDF_HOME /opt/asdf; and source $ASDF_HOME/asdf.fish' | tee /etc/fish/conf.d/asdf.fish
     [[ -d /etc/fish/completions ]] || mkdir -p /etc/fish/completions
     [[ -f /opt/asdf/completions/asdf.fish ]] && cp -pr /opt/asdf/completions/asdf.fish /etc/fish/completions
 fi
