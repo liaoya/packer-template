@@ -21,10 +21,10 @@ if [[ -f /etc/fedora-release && -n ${DNF_MIRROR_SERVER} && -n ${DNF_MIRROR_PATH}
     done
     dnf install -y -q yum-utils
     # I find the issue when use a specific mirror on Fedora 28
-    sed -i "s%os/%%g" /etc/yum.repos.d/fedora-updates.repo${YUM_MIRROR_PATH}
+    sed -i "s%os/%%g" /etc/yum.repos.d/fedora-updates.repo
 fi
 
-if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_PATH} && -n  ]]; then
+if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_PATH} && -n ${YUM_MIRROR_PATH} ]]; then
     echo "YUM_MIRROR_SERVER is \"${YUM_MIRROR_SERVER}\", YUM_MIRROR_EPEL_PATH is \"${YUM_MIRROR_EPEL_PATH}\", YUM_MIRROR_PATH is \"${YUM_MIRROR_PATH}\""
     for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do [ -f ${elem}.origin ] || cp ${elem} ${elem}.origin; done
     for elem in $(ls -1 /etc/yum.repos.d/CentOS*.repo); do 
