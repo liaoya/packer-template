@@ -5,7 +5,7 @@ echo "==> Install nvm"
 
 NVM_VERSION=$(curl -s "https://api.github.com/repos/creationix/nvm/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 export NVM_DIR=/opt/nvm
-[[ -d ${NVM_DIR} ]] || mkdir -p NVM_DIR
+[[ -d ${NVM_DIR} ]] || mkdir -p ${NVM_DIR}
 
 curl -s -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
 
