@@ -36,7 +36,7 @@ Run the command `bash gen-ova.sh` to generate ova file
 The following command can help to setup a new virtual machine
 
 ```bash
-base_image=/var/lib/libvirt/images/bionic-minikube-20180611.qcow2c
+base_image=$(ls -1 /var/lib/libvirt/images/bionic-minikube-*)
 vm_name=bionic-minikube
 virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
 virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}

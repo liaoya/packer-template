@@ -19,7 +19,7 @@ packer build -var "vm_name=develop" -var "custom_docker_ce=true" -var "custom_ja
 The following command can help to setup a new virtual machine
 
 ```bash
-base_image=/var/lib/libvirt/images/centos7-minikube-20180529.qcow2c
+base_image=$(ls -1 /var/lib/libvirt/images/centos7-minikube-*)
 vm_name=centos7-minikube
 virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
 virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}

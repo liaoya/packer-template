@@ -19,7 +19,7 @@ packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=
 The following command can help to setup a new virtual machine
 
 ```bash
-base_image=/var/lib/libvirt/images/ol74-base-20180608.qcow2c
+base_image=$(ls -1 /var/lib/libvirt/images/ol74-minikube-*)
 vm_name=oraclelinux74
 virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
 virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}

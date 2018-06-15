@@ -61,6 +61,8 @@ gpgcheck=1
 enabled=1
 EOF
     else
-        yum repolist disabled | grep -s -q ol7_developer_EPEL &&  yum-config-manager --enable "ol7_developer_EPEL" || true
+        yum repolist disabled | grep -s -q ol7_developer_EPEL &&  yum-config-manager --enable "ol7_developer_EPEL"  >/dev/null || true
     fi
+    yum repolist disabled | grep -s -w -q ol7_addons | sudo yum-config-manager --enable grep ol7_addons > /dev/null || true
+    yum repolist disabled | grep -s -w -q ol7_optional_latest | sudo yum-config-manager --enable grep ol7_optional_latest > /dev/null || true
 fi
