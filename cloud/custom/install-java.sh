@@ -9,10 +9,12 @@ curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash
 if [[ -n "$(ls -A ${JABBA_HOME})" ]]; then
     sed -i "/jabba.sh/d" ~/.bashrc
     [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" ${JABBA_HOME}
-    echo '[ -s "$JABBA_HOME/jabba.sh" ] && export JABBA_HOME=/opt/jabba && source "$JABBA_HOME/jabba.sh"' | tee /etc/profile.d/jabba.sh
+    echo '[ -s "/opt/jabba/jabba.sh" ] && export JABBA_HOME=/opt/jabba && source "${JABBA_HOME}/jabba.sh"' | tee /etc/profile.d/jabba.sh
     [[ -d /etc/fish/conf.d ]] || mkdir -p /etc/fish/conf.d
     echo '[ -s /opt/jabba/jabba.fish ]; and set -xg JABBA_HOME /opt/jabba; and source $JABBA_HOME/jabba.fish' | tee /etc/fish/conf.d/jabba.fish
 fi
+
+[[ -n ${SSH_USERNAME} ]] && [[ -d ${SSH_USERNAME}/.config ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" ${SSH_USERNAME}/.config
 
 echo "==> Install sdkman"
 export SDKMAN_DIR=/opt/sdkman

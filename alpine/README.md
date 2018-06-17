@@ -77,6 +77,34 @@ vboxmanage import alpine-3.7.0-virtualbox.ova --vsys 0 --vmname alpine --unit 9 
 
 Use `virtual-install` or **Virtual Manager**
 
+```bash
+base_image=$(ls -1 /var/lib/libvirt/images/alpine*)
+vm_name=alpine
+virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
+virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}
+qemu-img create -b $base_image -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2
+
+ROOT_DIR=$(mktemp -d)
+mkdir -p ${ROOT_DIR}/etc/network
+cat <<EOF > ${ROOT_DIR}/etc/network/interfaces
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+        address 10.113.4.30
+        netmask 255.255.252.0
+        gateway 10.113.4.1
+EOF
+cp /etc/resolv.conf ${ROOT_DIR}/etc/
+echo ${vm_name} > ${ROOT_DIR}/etc/hostname
+tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
+virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
+rm -fr ${vm_name}.tar ${ROOT_DIR}
+
+virt-install --name ${vm_name} --memory=1024 --vcpus=1 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-type linux --network bridge=ovsbr502,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+```
+
 #### Import to Vagrant
 
 **vagrant-alpine** and **vagrant-libvirt**(only for libvirt) are required. Run the following commands on RHEL like OS
