@@ -35,18 +35,18 @@ sed -i "/^rysnc_proxy/Id" /etc/environment
 [ -f /etc/docker/daemon.json ] && rm -f /etc/docker/daemon.json
 
 http_proxy="http://cn-proxy.jp.oracle.com:80"
-no_proxy="localhost,127.0.0.1,.cn.oracle.com,.jp.oracle.com,.us.oracle.com,.oraclecorp.com"
+no_proxy="localhost,127.0.0.1,10.113.69.40,10.113.69.79,10.113.69.101"
 
 if [[ $LOCATION == "office" ]]; then
     APT_PROXY=http://10.182.172.49:3128
     DOCKER_MIRROR_SERVER=http://10.182.172.49:5000
     YUM_PROXY=http://10.182.172.49:3128
-    no_proxy="${no_proxy},10.182.172.49"
+    no_proxy="${no_proxy},.cn.oracle.com,.jp.oracle.com,.us.oracle.com,.oraclecorp.com,10.182.172.49"
 elif [[ $LOCATION == "lab" ]]; then
     APT_PROXY=http://10.113.69.101:3128
     DOCKER_MIRROR_SERVER=http://10.113.69.101:5000
     YUM_PROXY=http://10.113.69.101:3128
-    no_proxy="${no_proxy},10.113.69.79,10.113.69.101"
+    no_proxy="${no_proxy}"
 fi
 
 echo "Put proxy to /etc/environment"

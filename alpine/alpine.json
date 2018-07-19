@@ -18,7 +18,7 @@
             ],
             "vm_name": "{{ user `vm_name` }}.qcow2",
             "boot_command": [
-                "root<enter><wait>",
+                "<wait10>root<enter><wait>",
                 "ifconfig eth0 up && udhcpc -i eth0<enter><wait10>",
                 "wget http://{{ .HTTPIP }}:{{ .HTTPPort }}/install.sh<enter><wait>",
                 "dos2unix install.sh<enter>",
