@@ -21,5 +21,5 @@ virtualenv -p ${PYTHON_EXEC} ${VPY_DIR}
 source ${VPY_DIR}/bin/activate
 curl -L -s https://bootstrap.pypa.io/get-pip.py | ${PYTHON_EXEC}
 pip install -U virtualenv setuptools
-pip install -U six ipython requests pylint flake8
+pip install -U six ipython requests pylint flake8 httpie
 [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" /opt/vpy2
