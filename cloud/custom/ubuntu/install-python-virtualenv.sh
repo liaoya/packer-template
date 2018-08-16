@@ -3,7 +3,7 @@
 [[ -n ${CUSTOM_PYTHON_VIRTUALENV} && "${CUSTOM_PYTHON_VIRTUALENV}" == "true" ]] || exit 0
 echo "==> Install Ubuntu virtualenv packages"
 
-apt install -y python-virtualenv python3-virtualenv virtualenv gcc
+apt install -y python-virtualenv python3-virtualenv virtualenv gcc make
 
 VPY_DIR=vpy2
 PYTHON_EXEC=/usr/bin/python2

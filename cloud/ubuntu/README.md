@@ -21,7 +21,7 @@ packer build -only qemu -var "vm_name=develop" -var "custom_docker=true" -var "c
 packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/lab.json -var-file ../conf/ubuntu-1804-i386.json ubuntu.json
 ```
 
-Download the latest official **ubuntu/xenial64** vagrant box and export for packer virtualbox-ovf build.
+Download the latest official **ubuntu/bionic64** vagrant box and export for packer virtualbox-ovf build.
 The official ova image can not be used since it contain cloud-init service which will block the boot for ever and I have not way to hack it.
 
 The main changes refer to `script.sh`

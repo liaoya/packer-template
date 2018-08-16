@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-[[ -n ${CUSTOM_LIBVIRT} && "${CUSTOM_LIBVIRT}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || exit 0
 
 echo "==> Install Ubuntu docker"
 apt-get install -y -qq -o "Dpkg::Use-Pty=0" docker.io >/dev/null
