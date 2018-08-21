@@ -41,7 +41,7 @@ if [[ $LOCATION == "office" ]]; then
     APT_PROXY=http://10.113.69.101:5900
     DOCKER_MIRROR_SERVER=http://10.113.69.101:5901
     YUM_PROXY=http://10.113.69.101:5900
-    no_proxy="${no_proxy},.cn.oracle.com,.jp.oracle.com,.us.oracle.com,.oraclecorp.com"
+    no_proxy="${no_proxy},cn.oracle.com,jp.oracle.com,us.oracle.com,oraclecorp.com"
 elif [[ $LOCATION == "lab" ]]; then
     APT_PROXY=http://10.113.69.101:5900
     DOCKER_MIRROR_SERVER=http://10.113.69.101:5901
