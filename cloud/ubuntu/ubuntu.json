@@ -53,7 +53,8 @@
             "type": "shell",
             "inline": [
                 "chmod a+x /tmp/cmdlet/*.sh",
-                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin"
+                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin",
+                "sudo chown root:root /usr/local/bin/*"
             ]
         },
 

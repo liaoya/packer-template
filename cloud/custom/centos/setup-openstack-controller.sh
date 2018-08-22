@@ -1,8 +1,13 @@
 #!/bin/bash -eux
 
-# https://www.server-world.info/en/note?os=CentOS_7&p=openstack_pike&f=2
+[[ -n ${CUSTOM_OPENSTACK_CONTROLLER} && "${CUSTOM_OPENSTACK_CONTROLLER}" == "true" ]] || exit 0
 
-yum --enablerepo=centos-openstack-pike -y -q install mariadb-server
+# https://www.server-world.info/en/note?os=CentOS_7&p=openstack_queens&f=2
+
+yum -y -q install centos-release-openstack-queens
+sed -i -e "s/enabled=1/enabled=0/g" /etc/yum.repos.d/CentOS-OpenStack-queens.repo
+
+yum --enablerepo=centos-openstack-queens -y install mariadb-server 
 sed -i "s/\[mysqld\]/&\ncharacter-set-server=utf8/g" /etc/my.cnf
 systemctl start mariadb
 systemctl enable mariadb
