@@ -45,6 +45,15 @@ if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_
         sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
         sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" ${elem}    
     done
+
+    curl -sL -o- https://setup.ius.io/ | bash
+    yum repolist enabled | grep -s -q "^ius/" && yum-config-manager --disable ius || true
+
+    CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' $(rpm -qf /etc/redhat-release))
+#    yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
+#    yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
+#    yum install -y -q http://rpms.remirepo.net/enterprise/remi-release-${CENTOS_RELEASE}.rpm
+#    yum install -y -q http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el${CENTOS_RELEASE}.noarch.rpm
 fi
 
 if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
@@ -63,6 +72,6 @@ EOF
     else
         yum repolist disabled | grep -s -q ol7_developer_EPEL &&  yum-config-manager --enable "ol7_developer_EPEL"  >/dev/null || true
     fi
-    yum repolist disabled | grep -s -w -q ol7_addons | sudo yum-config-manager --enable grep ol7_addons > /dev/null || true
-    yum repolist disabled | grep -s -w -q ol7_optional_latest | sudo yum-config-manager --enable grep ol7_optional_latest > /dev/null || true
+    yum repolist disabled | grep -s -w -q ol7_addons | yum-config-manager --enable grep ol7_addons > /dev/null || true
+    yum repolist disabled | grep -s -w -q ol7_optional_latest | yum-config-manager --enable grep ol7_optional_latest > /dev/null || true
 fi

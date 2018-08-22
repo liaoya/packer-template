@@ -10,6 +10,7 @@ if [[ -n  ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
     yum install -y -q yum-utils
     yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo
     yum install -y -q docker-ce
+    yum repolist enabled | grep -s -q "docker-ce-stable" && yum-config-manager --disable docker-ce-stable || true
 else
     yum install -y -q docker
 fi

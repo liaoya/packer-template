@@ -65,6 +65,15 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
         sed -i -e "s%^baseurl=.*%#&\n&%g" ${elem}
         sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" ${elem}    
     done
+
+    curl -sL -o- https://setup.ius.io/ | bash
+    yum repolist enabled | grep -s -q "^ius/" && yum-config-manager --disable ius || true
+
+    CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' $(rpm -qf /etc/redhat-release))
+#    yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
+#    yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
+#    yum install -y -q http://rpms.remirepo.net/enterprise/remi-release-${CENTOS_RELEASE}.rpm
+#    yum install -y -q http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el${CENTOS_RELEASE}.noarch.rpm
 fi
 
 if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
