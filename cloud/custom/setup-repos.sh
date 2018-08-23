@@ -46,7 +46,7 @@ if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_
         sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" ${elem}    
     done
 
-    curl -sL -o- https://setup.ius.io/ | bash
+    curl -sL -o- https://setup.ius.io/ | bash || true
     yum repolist enabled | grep -s -q "^ius/" && yum-config-manager --disable ius || true
 
     CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' $(rpm -qf /etc/redhat-release))
