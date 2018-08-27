@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEMP=`getopt -o l: --long location: -- "$@"`
+TEMP=$(getopt -o l: --long location: -- "$@")
 eval set -- "$TEMP"
 
 while true ; do
@@ -29,16 +29,16 @@ elif [[ $LOCATION == "cn" ]]; then
     DNF_MIRROR_SERVER="http://mirrors.ustc.edu.cn/"
     DNF_MIRROR_PATH="/fedora"
     DOCKER_MIRROR_SERVER="registry.docker-cn.com"
-    NPM_MIRROR_SERVER="https://registry.npm.taobao.org"
-    PIP_MIRROR_SERVER="http://mirrors.aliyun.com/pypi/simple"
+#    NPM_MIRROR_SERVER="https://registry.npm.taobao.org"
+#    PIP_MIRROR_SERVER="http://mirrors.aliyun.com/pypi/simple"
     YUM_MIRROR_SERVER="http://mirrors.ustc.edu.cn/"
     YUM_MIRROR_EPEL_PATH="/epel"
     YUM_MIRROR_PATH="/centos"
 fi
 
 if [[ -d /etc/apt ]]; then
-    [ -f /etc/apt/sources.list.origin ] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
-    [ -f /etc/apt/sources.list.origin ] && yes | cp -pr /etc/apt/sources.list.origin /etc/apt/sources.list || true
+    [[ -f /etc/apt/sources.list.origin ]] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
+    [[ -f /etc/apt/sources.list.origin ]] && cp -pr /etc/apt/sources.list.origin /etc/apt/sources.list
     sed -i -e "s%http://.*archive.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" -e "s%http://security.ubuntu.com%$APT_MIRROR_SERVER$APT_MIRROR_PATH%" /etc/apt/sources.list
     sed -i -e 's/^deb-src/#deb-src/' /etc/apt/sources.list
 fi
@@ -68,7 +68,7 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
 
     CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' $(rpm -qf /etc/redhat-release))
     yum install -y -q https://centos${CENTOS_RELEASE}.iuscommunity.org/ius-release.rpm
-    yum repolist enabled | grep -s -q "^ius/" && yum-config-manager --disable ius || true
+    yum repolist enabled | grep -s -q "^ius/" && yum-config-manager --disable ius > /dev/null || true
     
 #    yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
 #    yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
@@ -93,6 +93,9 @@ EOF
     fi
     yum repolist disabled | grep -s -w -q ol7_addons | sudo yum-config-manager --enable grep ol7_addons > /dev/null || true
     yum repolist disabled | grep -s -w -q ol7_optional_latest | sudo yum-config-manager --enable grep ol7_optional_latest > /dev/null || true
+    RELEASE=$(echo ${version} | cut -d '.' -f 1)
+    yum install -y -q https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm https://centos${RELEASE}.iuscommunity.org/ius-release.rpm
+    yum repolist enabled | grep -s -q "^epel/" && yum-config-manager --disable epel > /dev/null || true
 fi
 
 if [[ -f /etc/fedora-release && -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then

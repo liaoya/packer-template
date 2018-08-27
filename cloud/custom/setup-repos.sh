@@ -47,7 +47,7 @@ if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_
     done
 
     curl -sL -o- https://setup.ius.io/ | bash || true
-    yum repolist enabled | grep -s -q "^ius/" && yum-config-manager --disable ius || true
+    yum repolist enabled | grep -s -q "^ius/" && yum-config-manager --disable ius > /dev/null || true
 
     CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' $(rpm -qf /etc/redhat-release))
 #    yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
@@ -74,4 +74,7 @@ EOF
     fi
     yum repolist disabled | grep -s -w -q ol7_addons | yum-config-manager --enable grep ol7_addons > /dev/null || true
     yum repolist disabled | grep -s -w -q ol7_optional_latest | yum-config-manager --enable grep ol7_optional_latest > /dev/null || true
+    RELEASE=$(echo ${version} | cut -d '.' -f 1)
+    yum install -y -q https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm https://centos${RELEASE}.iuscommunity.org/ius-release.rpm
+    yum repolist enabled | grep -s -q "^epel/" && yum-config-manager --disable epel > /dev/null || true
 fi

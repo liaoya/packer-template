@@ -2,7 +2,7 @@
 
 echo "==> Install CentOS common packages"
 
-yum repolist all | grep -s -q "^ius/" && yum --enablerepo=ius install -y -q git2u tmux2u || yum -y -q install git
+yum repolist all | grep -s -q "^ius/" && yum --enablerepo=ius install -y -q git2u tmux2u yum-plugin-replace || yum -y -q install git
 
 yum install -y -q zip unzip bzip2 xz tig jq sshpass screen python2-httpie wget vim
 
