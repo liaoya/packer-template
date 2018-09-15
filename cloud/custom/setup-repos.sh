@@ -75,6 +75,6 @@ EOF
     yum repolist disabled | grep -s -w -q ol7_addons | yum-config-manager --enable grep ol7_addons > /dev/null || true
     yum repolist disabled | grep -s -w -q ol7_optional_latest | yum-config-manager --enable grep ol7_optional_latest > /dev/null || true
     RELEASE=$(echo ${version} | cut -d '.' -f 1)
-    yum install -y -q https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm https://centos${RELEASE}.iuscommunity.org/ius-release.rpm
+    yum install -y -q https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm https://rhel${RELEASE}.iuscommunity.org/ius-release.rpm
     yum repolist enabled | grep -s -q "^epel/" && yum-config-manager --disable epel > /dev/null || true
 fi
