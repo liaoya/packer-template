@@ -18,6 +18,7 @@ while getopts "ch" o; do
     esac
 done
 
-BASEDIR=$(dirname $(readlink -f $0))
-[[ -f $BASEDIR/seed.iso && $CLEAN -gt 0 ]] && rm -f $BASEDIR/seed.iso
-[[ -f $BASEDIR/seed.iso ]] || cloud-localds $BASEDIR/seed.iso $BASEDIR/user-data
+THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
+THIS_DIR=$(dirname "${THIS_FILE}")
+[[ -f $THIS_DIR/seed.iso && $CLEAN -gt 0 ]] && rm -f "$THIS_DIR/seed.iso"
+[[ -f $THIS_DIR/seed.iso ]] || cloud-localds "$THIS_DIR/seed.iso" "$THIS_DIR/user-data"

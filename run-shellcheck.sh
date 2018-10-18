@@ -2,17 +2,27 @@
 #
 # Run this script to make every shell file is valid
 
-THIS_DIR=$(dirname $(readlink -f ${BASH_SOURCE}))
-export SHELLCHECK_OPTS='--exclude=SC1090,SC2046,SC2086,SC2128'
+THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
+THIS_DIR=$(dirname "${THIS_FILE}")
 
 [[ $(command -v shellcheck) ]] || { echo "Cannot find shellcheck"; exit 1; }
 
-#find ${THIS_DIR} -iname "*.sh" -exec sh -c 'shellcheck $1 >/dev/null || echo $1' sh {} \;
-
 SHELLCHECK_RESULT="true"
-while IFS= read -r -d '' shellfile
-do
-    shellcheck "${shellfile}" || { echo ${shellfile}; SHELLCHECK_RESULT="false"; }
-done < <(find ${THIS_DIR} -iname "*.sh" -print0)
+
+run_shellcheck() {
+    while IFS= read -r -d '' shellfile
+    do
+        shellcheck "${shellfile}" || SHELLCHECK_RESULT="false"
+    done < <(find "${1}" -iname "*.sh" -print0)
+}
+
+if [[ $# -eq 0 ]]; then
+    run_shellcheck "${THIS_DIR}"
+else
+    while (( "$#")); do
+        target_dir=$1; shift;
+        [[ -d "${target_dir}" ]] || run_shellcheck "${target_dir}"
+    done
+fi
 
 [[ ${SHELLCHECK_RESULT} == true ]] || exit 1
