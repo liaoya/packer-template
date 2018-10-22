@@ -1,4 +1,5 @@
 #!/bin/bash -eux
+#shellcheck disable=SC2016,SC2086
 
 [[ -n ${CUSTOM_JAVA} && "${CUSTOM_JAVA}" == "true" ]] || exit 0
 
@@ -11,7 +12,7 @@ if [[ -n "$(ls -A ${JABBA_HOME})" ]]; then
     [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" ${JABBA_HOME}
     echo '[ -s "/opt/jabba/jabba.sh" ] && export JABBA_HOME=/opt/jabba && source "${JABBA_HOME}/jabba.sh"' | tee /etc/profile.d/jabba.sh
     [[ -d /etc/fish/conf.d ]] || mkdir -p /etc/fish/conf.d
-    echo '[ -s /opt/jabba/jabba.fish ]; and set -xg JABBA_HOME /opt/jabba; and source $JABBA_HOME/jabba.fish' | tee /etc/fish/conf.d/jabba.fish
+    echo "[ -s /opt/jabba/jabba.fish ]; and set -xg JABBA_HOME /opt/jabba; and source $JABBA_HOME/jabba.fish" | tee /etc/fish/conf.d/jabba.fish
 fi
 
 [[ -n ${SSH_USERNAME} ]] && [[ -d ${SSH_USERNAME}/.config ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" ${SSH_USERNAME}/.config

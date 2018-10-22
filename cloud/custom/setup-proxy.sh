@@ -1,4 +1,5 @@
 #!/bin/bash -eux
+#shellcheck disable=SC2154
 
 echo "==> Run custom setup proxy script"
 
@@ -26,8 +27,14 @@ EOF
 fi
 
 [[ ! -n ${YUM_PROXY} && -n ${http_proxy} ]] && YUM_PROXY=${http_proxy}
-[[ -f /etc/yum.conf && -n ${YUM_PROXY} ]] && { echo "==> Use ${YUM_PROXY} for yum"; sed -i "/^installonly_limit/i proxy=${YUM_PROXY}" /etc/yum.conf; } || true
-[[ -f /etc/dnf/dnf.conf && -n ${YUM_PROXY} ]] && { echo "==> Use ${YUM_PROXY} for dnf"; sed -i "/^installonly_limit/i proxy=${YUM_PROXY}" /etc/dnf/dnf.conf; } || true
+if [[ -f /etc/yum.conf && -n ${YUM_PROXY} ]]; then
+    echo "==> Use ${YUM_PROXY} for yum"
+    sed -i "/^installonly_limit/i proxy=${YUM_PROXY}" /etc/yum.conf
+fi
+if [[ -f /etc/dnf/dnf.conf && -n ${YUM_PROXY} ]]; then
+    echo "==> Use ${YUM_PROXY} for dnf"
+    sed -i "/^installonly_limit/i proxy=${YUM_PROXY}" /etc/dnf/dnf.conf
+fi
 
 if [[ -n ${http_proxy} ]]; then
     echo "==> Use ${http_proxy} for /etc/systemd/system/docker.service.d/http-proxy.conf"
@@ -43,7 +50,7 @@ fi
 if [[ -n ${DOCKER_MIRROR_SERVER} ]]; then
     echo "==> Use ${DOCKER_MIRROR_SERVER} for /etc/docker/daemon.json"
     mkdir -p /etc/docker
-    DOCKER_MIRROR_SERVER_IP=$(echo ${DOCKER_MIRROR_SERVER} | sed -e 's%http://%%' -e 's%https://%%')
+    DOCKER_MIRROR_SERVER_IP=$(echo "${DOCKER_MIRROR_SERVER}" | sed -e 's%http://%%' -e 's%https://%%')
     cat <<EOF > /etc/docker/daemon.json
 {
     "disable-legacy-registry": true,
@@ -51,9 +58,11 @@ if [[ -n ${DOCKER_MIRROR_SERVER} ]]; then
     "registry-mirrors": ["${DOCKER_MIRROR_SERVER}"]
 }
 EOF
-    if [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf && ! $(grep -s -q ${DOCKER_MIRROR_SERVER_IP} /etc/systemd/system/docker.service.d/http-proxy.conf) ]]; then
-        echo "==> Add ${DOCKER_MIRROR_SERVER_IP} to /etc/systemd/system/docker.service.d/http-proxy.conf NO_PROXY list"
-        sed -i "s/NO_PROXY=/&${DOCKER_MIRROR_SERVER_IP},/" /etc/systemd/system/docker.service.d/http-proxy.conf
+    if [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf ]]; then
+        if grep -s -q "${DOCKER_MIRROR_SERVER_IP}" /etc/systemd/system/docker.service.d/http-proxy.conf; then
+            echo "==> Add ${DOCKER_MIRROR_SERVER_IP} to /etc/systemd/system/docker.service.d/http-proxy.conf NO_PROXY list"
+            sed -i "s/NO_PROXY=/&${DOCKER_MIRROR_SERVER_IP},/" /etc/systemd/system/docker.service.d/http-proxy.conf
+        fi
     fi
-    [[ $(command -v docker) ]] && echo "==> Restart docker daemon" && systemctl daemon-reload && systemctl restart docker || true
+    [[ $(command -v docker) ]] && echo "==> Restart docker daemon" && systemctl daemon-reload && (systemctl restart docker || true)
 fi

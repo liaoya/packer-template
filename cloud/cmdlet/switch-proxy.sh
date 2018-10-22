@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 IPADDR=$(hostname -I | cut -d' ' -f1)
 LOCATION=""
 if [[ ${IPADDR} =~ 10.113 ]]; then LOCATION="lab"; fi
@@ -117,12 +119,13 @@ if [[ $(command -v docker) && -n ${DOCKER_MIRROR_SERVER} ]]; then
 }
 EOF
 
-    DOCKER_MIRROR_SERVER_IP=$(cut -d':' -f1 <<<${DOCKER_MIRROR_SERVER_IP_PORT})
+    DOCKER_MIRROR_SERVER_IP=$(cut -d':' -f1 <<<"${DOCKER_MIRROR_SERVER_IP_PORT}")
     [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf ]] \
-        && grep "NO_PROXY" /etc/systemd/system/docker.service.d/http-proxy.conf | grep -v -s -q ${DOCKER_MIRROR_SERVER_IP} \
+        && grep "NO_PROXY" /etc/systemd/system/docker.service.d/http-proxy.conf | grep -v -s -q "${DOCKER_MIRROR_SERVER_IP}" \
         && echo "Add ${DOCKER_MIRROR_SERVER_IP} to /etc/systemd/system/docker.service.d/http-proxy.conf NO_PROXY list" \
         && sed -i "s/NO_PROXY=/&${DOCKER_MIRROR_SERVER_IP},/" /etc/systemd/system/docker.service.d/http-proxy.conf
-    echo "Restart docker daemon" && systemctl daemon-reload && systemctl restart docker || true
+    echo "Restart docker daemon"
+    systemctl daemon-reload && systemctl restart docker
 fi
 
 if [[ $(command -v snapd) ]]; then

@@ -44,7 +44,7 @@ apt-get -y -qq clean
 apt-get -y -qq autoclean
 
 echo "==> Removing APT files"
-find /var/lib/apt -type f | xargs rm -f
+find /var/lib/apt -type f -exec rm -f {} \;
 echo "==> Removing caches"
 find /var/cache -type f -exec rm -rf {} \;
 rm -fr /tmp/*
@@ -52,15 +52,13 @@ rm -fr /tmp/*
 # Remove Bash history
 unset HISTFILE
 rm -f /root/.bash_history
-rm -f /home/${SSH_USER}/.bash_history
+rm -f "/home/${SSH_USER}/.bash_history"
 
 # Clean up log files
-find /var/log -type f | while read f; do echo -ne '' > "${f}"; done;
+find /var/log -type f | while read -r f; do echo -ne '' > "${f}"; done;
 
 echo "==> Clearing last login information"
->/var/log/lastlog
->/var/log/wtmp
->/var/log/btmp
+rm -f /var/log/lastlog /var/log/wtmp /var/log/btmp
 
 # qemu does not require wipe disk
 case "$PACKER_BUILDER_TYPE" in
@@ -69,14 +67,14 @@ esac
 
 # Whiteout root
 count=$(df --sync -kP / | tail -n1  | awk -F ' ' '{print $4}')
-let count--
-dd if=/dev/zero of=/tmp/whitespace bs=1024 count=$count
+count=$((count-1))
+dd if=/dev/zero of=/tmp/whitespace bs=1024 count="$count"
 rm /tmp/whitespace
 
 # Whiteout /boot
 count=$(df --sync -kP /boot | tail -n1 | awk -F ' ' '{print $4}')
-let count--
-dd if=/dev/zero of=/boot/whitespace bs=1024 count=$count
+count=$((count-1))
+dd if=/dev/zero of=/boot/whitespace bs=1024 count="$count"
 rm /boot/whitespace
 
 echo '==> Clear out swap and disable until reboot'
@@ -90,7 +88,7 @@ set -e
 if [ "x${swapuuid}" != "x" ]; then
     # Whiteout the swap partition to reduce box size
     # Swap is disabled till reboot
-    swappart=$(readlink -f /dev/disk/by-uuid/$swapuuid)
+    swappart=$(readlink -f "/dev/disk/by-uuid/$swapuuid")
     /sbin/swapoff "${swappart}"
     dd if=/dev/zero of="${swappart}" bs=1M || echo "dd exit code $? is suppressed"
     /sbin/mkswap -U "${swapuuid}" "${swappart}"

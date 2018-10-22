@@ -3,7 +3,7 @@
 mkdir -p ~/Documents ~/Downloads
 
 echo "==> Setup Common config"
-[[ -n ${VM_NAME} && $(command -v hostnamectl) ]] && echo "Set hostname to ${VM_NAME}" && hostnamectl set-hostname ${VM_NAME} || true
+[[ -n ${VM_NAME} && $(command -v hostnamectl) ]] && echo "Set hostname to ${VM_NAME}" && (hostnamectl set-hostname "${VM_NAME}" || true)
 [[ -f /etc/selinux/config ]] && sed -i "s/^SELINUX=enforcing/SELINUX=disabled/g" /etc/selinux/config && sed -i "s/^SELINUX=permissive/SELINUX=disabled/g" /etc/selinux/config
 echo "root:cloud" | chpasswd
 
@@ -21,4 +21,4 @@ sed -i '/XAUTHORITY"$/a Defaults    env_keep += "HTTP_PROXY HTTPS_PROXY FTP_PROX
 sed -i '/XAUTHORITY"$/a Defaults    env_keep += "http_proxy https_proxy ftp_proxy rsync_proxy no_proxy"' /etc/sudoers
 sed -i '/^Defaults    secure_path/ s/$/:\/usr\/local\/sbin:\/usr\/local\/bin/' /etc/sudoers
 SSH_USER=${SSH_USERNAME:-vagrant}
-echo "$SSH_USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${SSH_USER}
+echo "$SSH_USER ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${SSH_USER}"

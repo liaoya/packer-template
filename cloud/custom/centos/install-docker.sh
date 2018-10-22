@@ -1,7 +1,6 @@
 #!/bin/bash -eux
 
 [[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]] || exit 0
-echo "==> Install CentOS docker packages"
 
 yum install -y -q bridge-utils
 
@@ -10,12 +9,19 @@ if [[ -n  ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
     yum install -y -q yum-utils
     yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo
     yum install -y -q docker-ce
-    yum repolist enabled | grep -s -q "docker-ce-stable" && yum-config-manager --disable docker-ce-stable || true
+    if yum repolist enabled | grep -s -q "docker-ce-stable"; then
+        yum-config-manager --disable docker-ce-stable
+    fi
 else
+    echo "==> Install CentOS docker packages"
     yum install -y -q docker
 fi
 
-[[ $(command -v docker) ]] && systemctl enable docker && [[ -n ${SSH_USERNAME} ]] && getent group docker && usermod -aG docker ${SSH_USERNAME} || true
+[[ $(command -v docker) ]] && systemctl enable docker
+if [[ -n ${SSH_USERNAME} ]]; then
+    getent group docker
+    usermod -aG docker "${SSH_USERNAME}"
+fi
 
 #curl -LsS https://raw.githubusercontent.com/openvswitch/ovs/master/utilities/ovs-docker -o /usr/local/bin/ovs-docker && chmod a+x /usr/local/bin/ovs-docker || true
 #curl -LsS https://raw.githubusercontent.com/jpetazzo/pipework/master/pipework -o /usr/local/bin/pipework && chmod a+x /usr/local/bin/pipework || true

@@ -1,4 +1,5 @@
 #!/bin/bash -eux
+#shellcheck disable=SC1090
 
 [[ -n ${CUSTOM_OJET} && ${CUSTOM_OJET} == true ]] || exit 0
 echo "==> Install OJet"

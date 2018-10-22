@@ -21,7 +21,7 @@ if [[ $# -eq 0 ]]; then
 else
     while (( "$#")); do
         target_dir=$1; shift;
-        [[ -d "${target_dir}" ]] || run_shellcheck "${target_dir}"
+        [[ -d "${target_dir}" ]] && run_shellcheck "${target_dir}"
     done
 fi
 

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-set -x
+set -e -x
 
-BASEDIR=$(dirname $0)
+THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
+THIS_DIR=$(dirname "${THIS_FILE}")
 
-rm -fr ${BASEDIR}/box/* ${BASEDIR}/image/* ${BASEDIR}/qemu/* ${BASEDIR}/virtualbox/*
+rm -fr "${THIS_DIR}"/box/* "${THIS_DIR}"/image/* "${THIS_DIR}"/qemu/* "${THIS_DIR}"/virtualbox/*
