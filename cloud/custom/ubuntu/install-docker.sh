@@ -12,9 +12,10 @@ if [[ -n  ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
 else
     echo "==> Install Ubuntu docker"
     apt-get install -y -qq -o "Dpkg::Use-Pty=0" docker.io >/dev/null
-    if [[ -n ${SSH_USERNAME} ]]; then
-        getent group docker && usermod -aG docker "${SSH_USERNAME}"
-    fi
+fi
+
+if [[ -n ${SSH_USERNAME} ]]; then
+    getent group docker && usermod -aG docker "${SSH_USERNAME}"
 fi
 
 #curl -LsS https://raw.githubusercontent.com/openvswitch/ovs/master/utilities/ovs-docker -o /usr/local/bin/ovs-docker && chmod a+x /usr/local/bin/ovs-docker || true
