@@ -1,3 +1,5 @@
+#!/bin/sh
+#shellcheck disable=SC1091,SC2174
 set -exu
 
 #

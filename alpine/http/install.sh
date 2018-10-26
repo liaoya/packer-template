@@ -1,9 +1,9 @@
 #!/bom/sh
-
+#shellcheck disable=SC1091,SC2039
 # http://www.tutorialspoint.com/unix_commands/getopt.htm
 
 # read the options
-TEMP=`getopt -o d:n:p:P:r:z: --long domain:,nameserver:,passwrod:,proxy:,repository:,timezone: -- "$@"`
+TEMP=$(getopt -o d:n:p:P:r:z: --long domain:,nameserver:,passwrod:,proxy:,repository:,timezone: -- "$@")
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
@@ -27,29 +27,30 @@ while true ; do
     esac
 done
 
-echo DOMAIN is \"$DOMAIN\" NAMESERVER is \"$NAMESERVER\" PASSWORD is \"$PASSWORD\" PROXY is \"$PROXY\" REPOSITORY is \"$REPOSITORY\" TIMEZONE is \"$TIMEZONE\"
+echo DOMAIN is \""$DOMAIN"\" NAMESERVER is \""$NAMESERVER"\" PASSWORD is \""$PASSWORD"\" PROXY is \""$PROXY"\" REPOSITORY is \""$REPOSITORY"\" TIMEZONE is \""$TIMEZONE"\"
 
 setup-keymap us us
 setup-hostname -n alpine
-echo -e "eth0\ndhcp\nno\n" | setup-interfaces
+echo -e "eth0\\ndhcp\\nno\\n" | setup-interfaces
 /etc/init.d/networking --quiet start &
 sleep 10s
-echo -e "$PASSWORD\n$PASSWORD\n" | passwd
-[[ ! -z $NAMESERVER ]] && setup-dns -d $DOMAIN $NAMESERVER
-[[ ! -z $TIMEZONE ]] && setup-timezone -z $TIMEZONE
+echo -e "$PASSWORD\\n$PASSWORD\\n" | passwd
+[ ! -z "$NAMESERVER" ] && setup-dns -d "$DOMAIN" "$NAMESERVER"
+[ ! -z "$TIMEZONE" ] && setup-timezone -z "$TIMEZONE"
 setup-sshd -c openssh
 /etc/init.d/hostname --quiet restart
-if [[ ! -z $PROXY ]]; then
+if [ ! -z "$PROXY" ]; then
     echo "==> Use Proxy $PROXY"
-    setup-proxy -q $PROXY
+    setup-proxy -q "$PROXY"
     [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 fi
-setup-apkrepos $REPOSITORY
+#shellcheck disable=2086
+setup-apkrepos "$REPOSITORY"
 setup-ntp -c chrony
 # For virtualbox
-[ -b /dev/vda ] && echo -e "y\n" | setup-disk -m sys -s 0 -L /dev/vda
+[ -b /dev/vda ] && echo -e "y\\n" | setup-disk -m sys -s 0 -L /dev/vda
 # For qemu
-[ -b /dev/sda ] && echo -e "y\n" | setup-disk -m sys -s 0 -L /dev/sda
+[ -b /dev/sda ] && echo -e "y\\n" | setup-disk -m sys -s 0 -L /dev/sda
 
 # Post Installation
 rc-service sshd stop
@@ -64,10 +65,10 @@ sed -i '/^#http.*edge.*/! s/#//g' /mnt/etc/apk/repositories
 sed -i '/\/media/ s//#\/media/g' /mnt/etc/apk/repositories
 
 SSHD_CONFIG=/mnt/etc/ssh/sshd_config
-sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/g' $SSHD_CONFIG
-grep -s -q -w "^UseDNS yes" $SSHD_CONFIG && sed -i "/UseDNS/d" $SSHD_CONFIG && sed -i "/^# no default banner path/i UseDNS no" $SSHD_CONFIG
-grep -s -q -w "^GSSAPIAuthentication yes" $SSHD_CONFIG && sed -i "/GSSAPIAuthentication/d" $SSHD_CONFIG && sed -i "/^# no default banner path/i GSSAPIAuthentication no" $SSHD_CONFIG
-grep -s -q -w "^GSSAPICleanupCredentials yes" $SSHD_CONFIG && sed -i "/GSSAPICleanupCredentials/d" $SSHD_CONFIG && sed -i "/^# no default banner path/i GSSAPICleanupCredentials no" $SSHD_CONFIG
+sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/g' "$SSHD_CONFIG"
+grep -s -q -w "^UseDNS yes" "$SSHD_CONFIG" && sed -i "/UseDNS/d" "$SSHD_CONFIG" && sed -i "/^# no default banner path/i UseDNS no" "$SSHD_CONFIG"
+grep -s -q -w "^GSSAPIAuthentication yes" "$SSHD_CONFIG" && sed -i "/GSSAPIAuthentication/d" "$SSHD_CONFIG" && sed -i "/^# no default banner path/i GSSAPIAuthentication no" "$SSHD_CONFIG"
+grep -s -q -w "^GSSAPICleanupCredentials yes" "$SSHD_CONFIG" && sed -i "/GSSAPICleanupCredentials/d" "$SSHD_CONFIG" && sed -i "/^# no default banner path/i GSSAPICleanupCredentials no" "$SSHD_CONFIG"
 
 umount /mnt
 

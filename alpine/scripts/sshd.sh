@@ -1,3 +1,4 @@
+#!/bin/sh
 set -eux
 
 # add in order to allow packer ssh access to provision

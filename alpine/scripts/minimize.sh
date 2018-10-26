@@ -1,3 +1,4 @@
+#!/bin/sh
 set -ux
 
 # This script must be decorated with 'set -ux'

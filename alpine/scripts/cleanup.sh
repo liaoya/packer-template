@@ -1,3 +1,4 @@
+#!/bin/sh
 set -eux
 
 setup-proxy -q "none" || true

@@ -1,3 +1,5 @@
+#!/bin/sh
+#shellcheck disable=SC1091
 set -eux
 
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
