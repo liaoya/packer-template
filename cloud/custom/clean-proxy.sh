@@ -21,6 +21,7 @@ if [[ -f /etc/systemd/system/docker.service.d/http-proxy.conf ]]; then
 fi
 
 if [[ -f /etc/apt/sources.list.origin ]]; then cp -fpr /etc/apt/sources.list.origin /etc/apt/sources.list; fi
-if [[ -d /etc/yum.repos.d ]]; then
-    (cd /etc/yum.repos.d; for elem in *.origin; do yes | cp -f "$elem" $(basename -s .origin "$elem"); done)
-fi
+for elem in /etc/yum.repos.d/*.origin; do
+    [[ -e "${elem}" ]] || continue
+    cp -f "$elem" "/etc/yum.repos.d/$(basename -s .origin "$elem")"
+done

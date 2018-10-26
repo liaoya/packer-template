@@ -43,11 +43,28 @@ if [[ -d /etc/apt ]]; then
     sed -i -e 's/^deb-src/#deb-src/' /etc/apt/sources.list
 fi
 
-# (cd /etc/yum.repos.d; for elem in $(ls -1 *.origin); do yes | cp -f $elem $(basename -s .origin $elem); done)
+if [[ -f /etc/fedora-release && -n ${DNF_MIRROR_SERVER} && -n ${DNF_MIRROR_PATH} ]]; then
+    echo "DNF_MIRROR_SERVER is \"${DNF_MIRROR_SERVER}\", DNF_MIRROR_PATH is \"${DNF_MIRROR_PATH}\""
+    for elem in /etc/yum.repos.d/fedora*.repo; do
+        [[ -e "${elem}" ]] || continue
+        [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
+        [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
+        grep -s -q -e "^metalink=" "${elem}" && sed -i -e "s/^metalink=/#metalink=/g" "${elem}"
+        grep -s -q -e "^#baseurl=" "${elem}" && grep -s -q -e "^baseurl=" "${elem}" && sed -i -e "/^baseurl=/d" "${elem}";
+        grep -s -q -e "^#baseurl=" "${elem}" && sed -i -e "s/^#baseurl=/baseurl=/g" "${elem}"
+        sed -i -e "s%^baseurl=.*%#&\\n&%g" "${elem}"
+        sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" "${elem}"
+    done
+    dnf install -y -q yum-utils
+    # I find the issue when use a specific mirror on Fedora 28
+    sed -i "s%os/%%g" /etc/yum.repos.d/fedora-updates.repo
+fi
 
 if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
-    for elem in /etc/yum.repos.d/CentOS*.repo; do [ -f "${elem}.origin" ] || cp "${elem}" "${elem}.origin"; done
-    for elem in /etc/yum.repos.d/CentOS*.repo; do 
+    for elem in /etc/yum.repos.d/CentOS*.repo; do
+        [[ -e "${elem}" ]] || continue
+        [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
+        [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
         grep -s -q -e "^mirrorlist=" "${elem}" && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" "${elem}"
         grep -s -q -e "^#baseurl=" "${elem}" && grep -s -q -e "^baseurl=" "${elem}" && sed -i -e "/^baseurl=/d" "${elem}";
         grep -s -q -e "^#baseurl=" "${elem}" && sed -i -e "s/^#baseurl=/baseurl=/g" "${elem}"
@@ -56,8 +73,10 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
     done
     yum install -y -q epel-release
 
-    for elem in /etc/yum.repos.d/epel*.repo; do [ -f "${elem}.origin" ] || cp "${elem}" "${elem}.origin"; done
     for elem in /etc/yum.repos.d/epel*.repo; do
+        [[ -e "${elem}" ]] || continue
+        [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
+        [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
         grep -s -q -e "^mirrorlist=" "${elem}" && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" "${elem}"
         grep -s -q -e "^metalink=" "${elem}" && sed -i -e "s/^metalink=/#metalink=/g" "${elem}"
         grep -s -q -e "^#baseurl=" "${elem}" && grep -s -q -e "^baseurl=" "${elem}" && sed -i -e "/^baseurl=/d" "${elem}";

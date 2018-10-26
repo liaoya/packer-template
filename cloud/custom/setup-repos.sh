@@ -4,15 +4,17 @@ echo "==> Run custom repository"
 
 if [[ -d /etc/apt && -n ${APT_MIRROR_SERVER} && -n ${APT_MIRROR_PATH} ]]; then
     echo "APT_MIRROR_SERVER is \"${APT_MIRROR_SERVER}\", APT_MIRROR_PATH is \"${APT_MIRROR_PATH}\""
-    [ -f /etc/apt/sources.list.origin ] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
+    [[ -f /etc/apt/sources.list.origin ]] || cp -pr /etc/apt/sources.list /etc/apt/sources.list.origin
     sed -i -e "s%http://.*archive.ubuntu.com%${APT_MIRROR_SERVER}${APT_MIRROR_PATH}%" /etc/apt/sources.list
     apt-get update -qq
 fi
 
 if [[ -f /etc/fedora-release && -n ${DNF_MIRROR_SERVER} && -n ${DNF_MIRROR_PATH} ]]; then
     echo "DNF_MIRROR_SERVER is \"${DNF_MIRROR_SERVER}\", DNF_MIRROR_PATH is \"${DNF_MIRROR_PATH}\""
-    for elem in /etc/yum.repos.d/fedora*.repo; do [ -f "${elem}.origin" ] || cp "${elem}" "${elem}.origin"; done
     for elem in /etc/yum.repos.d/fedora*.repo; do
+        [[ -e "${elem}" ]] || continue
+        [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
+        [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
         grep -s -q -e "^metalink=" "${elem}" && sed -i -e "s/^metalink=/#metalink=/g" "${elem}"
         grep -s -q -e "^#baseurl=" "${elem}" && grep -s -q -e "^baseurl=" "${elem}" && sed -i -e "/^baseurl=/d" "${elem}";
         grep -s -q -e "^#baseurl=" "${elem}" && sed -i -e "s/^#baseurl=/baseurl=/g" "${elem}"
@@ -25,8 +27,10 @@ if [[ -f /etc/fedora-release && -n ${DNF_MIRROR_SERVER} && -n ${DNF_MIRROR_PATH}
 fi
 
 if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_PATH} && -n ${YUM_MIRROR_PATH} ]]; then
-    for elem in /etc/yum.repos.d/CentOS*.repo; do [ -f "${elem}.origin" ] || cp "${elem}" "${elem}.origin"; done
-    for elem in /etc/yum.repos.d/CentOS*.repo; do 
+    for elem in /etc/yum.repos.d/CentOS*.repo; do
+        [[ -e "${elem}" ]] || continue
+        [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
+        [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
         grep -s -q -e "^mirrorlist=" "${elem}" && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" "${elem}"
         grep -s -q -e "^#baseurl=" "${elem}" && grep -s -q -e "^baseurl=" "${elem}" && sed -i -e "/^baseurl=/d" "${elem}";
         grep -s -q -e "^#baseurl=" "${elem}" && sed -i -e "s/^#baseurl=/baseurl=/g" "${elem}"
@@ -35,8 +39,10 @@ if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_
     done
     yum install -y -q epel-release
 
-    for elem in /etc/yum.repos.d/epel*.repo; do [ -f "${elem}.origin" ] || cp "${elem}" "${elem}.origin"; done
     for elem in /etc/yum.repos.d/epel*.repo; do
+        [[ -e "${elem}" ]] || continue
+        [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
+        [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
         grep -s -q -e "^mirrorlist=" "${elem}" && sed -i -e "s/^mirrorlist=/#mirrorlist=/g" "${elem}"
         grep -s -q -e "^metalink=" "${elem}" && sed -i -e "s/^metalink=/#metalink=/g" "${elem}"
         grep -s -q -e "^#baseurl=" "${elem}" && grep -s -q -e "^baseurl=" "${elem}" && sed -i -e "/^baseurl=/d" "${elem}";
