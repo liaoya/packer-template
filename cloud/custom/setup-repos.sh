@@ -70,7 +70,7 @@ gpgcheck=1
 enabled=1
 EOF
     else
-        if yum repolist disabled | grep -s -q ol7_developer_EPEL; then yum-config-manager --enable "ol7_developer_EPEL" >/dev/null; then
+        if yum repolist disabled | grep -s -q ol7_developer_EPEL; then yum-config-manager --enable "ol7_developer_EPEL" >/dev/null; fi
     fi
     yum repolist disabled | grep -s -w -q ol7_addons | yum-config-manager --enable grep ol7_addons > /dev/null || true
     yum repolist disabled | grep -s -w -q ol7_optional_latest | yum-config-manager --enable grep ol7_optional_latest > /dev/null || true

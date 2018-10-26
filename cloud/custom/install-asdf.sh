@@ -1,5 +1,5 @@
 #!/bin/bash -eux
-##ssshellcheck disable=SC2086
+#shellcheck disable=SC2086
 
 [[ -n ${CUSTOM_ASDF} && ${CUSTOM_ASDF} == true ]] || exit 0
 echo "==> Install asdf"
