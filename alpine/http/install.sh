@@ -29,6 +29,8 @@ done
 
 echo DOMAIN is \""$DOMAIN"\" NAMESERVER is \""$NAMESERVER"\" PASSWORD is \""$PASSWORD"\" PROXY is \""$PROXY"\" REPOSITORY is \""$REPOSITORY"\" TIMEZONE is \""$TIMEZONE"\"
 
+set -x
+
 setup-keymap us us
 setup-hostname -n alpine
 echo -e "eth0\\ndhcp\\nno\\n" | setup-interfaces
@@ -45,7 +47,7 @@ if [ ! -z "$PROXY" ]; then
     [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 fi
 #shellcheck disable=2086
-setup-apkrepos "$REPOSITORY"
+setup-apkrepos "$REPOSITORY" "$(dirname $REPOSITORY)/community"
 setup-ntp -c chrony
 # For virtualbox
 [ -b /dev/vda ] && echo -e "y\\n" | setup-disk -m sys -s 0 -L /dev/vda
