@@ -4,5 +4,5 @@
 echo "==> Install Fedora Kubernetes packages"
 
 dnf install -y -q kubernetes etcd
-[[ -n ${SSH_USERNAME} ]] && getent group docker && (usermod -aG docker "${SSH_USERNAME}" || true)
-[[ -n ${SSH_USERNAME} ]] && getent group dockerroot && (usermod -aG dockerroot "${SSH_USERNAME}" || true)
+if [[ -n ${SSH_USERNAME} ]] && getent group docker; then usermod -aG docker "${SSH_USERNAME}"; fi
+if [[ -n ${SSH_USERNAME} ]] && getent group dockerroot; then usermod -aG dockerroot "${SSH_USERNAME}"; fi

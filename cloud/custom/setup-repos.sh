@@ -47,7 +47,7 @@ if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_
 
     CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' "$(rpm -qf /etc/redhat-release)")
     yum install -y -q "https://centos${CENTOS_RELEASE}.iuscommunity.org/ius-release.rpm"
-    yum repolist enabled | grep -s -q "^ius/" && (yum-config-manager --disable ius > /dev/null || true)
+    if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager --disable ius > /dev/null; fi
     
 #    yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
 #    yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
@@ -70,11 +70,11 @@ gpgcheck=1
 enabled=1
 EOF
     else
-        yum repolist disabled | grep -s -q ol7_developer_EPEL && (yum-config-manager --enable "ol7_developer_EPEL"  >/dev/null || true)
+        if yum repolist disabled | grep -s -q ol7_developer_EPEL; then yum-config-manager --enable "ol7_developer_EPEL" >/dev/null; then
     fi
     yum repolist disabled | grep -s -w -q ol7_addons | yum-config-manager --enable grep ol7_addons > /dev/null || true
     yum repolist disabled | grep -s -w -q ol7_optional_latest | yum-config-manager --enable grep ol7_optional_latest > /dev/null || true
     RELEASE=$(echo "${version}" | cut -d '.' -f 1)
     yum install -y -q "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm" "https://rhel${RELEASE}.iuscommunity.org/ius-release.rpm"
-    yum repolist enabled | grep -s -q "^epel/" && (yum-config-manager --disable epel > /dev/null || true)
+    if yum repolist enabled | grep -s -q "^epel/"; then yum-config-manager --disable epel > /dev/null; fi
 fi

@@ -5,6 +5,6 @@ echo "==> Install libvirt software"
 
 apt-get install -y -qq -o "Dpkg::Use-Pty=0" qemu-kvm libvirt-bin virtinst >/dev/null
 
-[[ -n ${SSH_USERNAME} ]] && getent group libvirtd && (adduser "${SSH_USERNAME}" libvirtd || true)
-[[ -n ${SSH_USERNAME} ]] && getent group libvirt && (adduser "${SSH_USERNAME}" libvirt || true)
-[[ -n ${SSH_USERNAME} ]] && getent group kvm && (usermod -aG kvm "${SSH_USERNAME}" || true)
+if [[ -n ${SSH_USERNAME} ]] && getent group libvirtd; then adduser "${SSH_USERNAME}" libvirtd; fi
+if [[ -n ${SSH_USERNAME} ]] && getent group libvirt; then adduser "${SSH_USERNAME}" libvirt; fi
+if [[ -n ${SSH_USERNAME} ]] && getent group kvm then usermod -aG kvm "${SSH_USERNAME}"; fi

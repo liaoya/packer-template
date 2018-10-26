@@ -64,5 +64,8 @@ EOF
             sed -i "s/NO_PROXY=/&${DOCKER_MIRROR_SERVER_IP},/" /etc/systemd/system/docker.service.d/http-proxy.conf
         fi
     fi
-    [[ $(command -v docker) ]] && echo "==> Restart docker daemon" && systemctl daemon-reload && (systemctl restart docker || true)
+    if [[ $(command -v docker) ]]; then
+        echo "==> Restart docker daemon"
+        systemctl daemon-reload && systemctl restart docker
+    fi
 fi
