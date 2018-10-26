@@ -15,5 +15,5 @@ if [[ -d ${NVM_DIR} && -n "$(ls -A ${NVM_DIR})" ]]; then
     [[ -n ${SUDO_USER} ]] && chown -R "$(id -u ${SUDO_USER}):$(id -g ${SUDO_USER})" ${NVM_DIR}
     echo "[[ -s ${NVM_DIR}/nvm.sh ]] && export NVM_DIR=${NVM_DIR} && \\. \${NVM_DIR}/nvm.sh" | tee /etc/profile.d/nvm.sh
     [[ -d /etc/bash_completion.d ]] || mkdir -p /etc/bash_completion.d
-    [[ -s ${NVM_DIR}/bash_completion ]] && cp ${NVM_DIR}/bash_completion /etc/bash_completion.d/asdf.bash
+    [[ -s ${NVM_DIR}/bash_completion ]] && cp ${NVM_DIR}/bash_completion /etc/bash_completion.d/nvm.bash
 fi
