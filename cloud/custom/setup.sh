@@ -24,5 +24,5 @@ sed -i '/XAUTHORITY"$/a Defaults    env_keep += "HTTP_PROXY HTTPS_PROXY FTP_PROX
 sed -i '/XAUTHORITY"$/a Defaults    env_keep += "http_proxy https_proxy ftp_proxy rsync_proxy no_proxy"' /etc/sudoers
 sed -i '/^Defaults    secure_path/ s/$/:\/usr\/local\/sbin:\/usr\/local\/bin/' /etc/sudoers
 if [[ -n ${SUDO_USER} ]]; then
-    echo "${SUDO_USER} ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${SSH_USER}"
+    echo "${SUDO_USER} ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${SUDO_USER}"
 fi

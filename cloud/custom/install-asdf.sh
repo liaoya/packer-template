@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-[[ -n ${CUSTOM_ASDF} && ${CUSTOM_ASDF} == true ]] || exit 0
+[[ -n ${CUSTOM_ASDF} && "${CUSTOM_ASDF}" == "true" ]] || exit 0
 echo "==> Install asdf"
 
 [[ $(command -v git) ]] || { echo "git is required"; exit 0; }

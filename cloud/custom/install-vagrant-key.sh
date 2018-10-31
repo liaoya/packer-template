@@ -1,8 +1,7 @@
 #!/bin/bash -eux
 
-SSH_USER=${SSH_USERNAME:-vagrant}
-if id -u "${SSH_USER}" >/dev/null 2>&1; then
-    echo "==> Install vagrant key as $SSH_USER's ssh key"
+if [[ -n ${SUDO_USER} ]]; then
+    echo "==> Install vagrant key as ${SUDO_USER}'s ssh key"
 #     (cd /tmp; curl -L -s -S -O https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant; curl -L -s -S -O https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub)
     VAGRANT_INSECURE_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key"
     echo "${VAGRANT_INSECURE_KEY}" > /tmp/vagrant.pub
@@ -35,11 +34,11 @@ kda/AoGANWrLCz708y7VYgAtW2Uf1DPOIYMdvo6fxIB5i9ZfISgcJ/bbCUkFrhoH
 NE5OgEXk2wVfZczCZpigBKbKZHNYcelXtTt/nP3rsCuGcM4h53s=
 -----END RSA PRIVATE KEY-----
 EOF
-    su -l "$SSH_USER" -c '[ -d ~/.ssh ] || { mkdir ~/.ssh; chmod 700 ~/.ssh; }'
-    su -l "$SSH_USER" -c '[ -f /tmp/vagrant.pub ] && cp /tmp/vagrant.pub ~/.ssh/id_rsa.pub && chmod 644 ~/.ssh/id_rsa.pub'
-    su -l "$SSH_USER" -c '[ -f /tmp/vagrant ] && cp /tmp/vagrant ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa'
-    su -l "$SSH_USER" -c '[ -d ~/Downloads ] || mkdir ~/Downloads'
-    su -l "$SSH_USER" -c '[ -d ~/Documents ] || mkdir ~/Documents'
+    su -l "${SUDO_USER}" -c '[ -d ~/.ssh ] || { mkdir ~/.ssh; chmod 700 ~/.ssh; }'
+    su -l "${SUDO_USER}" -c '[ -f /tmp/vagrant.pub ] && cp /tmp/vagrant.pub ~/.ssh/id_rsa.pub && chmod 644 ~/.ssh/id_rsa.pub'
+    su -l "${SUDO_USER}" -c '[ -f /tmp/vagrant ] && cp /tmp/vagrant ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa'
+    su -l "${SUDO_USER}" -c '[ -d ~/Downloads ] || mkdir ~/Downloads'
+    su -l "${SUDO_USER}" -c '[ -d ~/Documents ] || mkdir ~/Documents'
     [ -d ~/.ssh ] || { mkdir ~/.ssh; chmod 700 ~/.ssh; }
     [ -f /tmp/vagrant.pub ] && cp /tmp/vagrant.pub ~/.ssh/id_rsa.pub && chmod 644 ~/.ssh/id_rsa.pub
     [ -f /tmp/vagrant ] && cp /tmp/vagrant ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa

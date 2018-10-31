@@ -69,6 +69,7 @@
                 "CUSTOM_OJET={{user `custom_ojet`}}",
                 "CUSTOM_PYTHON_VIRTUALENV={{user `custom_python_virtualenv`}}",
                 "CUSTOM_UPDATE={{user `custom_update`}}",
+                "DISABLE_CLOUD_INIT={{user `disable_cloud_init`}}",
                 "DNF_MIRROR_PATH={{user `dnf_mirror_path`}}",
                 "DNF_MIRROR_SERVER={{user `dnf_mirror_server`}}",
                 "VM_NAME={{user `fedora_name`}}-{{user `vm_name`}}",
@@ -77,7 +78,7 @@
                 "https_proxy={{user `https_proxy`}}",
                 "no_proxy={{user `no_proxy`}}"
             ], 
-            "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash -e -x '{{.Path}}'",
+            "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash -x '{{.Path}}'",
             "scripts": [
                 "../custom/disable-cloud-init.sh",
                 "../custom/install-vagrant-key.sh",
@@ -138,6 +139,7 @@
         "custom_ojet": "false",
         "custom_python_virtualenv": "false",
         "custom_update": "false",
+        "disable_cloud_init": "true",
         "disk_size": "65536",
         "dnf_mirror_path":"",
         "dnf_mirror_server":"",
