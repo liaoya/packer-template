@@ -9,18 +9,18 @@ export PACKER_CACHE_DIR=~/.cache/packer
 [ -d $PACKER_CACHE_DIR ] || mkdir -p $PACKER_CACHE_DIR
 export CURLOPT_SSL_VERIFYPEER=false
 
-packer build -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
+packer build -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
 
-packer build -var "vm_name=minikube" -var "custom_docker_ce=true" -var "custom_libvirt=true" -var "custom_python_virtualenv=true" -var "disk_size=65536" -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
+packer build -var "vm_name=minikube" -var "custom_docker_ce=true" -var "custom_libvirt=true" -var "custom_python_virtualenv=true" -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
 
-packer build -var "vm_name=develop" -var "custom_docker_ce=true" -var "custom_java=true" -var "custom_nvm=true" -var "custom_python_virtualenv=true"  -var-file ../conf/fedora28.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
+packer build -var "vm_name=develop" -var "custom_docker_ce=true" -var "custom_java=true" -var "custom_nvm=true" -var "custom_python_virtualenv=true"  -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/lab.json fedora.json
 ```
 
 The following command can help to setup a new virtual machine
 
 ```bash
-base_image=$(ls -1 /var/lib/libvirt/images/fedora28-minikube-*)
-vm_name=fedora28-minikube
+base_image=$(ls -1 /var/lib/libvirt/images/fedora29-minikube-*)
+vm_name=fedora29-minikube
 virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
 virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}
 qemu-img create -b $base_image -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2

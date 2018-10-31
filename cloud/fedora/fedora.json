@@ -140,7 +140,7 @@
         "custom_ojet": "false",
         "custom_python_virtualenv": "false",
         "custom_update": "false",
-        "disk_size": "32768",
+        "disk_size": "65536",
         "dnf_mirror_path":"",
         "dnf_mirror_server":"",
         "fedora_name": "",
