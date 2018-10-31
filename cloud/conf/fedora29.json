@@ -1,0 +1,8 @@
+{
+    "fedora_name": "fedora29",
+    "iso_checksum": "a30549d620bf6bf41d30a9a58626e59dfa70bb011fd7d50f6c4511ad2e479a39",
+    "iso_checksum_type": "sha256",
+    "iso_name": "Fedora-Cloud-Base-29-1.2.x86_64.qcow2",
+    "iso_path": "",
+    "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/29/Cloud/x86_64/images/Fedora-Cloud-Base-29-1.2.x86_64.qcow2"
+}
