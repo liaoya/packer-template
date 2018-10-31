@@ -1,5 +1,4 @@
 #!/bin/bash -eux
-#shellcheck disable=SC2046
 
 echo "==> Run clean proxy script"
 
@@ -23,5 +22,6 @@ fi
 if [[ -f /etc/apt/sources.list.origin ]]; then cp -fpr /etc/apt/sources.list.origin /etc/apt/sources.list; fi
 for elem in /etc/yum.repos.d/*.origin; do
     [[ -e "${elem}" ]] || continue
-    cp -f "$elem" "/etc/yum.repos.d/$(basename -s .origin "$elem")"
+    dest=$(basename -s .origin "${elem}")
+    cp -f "${elem}" "/etc/yum.repos.d/${dest}"
 done

@@ -11,7 +11,7 @@ echo "==> Install Orace Linux virtualenv packages"
 # curl -L -s https://bootstrap.pypa.io/get-pip.py | python
 # pip install -U virtualenv setuptools
 # virtualenv --system-site-packages /opt/vpy2
-# [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" /opt/vpy2
+# [[ -n ${SUDO_USER} ]] && chown -R "$(id -u ${SUDO_USER}):$(id -g ${SUDO_USER})" /opt/vpy2
 
 yum install -y -q python36-devel gcc
 VPY_DIR=/opt/vpy3
@@ -21,4 +21,4 @@ PYTHON_EXEC=/usr/bin/python3.6
 source ${VPY_DIR}/bin/activate
 curl -L -s https://bootstrap.pypa.io/get-pip.py | python3
 pip install -U six ipython requests pylint flake8 httpie
-[[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" "${VPY_DIR}"
+[[ -n ${SUDO_USER} ]] && chown -R "$(id -u ${SUDO_USER}):$(id -g ${SUDO_USER})" "${VPY_DIR}"

@@ -5,8 +5,8 @@ echo '==> Install Unbuntu OpenvSwitch'
 
 apt-get install -y -qq -o "Dpkg::Use-Pty=0" openvswitch-switch bridge-utils >/dev/null
 
-if [[ -n ${SSH_USERNAME} ]]; then
-    getent group openvswitch && usermod -aG openvswitch "${SSH_USERNAME}"
+if [[ -n ${SUDO_USER} ]]; then
+    getent group openvswitch && usermod -aG openvswitch "${SUDO_USER}"
 fi
 
 echo "==> Enable net.ipv4.ip_forward"

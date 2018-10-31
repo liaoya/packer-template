@@ -14,8 +14,8 @@ else
     apt-get install -y -qq -o "Dpkg::Use-Pty=0" docker.io >/dev/null
 fi
 
-if [[ -n ${SSH_USERNAME} ]]; then
-    getent group docker && usermod -aG docker "${SSH_USERNAME}"
+if [[ -n ${SUDO_USER} ]]; then
+    getent group docker && usermod -aG docker "${SUDO_USER}"
 fi
 
 #curl -LsS https://raw.githubusercontent.com/openvswitch/ovs/master/utilities/ovs-docker -o /usr/local/bin/ovs-docker && chmod a+x /usr/local/bin/ovs-docker || true

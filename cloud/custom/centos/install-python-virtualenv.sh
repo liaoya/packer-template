@@ -1,5 +1,5 @@
 #!/bin/bash -eux
-#shellcheck disable=SC1090,SC2086
+#shellcheck disable=SC1090
 
 [[ -n ${CUSTOM_PYTHON_VIRTUALENV} && "${CUSTOM_PYTHON_VIRTUALENV}" == "true" ]] || exit 0
 echo "==> Install CentOS virtualenv packages"
@@ -23,4 +23,8 @@ PYTHON_EXEC=/usr/bin/python3.6
 source ${VPY_DIR}/bin/activate
 curl -L -s https://bootstrap.pypa.io/get-pip.py | python3
 pip install -U six ipython requests pylint flake8 httpie
-[[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" "${VPY_DIR}"
+if [[ -n ${SUDO_USER} ]]; then
+    real_user=$(id -u "${SUDO_USER}")
+    real_group=$(id -g "${SUDO_USER}")
+    chown -R "${real_user}:${real_group}" "${VPY_DIR}"
+fi
