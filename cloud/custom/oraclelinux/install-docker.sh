@@ -8,7 +8,4 @@ yum repolist disabled | grep -s -w -q ol7_addons | sudo yum-config-manager --ena
 yum install -y -q docker-engine
 
 [[ $(command -v docker) ]] && systemctl enable docker
-if [[ -n ${SSH_USERNAME} ]]; then
-    getent group docker
-    usermod -aG docker "${SSH_USERNAME}"
-fi
+if [[ -n ${SUDO_USER} ]] && getent group docker; then usermod -aG docker "${SUDO_USER}"; fi

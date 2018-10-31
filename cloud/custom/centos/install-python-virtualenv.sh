@@ -13,7 +13,11 @@ echo "==> Install CentOS virtualenv packages"
 # curl -L -s https://bootstrap.pypa.io/get-pip.py | python2
 # pip install -U virtualenv setuptools
 # pip install -U six ipython requests pylint flake8 httpie
-# [[ -n ${SSH_USERNAME} ]] && chown -R "$(id -u ${SSH_USERNAME}):$(id -g ${SSH_USERNAME})" ${VPY_DIR}
+# if [[ -n ${SUDO_USER} ]]; then
+#     real_user=$(id -u "${SUDO_USER}")
+#     real_group=$(id -g "${SUDO_USER}")
+#     chown -R "${real_user}:${real_group}" "${VPY_DIR}"
+# fi
 
 yum install -y -q python36-devel gcc
 VPY_DIR=/opt/vpy3

@@ -20,6 +20,7 @@ if [ -f /etc/redhat-release ]; then
 fi
 
 BUILT_MSG=$(printf 'built %s' "$(date +%Y-%m-%d)")
-{ printf '%0.1s\n' "-"{1..64}; \
-printf '%2s%-40s%20s\n' " " "${PLATFORM_MSG}" "${BUILT_MSG}"; \
-printf '%0.1s\n' "-"{1..64}; } > ${MOTD_FILE}
+{ printf '%0.1s' "-"{1..64}; \
+printf '\n%2s%-40s%20s\n' " " "${PLATFORM_MSG}" "${BUILT_MSG}"; \
+printf '%0.1s' "-"{1..64}; \
+printf '\n'; } > ${MOTD_FILE}

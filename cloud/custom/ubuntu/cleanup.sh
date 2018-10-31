@@ -1,6 +1,5 @@
 #!/bin/bash -eux
 
-SSH_USER=${SSH_USERNAME:-vagrant}
 DISK_USAGE_BEFORE_CLEANUP=$(df -h)
 
 # Make sure udev does not block our network - http://6.ptmc.org/?p=164
@@ -52,7 +51,10 @@ rm -fr /tmp/*
 # Remove Bash history
 unset HISTFILE
 rm -f /root/.bash_history
-rm -f "/home/${SSH_USER}/.bash_history"
+if [[ -n ${SUDO_USER} ]]; then
+    user_home=$(getent passwd "${SUDO_USER}" | cut -d: -f6)
+    rm -f "${user_home}/.bash_history"
+fi
 
 # Clean up log files
 find /var/log -type f | while read -r f; do echo -ne '' > "${f}"; done;
