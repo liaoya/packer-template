@@ -8,7 +8,7 @@ else
     yum -y -q install git
 fi
 
-yum install -y -q zip unzip bzip2 xz tig jq sshpass screen python2-httpie
+yum install -y -q zip unzip bzip2 xz tig jq sshpass screen python2-httpie moreutils
 
 yum install -y -q yum-utils
 yum-config-manager --add-repo http://download.opensuse.org/repositories/shells:/fish:/release:/2/RHEL_7/shells:fish:release:2.repo
