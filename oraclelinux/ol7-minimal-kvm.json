@@ -3,28 +3,28 @@
         {
             "accelerator": "kvm",
             "boot_command": [
-                "<up><wait><tab><wait> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ol7-kvm-ks.cfg<enter><wait>"
+                "<up><wait><tab><wait> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/ol7-kvm-ks.cfg<enter><wait>"
             ],
             "boot_wait": "6s",
-            "disk_compression": "{{ user `disk_compression` }}",
+            "disk_compression": "{{user `disk_compression`}}",
             "disk_interface": "virtio",
-            "disk_size": "{{ user `disk_size` }}",
+            "disk_size": "{{user `disk_size`}}",
             "format": "qcow2",
-            "headless": true,
+            "headless": "{{user `headless`}}",
             "http_directory": "http",
             "http_port_min": 10082,
             "http_port_max": 10089,
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "iso_url":  [
-                "{{ user `iso_path` }}/{{ user `iso_name` }}",
-                "{{ user `iso_url` }}"
+            "iso_urls": [
+                "{{user `iso_path`}}/{{user `iso_name`}}",
+                "{{user `iso_url`}}"
             ],
             "net_device": "virtio-net",
             "output_directory": "qemu/{{user `vm_name`}}",
             "qemuargs": [
                 ["-m", "{{user `memory`}}"],
-                ["-smp", "cpus={{ user `cpus` }}"]
+                ["-smp", "cpus={{user `cpus`}}"]
             ],
             "ssh_host_port_min": 2222,
             "ssh_host_port_max": 2229,
@@ -34,7 +34,7 @@
             "ssh_wait_timeout": "1200s",
             "shutdown_command": "{{user `shutdown_command`}}",
             "type": "qemu",
-            "vm_name": "{{user `vm_name`}}.qcow2",
+            "vm_name": "{{user `vm_name`}}.qcow2"
         }
     ],
 
@@ -51,12 +51,12 @@
                 "YUM_PROXY={{user `yum_proxy`}}",
                 "http_proxy={{user `http_proxy`}}",
                 "https_proxy={{user `https_proxy`}}",
-                "no_proxy={{user `no_proxy`}}",
+                "no_proxy={{user `no_proxy`}}"
             ],          
     
             "type": "shell",
             "scripts": [
-                "scripts/create.sh",
+                "scripts/create-user.sh",
                 "scripts/cleanup.sh"
             ]
         }
@@ -70,7 +70,7 @@
         "custom_java": "false",
         "custom_update": "false",
         "custom_user": "oracle",
-        "disk_compression": false,
+        "disk_compression": "true",
         "disk_size": "65536",
         "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",
