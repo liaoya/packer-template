@@ -1,49 +1,78 @@
 {
     "builders": [
         {
-            "type": "qemu",
             "accelerator": "kvm",
-            "headless": true,
-            "qemuargs": [
-                ["-m", "4096M"],
-                ["-smp", "cpus=1,maxcpus=16,cores=4"]
+            "boot_command": [
+                "<up><wait><tab><wait> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ol7-kvm-ks.cfg<enter><wait>"
             ],
+            "boot_wait": "6s",
+            "disk_compression": "{{ user `disk_compression` }}",
             "disk_interface": "virtio",
-            "disk_size": 32768,
-            "disk_compression": false,
+            "disk_size": "{{ user `disk_size` }}",
             "format": "qcow2",
-            "net_device": "virtio-net",
-            "iso_url": "{{user `iso_url`}}",
-            "iso_checksum": "{{user `iso_checksum`}}",
-            "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "vm_name": "ol7-minimal.qcow2",
-            "output_directory": "images",
+            "headless": true,
             "http_directory": "http",
             "http_port_min": 10082,
             "http_port_max": 10089,
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_url":  [
+                "{{ user `iso_path` }}/{{ user `iso_name` }}",
+                "{{ user `iso_url` }}"
+            ],
+            "net_device": "virtio-net",
+            "output_directory": "qemu/{{user `vm_name`}}",
+            "qemuargs": [
+                ["-m", "{{user `memory`}}"],
+                ["-smp", "cpus={{ user `cpus` }}"]
+            ],
             "ssh_host_port_min": 2222,
             "ssh_host_port_max": 2229,
             "ssh_username": "{{user `ssh_username`}}",
             "ssh_password": "{{user `ssh_password`}}",
             "ssh_port": 22,
             "ssh_wait_timeout": "1200s",
-            "boot_wait": "6s",
-            "boot_command": [
-                "<up><wait><tab><wait> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ol7-kvm-ks.cfg<enter><wait>"
-            ],
-            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now"
+            "shutdown_command": "{{user `shutdown_command`}}",
+            "type": "qemu",
+            "vm_name": "{{user `vm_name`}}.qcow2",
         }
     ],
 
-    "provisioners": [{
-        "type": "shell",
-        "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash -x '{{.Path}}'",
-        "scripts": [
-            "scripts/cleanup.sh"
-        ]
-    }],
+    "provisioners": [
+        {
+            "environment_vars": [
+                "CUSTOM_ASDF={{user `custom_asdf`}}",
+                "CUSTOM_DOCKER={{user `custom_docker`}}",
+                "CUSTOM_GROUP={{user `custom_group`}}",
+                "CUSTOM_JAVA={{user `custom_java`}}",
+                "CUSTOM_UPDATE={{user `custom_update`}}",
+                "CUSTOM_USER={{user `custom_user`}}",
+                "VM_NAME={{user `vm_name`}}",
+                "YUM_PROXY={{user `yum_proxy`}}",
+                "http_proxy={{user `http_proxy`}}",
+                "https_proxy={{user `https_proxy`}}",
+                "no_proxy={{user `no_proxy`}}",
+            ],          
+    
+            "type": "shell",
+            "scripts": [
+                "scripts/create.sh",
+                "scripts/cleanup.sh"
+            ]
+        }
+    ],
 
     "variables": {
+        "cpus": "2",
+        "custom_asdf": "true",
+        "custom_docker": "false",
+        "custom_group": "users",
+        "custom_java": "false",
+        "custom_update": "false",
+        "custom_user": "oracle",
+        "disk_compression": false,
+        "disk_size": "65536",
+        "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",
         "no_proxy": "{{env `no_proxy`}}",
@@ -52,8 +81,11 @@
         "iso_name": "OracleLinux-R7-U5-Server-x86_64-dvd.iso",
         "iso_path": "",
         "iso_url": "http://mirrors.kernel.org/oracle/OL7/u5/x86_64/OracleLinux-R7-U5-Server-x86_64-dvd.iso",
-        "ssh_username": "vagrant",
-        "ssh_password": "vagrant",
-        "shutdown_command": "shutdown -P now"
+        "memory": "4096",
+        "ssh_username": "root",
+        "ssh_password": "root",
+        "shutdown_command": "shutdown -P now",
+        "vm_name": "oraclelinux",
+        "yum_proxy": "http://10.113.69.101:5900"
     }
 }
