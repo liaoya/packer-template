@@ -16,6 +16,6 @@ users:
 
 chpasswd:
   list: |
-    root:cloud
+    # root:cloud
     vagrant:vagrant
   expire: False

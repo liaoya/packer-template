@@ -2,7 +2,7 @@
 
 THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
 THIS_DIR=$(dirname "${THIS_FILE}")
-USAGE=$(baseame "${THIS_FILE}")
+USAGE=$(basename "${THIS_FILE}")
 printf -v USAGE "Usage: %s -h[elp] -c[lean]" "${USAGE}"
 
 CLEAN=0

@@ -17,7 +17,7 @@ NO_PROXY="${no_proxy}"
 EOF
 fi
 
-[[ ! -n ${APT_PROXY} && -n ${http_proxy} ]] && APT_PROXY=${http_proxy}
+if [[ -z ${APT_PROXY} && -n ${http_proxy} ]]; then APT_PROXY=${http_proxy}; fi
 if [[ -n ${APT_PROXY} && -d /etc/apt/apt.conf.d ]]; then
     echo "==> Use ${APT_PROXY} for apt"
     cat <<EOF > /etc/apt/apt.conf.d/01proxy
@@ -26,7 +26,7 @@ Acquire::https::proxy "${APT_PROXY}";
 EOF
 fi
 
-[[ ! -n ${YUM_PROXY} && -n ${http_proxy} ]] && YUM_PROXY=${http_proxy}
+if [[ -z ${YUM_PROXY} && -n ${http_proxy} ]]; then YUM_PROXY=${http_proxy}; fi
 if [[ -f /etc/yum.conf && -n ${YUM_PROXY} ]]; then
     echo "==> Use ${YUM_PROXY} for yum"
     sed -i "/^installonly_limit/i proxy=${YUM_PROXY}" /etc/yum.conf

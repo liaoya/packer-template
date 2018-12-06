@@ -98,6 +98,7 @@
                 "../custom/centos/install-libvirt.sh",
                 "../custom/install-nvm.sh",
                 "../custom/install-ojet.sh",
+                "../custom/install-powerline.sh",
                 "../custom/centos/install-python-virtualenv.sh",
                 "../custom/clean-proxy.sh",              
                 "../custom/motd.sh",
