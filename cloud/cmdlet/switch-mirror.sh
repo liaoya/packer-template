@@ -89,6 +89,8 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
     # yum install -y -q "https://centos${CENTOS_RELEASE}.iuscommunity.org/ius-release.rpm"
     curl -sL https://setup.ius.io/ -o- | bash
     if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager --disable ius > /dev/null; fi
+
+    curl -sL https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-7/outman-emacs-epel-7.repo -o /etc/yum.repos.d/emacs-copr.repo
     
 #    yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
 #    yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
@@ -118,6 +120,8 @@ EOF
     RELEASE=$(echo "${version}" | cut -d '.' -f 1)
     yum install -y -q "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm" "https://rhel${RELEASE}.iuscommunity.org/ius-release.rpm"
     if yum repolist enabled | grep -s -q "^epel/"; then yum-config-manager --disable epel > /dev/null; fi
+
+    curl -sL https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-7/outman-emacs-epel-7.repo -o /etc/yum.repos.d/emacs-copr.repo
 fi
 
 if [[ -f /etc/fedora-release && -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then

@@ -1,0 +1,7 @@
+{
+    "iso_checksum": "bc5bcd4cb1d36eef3d8bcff7d817977256eb90c2a08e8d886d9d86d912636619",
+    "iso_name": "OracleLinux-7.6-x86_64.qcow2c",
+    "oracle_name": "ol76",
+    "ssh_password": "oracle",
+    "ssh_username": "oracle"
+}
