@@ -1,12 +1,25 @@
 #!/bin/bash
 #shellcheck disable=SC1090,SC1091
 
+pathmunge () {
+    case ":${PATH}:" in
+        *:"$1":*)
+        ;;
+        *)
+            if [ "$2" = "after" ] ; then
+                PATH=$PATH:$1
+            else
+                PATH=$1:$PATH
+            fi
+    esac
+}
+
 THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
 
 if [[ $# -eq 0 ]]; then
-    (source /etc/environment; bash "${THIS_FILE}" run)
+    (set -a; source /etc/environment; bash -e -x "${THIS_FILE}" run)
     if [[ -n "${SUDO_USER}" ]]; then
-        su -l "${SUDO_USER}" -c "source /etc/environment; bash ${THIS_FILE} run"
+        su -l "${SUDO_USER}" -c "set -a; source /etc/environment; bash -e -x ${THIS_FILE} run"
     fi
     exit 0
 fi
@@ -25,22 +38,23 @@ pathmunge () {
             fi
     esac
 }
-[[ -d "${HOME}/.local/bin" ]] && pathmunge "${HOME}/.local/bin"
+#[[ -d "${HOME}/.local/bin" ]] && pathmunge "${HOME}/.local/bin"
 EOF
     [[ -d "${HOME}/.local/bin" ]] || mkdir -p "${HOME}/.local/bin"
-    export PATH=${PATH}:"${HOME}/.local/bin"
+    pathmunge "${HOME}/.local/bin"
 fi
 
-curl -sL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+get_pip_filename=$(mktemp --suffix .py)
+curl -sL https://bootstrap.pypa.io/get-pip.py -o "${get_pip_filename}"
 if [[ $(command -v pip3) ]]; then
     pip3 install --user --upgrade powerline-status powerline-shell
 elif [[ $(command -v pip2) ]]; then
     pip2 install --user --upgrade powerline-status powerline-shell
 elif [[ $(command -v python3) ]]; then
-    python3 /tmp/get-pip.py --user
+    python3 "${get_pip_filename}" --user
     pip3 install --user --upgrade powerline-status powerline-shell
 elif [[ $(command -v python2) ]]; then
-    python2 /tmp/get-pip.py --user
+    python2 "${get_pip_filename}" --user
     pip2 install --user --upgrade powerline-status powerline-shell
 else
     exit 0
