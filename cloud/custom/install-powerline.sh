@@ -12,7 +12,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 if ! grep -s -q "^pathmunge () {" "${HOME}/.bashrc"; then
-    cat <<'EOF' >> ~/.bashrc
+    cat <<'EOF' >> "${HOME}/.bashrc"
 pathmunge () {
     case ":${PATH}:" in
         *:"$1":*)
@@ -28,7 +28,7 @@ pathmunge () {
 [[ -d "${HOME}/.local/bin" ]] && pathmunge "${HOME}/.local/bin"
 EOF
     [[ -d "${HOME}/.local/bin" ]] || mkdir -p "${HOME}/.local/bin"
-    source ~/.bashrc
+    export PATH=${PATH}:"${HOME}/.local/bin"
 fi
 
 curl -sL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py

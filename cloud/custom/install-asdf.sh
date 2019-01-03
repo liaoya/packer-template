@@ -5,7 +5,7 @@ echo "==> Install asdf"
 
 [[ $(command -v git) ]] || { echo "git is required"; exit 0; }
 export ASDF_DATA_DIR=/opt/asdf
-git clone https://github.com/asdf-vm/asdf.git ${ASDF_DATA_DIR} --branch v0.6.1
+git clone https://github.com/asdf-vm/asdf.git ${ASDF_DATA_DIR} --branch v0.6.2
 if [[ -n "$(ls -A ${ASDF_DATA_DIR})" ]]; then
     if [[ -n ${SUDO_USER} ]]; then
         real_user=$(id -u "${SUDO_USER}")
