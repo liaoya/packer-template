@@ -16,12 +16,11 @@ pathmunge () {
 
 THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
 
-if [[ $# -eq 0 ]]; then
-    (set -a; source /etc/environment; bash -e -x "${THIS_FILE}" run)
+if [[ $UID -eq 0 ]]; then
     if [[ -n "${SUDO_USER}" ]]; then
-        su -l "${SUDO_USER}" -c "set -a; source /etc/environment; bash -e -x ${THIS_FILE} run"
+        su -l "${SUDO_USER}" -c "set -a; source /etc/environment; bash -e -x ${THIS_FILE}"
+        exit 0
     fi
-    exit 0
 fi
 
 if ! grep -s -q "^pathmunge () {" "${HOME}/.bashrc"; then
