@@ -99,24 +99,14 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
 fi
 
 if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
-    version=$(cut -d " " -f 5 /etc/oracle-release)
+    [[ -f /etc/yum.repos.d/public-yum-ol7.repo.origin ]] || mv /etc/yum.repos.d/public-yum-ol7.repo /etc/yum.repos.d/public-yum-ol7.repo.origin
+    curl -sL https://yum.oracle.com/public-yum-ol7.repo -o /etc/yum.repos.d/public-yum-ol7.repo
     sed -i "s/https:/http:/g" /etc/yum.repos.d/public-yum-ol7.repo
     yum install -y -q yum-utils
-    if ! yum repolist all | grep -s -w -q ol7_developer_EPEL; then
-        cat << 'EOF' >>/etc/yum.repos.d/public-yum-ol7.repo
-
-[ol7_developer_EPEL]
-name=Oracle Linux $releasever Development Packages ($basearch)
-baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/$basearch/
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
-gpgcheck=1
-enabled=1
-EOF
-    else
-        if yum repolist disabled | grep -s -q ol7_developer_EPEL; then yum-config-manager --enable "ol7_developer_EPEL" >/dev/null; fi
-    fi
-    yum repolist disabled | grep -s -w -q ol7_addons | yum-config-manager --enable grep ol7_addons > /dev/null || true
-    yum repolist disabled | grep -s -w -q ol7_optional_latest | yum-config-manager --enable grep ol7_optional_latest > /dev/null || true
+    if yum repolist disabled | grep -s -q ol7_developer_EPEL; then yum-config-manager --enable "ol7_developer_EPEL" >/dev/null; fi
+    if yum repolist disabled | grep -s -w -q ol7_addons; then yum-config-manager --enable grep ol7_addons > /dev/null; fi
+    if yum repolist disabled | grep -s -w -q ol7_optional_latest; then yum-config-manager --enable grep ol7_optional_latest > /dev/null; fi
+    version=$(cut -d " " -f 5 /etc/oracle-release)
     RELEASE=$(echo "${version}" | cut -d '.' -f 1)
     yum install -y -q "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm" "https://rhel${RELEASE}.iuscommunity.org/ius-release.rpm"
     if yum repolist enabled | grep -s -q "^epel/"; then yum-config-manager --disable epel > /dev/null; fi
