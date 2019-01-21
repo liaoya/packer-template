@@ -1,0 +1,8 @@
+{
+    "iso_checksum": "07c3aad5d2e4171ed31f05689749698e57129c77c01c45df4369a2825d234432",
+    "iso_checksum_type": "sha256",
+    "iso_name": "debian-9.6.3-20190115-openstack-amd64.qcow2",
+    "iso_path": "",
+    "iso_url": "https://cdimage.debian.org/cdimage/openstack/9.6.3-20190115/debian-9.6.3-20190115-openstack-amd64.qcow2",
+    "ubuntu_name": "stretch"
+}

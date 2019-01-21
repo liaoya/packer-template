@@ -1,4 +1,4 @@
-#!/bom/sh
+#!/bin/sh
 #shellcheck disable=SC1091,SC2039
 # http://www.tutorialspoint.com/unix_commands/getopt.htm
 
@@ -29,7 +29,7 @@ done
 
 echo DOMAIN is \""$DOMAIN"\" NAMESERVER is \""$NAMESERVER"\" PASSWORD is \""$PASSWORD"\" PROXY is \""$PROXY"\" REPOSITORY is \""$REPOSITORY"\" TIMEZONE is \""$TIMEZONE"\"
 
-set -x
+set -e -x
 
 setup-keymap us us
 setup-hostname -n alpine
@@ -41,8 +41,7 @@ echo -e "$PASSWORD\\n$PASSWORD\\n" | passwd
 [ ! -z "$TIMEZONE" ] && setup-timezone -z "$TIMEZONE"
 setup-sshd -c openssh
 /etc/init.d/hostname --quiet restart
-if [ ! -z "$PROXY" ]; then
-    echo "==> Use Proxy $PROXY"
+if [ -n "$PROXY" ]; then
     setup-proxy -q "$PROXY"
     [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 fi
