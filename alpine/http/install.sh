@@ -34,11 +34,11 @@ set -e -x
 setup-keymap us us
 setup-hostname -n alpine
 echo -e "eth0\\ndhcp\\nno\\n" | setup-interfaces
-/etc/init.d/networking --quiet start &
+/etc/init.d/networking --quiet restart &
 sleep 10s
 echo -e "$PASSWORD\\n$PASSWORD\\n" | passwd
-[ ! -z "$NAMESERVER" ] && setup-dns -d "$DOMAIN" "$NAMESERVER"
-[ ! -z "$TIMEZONE" ] && setup-timezone -z "$TIMEZONE"
+[ -n "$NAMESERVER" ] && setup-dns -d "$DOMAIN" "$NAMESERVER"
+[ -n "$TIMEZONE" ] && setup-timezone -z "$TIMEZONE"
 setup-sshd -c openssh
 /etc/init.d/hostname --quiet restart
 if [ -n "$PROXY" ]; then
@@ -46,7 +46,7 @@ if [ -n "$PROXY" ]; then
     [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 fi
 #shellcheck disable=2086
-setup-apkrepos "$REPOSITORY" "$(dirname $REPOSITORY)/community"
+[ -n "$REPOSITORY" ] && setup-apkrepos "$REPOSITORY" "$(dirname $REPOSITORY)/community"
 setup-ntp -c chrony
 # For virtualbox
 [ -b /dev/vda ] && echo -e "y\\n" | setup-disk -m sys -s 0 -L /dev/vda

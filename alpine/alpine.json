@@ -34,6 +34,7 @@
                 "{{ user `iso_url` }}"
             ],
             "shutdown_command": "{{user `shutdown_command`}}",
+            "ssh_handshake_attempts": "{{user `ssh_handshake_attempts`}}",
             "ssh_password": "{{user `ssh_password`}}",
             "ssh_username": "{{user `ssh_username`}}",
             "ssh_timeout": "{{user `ssh_timeout`}}",
@@ -87,6 +88,7 @@
                 "{{ user `iso_url` }}"
             ],
             "shutdown_command": "{{user `shutdown_command`}}",
+            "ssh_handshake_attempts": "{{user `ssh_handshake_attempts`}}",
             "ssh_password": "{{user `ssh_password`}}",
             "ssh_username": "{{user `ssh_username`}}",
             "ssh_timeout": "{{user `ssh_timeout`}}",
@@ -169,9 +171,10 @@
         "no_proxy": "{{env `no_proxy`}}",
         "repository": "-1",
         "shutdown_command": "/sbin/poweroff",
-        "ssh_username": "root",
+        "ssh_handshake_attempts": "30",
         "ssh_password": "alpine",
         "ssh_timeout": "10m",
+        "ssh_username": "root",
         "timezone": "Asia/Shanghai",
         "vagrantfile_template": "",
         "version": "{{isotime \"20060102\"}}",
