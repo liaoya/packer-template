@@ -45,8 +45,8 @@
     "variables": {
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",
-        "iso_url": "file:///home/tshen/Downloads/isos/V834394-01.iso",
-        "iso_checksum": "e44eff40f3a16ffa008285e5c52e1199",
+        "iso_url": "",
+        "iso_checksum": "",
         "iso_checksum_type": "md5",
         "no_proxy": "{{env `no_proxy`}}",
         "Ssh_username": "root",

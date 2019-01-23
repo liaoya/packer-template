@@ -16,6 +16,17 @@ packer build -var "vm_name=minikube" -var "custom_docker=true" -var "custom_libv
 packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var "custom_python_virtualenv=true" -var-file ../conf/oraclelinux74.json -var-file ../conf/lab.json oraclelinux.json
 ```
 
+## Use our own image
+
+Oracle has not provide openstack image after oracle linux 7.4.
+I have to build with my own.
+
+```bash
+image_name=ol76-minimal-20190122.qcow2c
+image_checksum=$(sha256sum ~/.cache/packer/${image_name} | cut -d' ' -f 1)
+packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var "iso_name=${image_name}" -var "iso_checksum=${image_checksum}" -var "oracle_name=ol76" -var "ssh_password=oracle" -var "ssh_username=oracle" -var-file ../conf/lab.json oraclelinux.json
+```
+
 The following command can help to setup a new virtual machine
 
 ```bash
