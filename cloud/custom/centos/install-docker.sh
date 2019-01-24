@@ -17,6 +17,11 @@ else
     yum install -y -q docker
 fi
 
+cat <<EOF >>/etc/sysctl.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+
 [[ $(command -v docker) ]] && systemctl enable docker
 if [[ -n ${SUDO_USER} ]] && getent group docker; then usermod -aG docker "${SUDO_USER}"; fi
 

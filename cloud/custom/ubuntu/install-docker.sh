@@ -14,6 +14,11 @@ else
     apt-get install -y -qq -o "Dpkg::Use-Pty=0" docker.io >/dev/null
 fi
 
+cat <<EOF >>/etc/sysctl.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+
 if [[ -n ${SUDO_USER} ]]; then
     getent group docker && usermod -aG docker "${SUDO_USER}"
 fi
