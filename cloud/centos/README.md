@@ -16,6 +16,8 @@ packer build -var "vm_name=minikube" -var "custom_docker_ce=true" -var "custom_l
 packer build -var "vm_name=develop" -var "custom_docker_ce=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/centos7.json -var-file ../conf/jaist.json -var-file ../conf/lab.json centos.json
 
 packer build -var "vm_name=kubernetes" -var "custom_docker=true" -var "custom_kubernetes=true" -var-file ../conf/centos7.json -var-file ../conf/jaist.json -var-file ../conf/lab.json centos.json
+
+packer build -var "vm_name=libvirt" -var "custom_libvirt=true" -var-file ../conf/centos7.json -var-file ../conf/jaist.json -var-file ../conf/lab.json centos.json
 ```
 
 The following command can help to setup a new virtual machine
