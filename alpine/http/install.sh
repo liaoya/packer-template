@@ -3,17 +3,19 @@
 # http://www.tutorialspoint.com/unix_commands/getopt.htm
 
 # read the options
-TEMP=$(getopt -o d:n:p:P:r:z: --long domain:,nameserver:,passwrod:,proxy:,repository:,timezone: -- "$@")
+TEMP=$(getopt -o d:n:N:p:P:r:z: --long domain:,nameserver:,ntp:,passwrod:,proxy:,repository:,timezone: -- "$@")
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
-DOMAIN="" NAMESERVER="" PASSWORD="alpine" PROXY="" REPOSITORY="-1" TIMEZONE=""
+DOMAIN="" NAMESERVER="" NTP="none" PASSWORD="alpine" PROXY="" REPOSITORY="-1" TIMEZONE=""
 while true ; do
     case "$1" in
         -d|--domain)
             DOMAIN=$2 ; shift 2 ;;
         -n|--nameserver)
             NAMESERVER=$2 ; shift 2 ;;
+        -N|--ntp)
+            NTP=$2; shift 2 ;;
         -p|--password)
             PASSWORD=$2 ; shift 2 ;;
         -P|--proxy)
@@ -27,7 +29,7 @@ while true ; do
     esac
 done
 
-echo DOMAIN is \""$DOMAIN"\" NAMESERVER is \""$NAMESERVER"\" PASSWORD is \""$PASSWORD"\" PROXY is \""$PROXY"\" REPOSITORY is \""$REPOSITORY"\" TIMEZONE is \""$TIMEZONE"\"
+echo DOMAIN is \""$DOMAIN"\" NAMESERVER is \""$NAMESERVER"\" NTP is \""$NTP"\" PASSWORD is \""$PASSWORD"\" PROXY is \""$PROXY"\" REPOSITORY is \""$REPOSITORY"\" TIMEZONE is \""$TIMEZONE"\"
 
 set -e -x
 
@@ -47,7 +49,7 @@ if [ -n "$PROXY" ]; then
 fi
 #shellcheck disable=2086
 [ -n "$REPOSITORY" ] && setup-apkrepos "$REPOSITORY" "$(dirname $REPOSITORY)/community"
-setup-ntp -c chrony
+[ -n "$NTP" ] && setup-ntp -c "$NTP"
 # For virtualbox
 [ -b /dev/vda ] && echo -e "y\\n" | setup-disk -m sys -s 0 -L /dev/vda
 # For qemu
