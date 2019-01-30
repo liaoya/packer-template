@@ -1,8 +1,8 @@
 {
     "centos_name": "centos7",
-    "iso_checksum": "c1c71ffe8fd1ec45a77033f1fd035ca0c806ed4b89534a52855220cd3c670e4c",
+    "iso_checksum": "b9b65baf1178b563cbf9c953ee94afd2145686c8de48fb0cbdffc780bfd71042",
     "iso_checksum_type": "sha256",
-    "iso_name": "CentOS-7-x86_64-GenericCloud-1809.qcow2c",
+    "iso_name": "CentOS-7-x86_64-GenericCloud-1811.qcow2c",
     "iso_path": "",
-    "iso_url": "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1809.qcow2c"
+    "iso_url": "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1811.qcow2c"
 }

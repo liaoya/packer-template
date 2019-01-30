@@ -36,7 +36,7 @@ sed -i "/^rysnc_proxy/Id" /etc/environment
 [ -f /etc/systemd/system/docker.service.d/http-proxy.conf ] && rm -f /etc/systemd/system/docker.service.d/http-proxy.conf
 [ -f /etc/docker/daemon.json ] && rm -f /etc/docker/daemon.json
 
-http_proxy="http://cn-proxy.jp.oracle.com:80"
+http_proxy="http://www-proxy-tyo.jp.oracle.com:80"
 no_proxy="localhost,127.0.0.1,$(hostname -f),$(hostname -I | cut -d " " -f 1),10.113.69.40,10.113.69.79,10.113.69.101"
 
 if [[ $LOCATION == "office" ]]; then

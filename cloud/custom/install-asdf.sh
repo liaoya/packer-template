@@ -1,12 +1,22 @@
 #!/bin/bash -eux
+#shellcheck disable=SC1090
 
 [[ -n ${CUSTOM_ASDF} && "${CUSTOM_ASDF}" == "true" ]] || exit 0
 echo "==> Install asdf"
 
 [[ $(command -v git) ]] || { echo "git is required"; exit 0; }
 export ASDF_DATA_DIR=/opt/asdf
-git clone https://github.com/asdf-vm/asdf.git ${ASDF_DATA_DIR} --branch v0.6.2
+if [[ $(command -v jq) ]]; then
+    ASDF_VERSION=$(curl -sL https://api.github.com/repos/asdf-vm/asdf/tags | jq .[].name | tr -d '"' | head -1)
+else
+    ASDF_VERSION="v0.6.3"
+fi
+git clone https://github.com/asdf-vm/asdf.git ${ASDF_DATA_DIR} --branch "${ASDF_VERSION}"
 if [[ -n "$(ls -A ${ASDF_DATA_DIR})" ]]; then
+    if [[ -f "${ASDF_DATA_DIR}/asdf.sh" ]]; then
+        source "${ASDF_DATA_DIR}/asdf.sh"
+        asdf update
+    fi
     if [[ -n ${SUDO_USER} ]]; then
         real_user=$(id -u "${SUDO_USER}")
         real_group=$(id -g "${SUDO_USER}")
