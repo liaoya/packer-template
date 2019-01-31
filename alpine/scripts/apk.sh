@@ -5,7 +5,8 @@ set -eux
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 # Never install ifupdown
 apk update -q --no-progress
-apk add -q --no-progress vlan ethtool
+apk add -q --no-progress bash curl nano
+apk add -q --no-progress ethtool vlan
 # apk add -q --no-progress sshpass wget file iproute2 net-tools
 
 if [ "$PACKER_BUILDER_TYPE" = "qemu" ]; then

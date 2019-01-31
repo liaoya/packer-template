@@ -91,6 +91,7 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
     if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager --disable ius > /dev/null; fi
 
     curl -sL https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-7/outman-emacs-epel-7.repo -o /etc/yum.repos.d/emacs-copr.repo
+    curl -sL https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo -o /etc/yum.repos.d/ripgrep.repo
     
 #    yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
 #    yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm

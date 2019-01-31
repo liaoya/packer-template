@@ -14,13 +14,16 @@ set -exu
 #
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 apk update -q --no-progress
-apk add -q --no-progress bash curl
 
 SSH_USER="vagrant"
 SSH_GROUP="users"
 SSH_PASS="vagrant"
 
-adduser -D -G $SSH_GROUP -g "${SSH_USER}" -s /bin/bash $SSH_USER
+if [ -n "$(command -v bash)" ]; then
+    adduser -D -G $SSH_GROUP -g "${SSH_USER}" -s /bin/bash $SSH_USER
+else
+    adduser -D -G $SSH_GROUP -g "${SSH_USER}" $SSH_USER
+fi
 echo "$SSH_USER:$SSH_PASS" | chpasswd
 
 mkdir -pm 700 /home/vagrant/.ssh

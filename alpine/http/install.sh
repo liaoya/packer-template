@@ -36,8 +36,8 @@ set -e -x
 setup-keymap us us
 setup-hostname -n alpine
 echo -e "eth0\\ndhcp\\nno\\n" | setup-interfaces
-/etc/init.d/networking --quiet restart &
-sleep 10s
+# /etc/init.d/networking --quiet restart &
+# sleep 10s
 echo -e "$PASSWORD\\n$PASSWORD\\n" | passwd
 [ -n "$NAMESERVER" ] && setup-dns -d "$DOMAIN" "$NAMESERVER"
 [ -n "$TIMEZONE" ] && setup-timezone -z "$TIMEZONE"

@@ -37,7 +37,7 @@ Use the following command to build at Nanjing site, qcow2 file is under image/ a
 ```bash
 export http_proxy=
 rm -fr qemu/* image/* box/*
-packer build -only qemu -var-file conf/3.7.0.json alpine.json
+packer build -only qemu -var-file conf/3.9.0.json alpine.json
 ```
 
 ### Build virtualbox ova and its corresponding vagrant box
@@ -47,7 +47,7 @@ Use the following command to build at Nanjing site, ova file is under image/ and
 ```bash
 export http_proxy=
 rm -fr virtualbox/* image/* box/*
-packer build -only virtualbox-iso -var-file conf/3.7.0.json alpine.json
+packer build -only virtualbox-iso -var-file conf/3.9.0.json alpine.json
 ```
 
 The root is disabled via ssh from remote. Please use vagrant/vagrant for login.
