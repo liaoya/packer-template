@@ -15,6 +15,8 @@ done
 [[ $EUID -gt 0 ]] && { echo "Only root can run this script"; exit 1; }
 [[ -n $LOCATION ]] || { echo "Please specify a location (cn|jp)"; exit 1; }
 
+timedatectl set-timezone "Asia/Shanghai"
+
 if [[ $LOCATION == "jp" ]]; then
     APT_MIRROR_SERVER="http://ftp.jaist.ac.jp"
     APT_MIRROR_PATH="/pub/Linux/ubuntu"

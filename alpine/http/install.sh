@@ -7,7 +7,7 @@ TEMP=$(getopt -o d:n:N:p:P:r:z: --long domain:,nameserver:,ntp:,passwrod:,proxy:
 eval set -- "$TEMP"
 
 # extract options and their arguments into variables.
-DOMAIN="" NAMESERVER="" NTP="none" PASSWORD="alpine" PROXY="" REPOSITORY="-1" TIMEZONE=""
+DOMAIN="" NAMESERVER="" NTP="chrony" PASSWORD="alpine" PROXY="" REPOSITORY="" TIMEZONE=""
 while true ; do
     case "$1" in
         -d|--domain)
@@ -49,6 +49,7 @@ if [ -n "$PROXY" ]; then
 fi
 #shellcheck disable=2086
 [ -n "$REPOSITORY" ] && setup-apkrepos "$REPOSITORY" "$(dirname $REPOSITORY)/community"
+# Forget set ntp or set ntp to none will make networking service not work
 [ -n "$NTP" ] && setup-ntp -c "$NTP"
 # For virtualbox
 [ -b /dev/vda ] && echo -e "y\\n" | setup-disk -m sys -s 0 -L /dev/vda
@@ -57,6 +58,7 @@ fi
 
 # Post Installation
 rc-service sshd stop
+rc-update add -u networking default
 mount /dev/vg0/lv_root /mnt
 
 # Enable serial console
