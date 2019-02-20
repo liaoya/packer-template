@@ -89,6 +89,7 @@
                 "../custom/fedora/install-common.sh",
                 "../custom/install-asdf.sh",
                 "../custom/fedora/install-docker.sh",
+                "../custom/install-docker-compose.sh",
                 "../custom/install-java.sh",
                 "../custom/fedora/install-libvirt.sh",
                 "../custom/install-nvm.sh",
