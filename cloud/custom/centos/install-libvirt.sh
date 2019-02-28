@@ -5,8 +5,8 @@ echo '==> Install libvirt for CentOS'
 
 yum install -y -q libvirt libvirt-daemon-kvm qemu-kvm virt-install virt-top libvirt-python
 if [[ -n ${SUDO_USER} ]]; then
-    if getent group libvirtd; then adduser "${SUDO_USER}" libvirtd; fi
-    if getent group libvirt; then adduser "${SUDO_USER}" libvirt; fi
+    if getent group libvirtd; then usermod -aG libvirtd "${SUDO_USER}"; fi
+    if getent group libvirt; then usermod -aG libvirt "${SUDO_USER}"; fi
     if getent group qemu; then usermod -aG qemu "${SUDO_USER}"; fi
     if getent group kvm; then usermod -aG kvm "${SUDO_USER}"; fi
     su -l "${SUDO_USER}" -c 'echo export LIBVIRT_DEFAULT_URI="qemu:///system" >> ~/.bashrc'
