@@ -158,7 +158,7 @@
     ],
     "variables": {
         "cpus": "1",
-        "disk_size": "2048",
+        "disk_size": "512",
         "http_proxy": "{{env `http_proxy`}}",
         "https_proxy": "{{env `https_proxy`}}",
         "headless": "true",

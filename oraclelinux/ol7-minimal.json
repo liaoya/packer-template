@@ -16,12 +16,12 @@
         "http_port_max": 10089,
         "ssh_host_port_min": 2222,
         "ssh_host_port_max": 2229,
-        "ssh_username": "{{user `Ssh_username`}}",
-        "ssh_password": "{{user `Ssh_password`}}",
+        "ssh_username": "{{user `ssh_username`}}",
+        "ssh_password": "{{user `ssh_password`}}",
         "ssh_port": 22,
         "ssh_wait_timeout": "1200s",
         "boot_wait": "6s",
-        "shutdown_command": "{{user `Shutdown_command`}}",
+        "shutdown_command": "{{user `shutdown_command`}}",
         "vboxmanage": [
             ["modifyvm", "{{.Name}}", "--memory", "4096"],
             ["modifyvm", "{{.Name}}", "--cpus", "2"]
@@ -49,9 +49,9 @@
         "iso_checksum": "",
         "iso_checksum_type": "md5",
         "no_proxy": "{{env `no_proxy`}}",
-        "Ssh_username": "root",
-        "Ssh_password": "nextGen",
-        "Shutdown_command": "/sbin/halt -h -p",
+        "ssh_username": "root",
+        "ssh_password": "oracle",
+        "shutdown_command": "/sbin/halt -h -p",
         "vagrantfile_template": "",
         "virtualbox_output_dir": "{{env `HOME`}}/VirtualBox VMs/OL7DevBox"
     }

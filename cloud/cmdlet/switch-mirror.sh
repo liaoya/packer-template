@@ -102,7 +102,7 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
 fi
 
 if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
-    [[ -f /etc/yum.repos.d/public-yum-ol7.repo.origin ]] || mv /etc/yum.repos.d/public-yum-ol7.repo /etc/yum.repos.d/public-yum-ol7.repo.origin
+    if [[ -f /etc/yum.repos.d/public-yum-ol7.repo.origin ]]; then mv /etc/yum.repos.d/public-yum-ol7.repo /etc/yum.repos.d/public-yum-ol7.repo.origin; fi
     curl -sL https://yum.oracle.com/public-yum-ol7.repo -o /etc/yum.repos.d/public-yum-ol7.repo
     sed -i "s/https:/http:/g" /etc/yum.repos.d/public-yum-ol7.repo
     yum install -y -q yum-utils

@@ -79,7 +79,7 @@
         "custom_group": "users",
         "custom_user": "oracle",
         "disk_compression": "true",
-        "disk_size": "16384",
+        "disk_size": "8192",
         "headless": "true",
         "iso_checksum": "d0cc4493db10c2a49084f872083ed9ed6a09cc065064c009734712b9ef357886",
         "iso_checksum_type": "sha256",
