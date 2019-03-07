@@ -76,7 +76,7 @@
 
     "variables": {
         "cpus": "2",
-        "custom_group": "users",
+        "custom_group": "oracle",
         "custom_user": "oracle",
         "disk_compression": "true",
         "disk_size": "8192",

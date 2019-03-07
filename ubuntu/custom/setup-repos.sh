@@ -1,4 +1,7 @@
-#!/bin/bash -eux
+#!/bin/bash
+#shellcheck disable=SC1091
+
+set -e -x
 
 echo "==> Run custom repository"
 

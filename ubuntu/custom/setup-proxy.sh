@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
+#shellcheck disable=SC1091,SC2154
 
-set -eux
+set -e -x
 
 echo "==> Run custom setup proxy script"
 
