@@ -9,13 +9,13 @@ export PACKER_CACHE_DIR=~/.cache/packer
 [ -d $PACKER_CACHE_DIR ] || mkdir -p $PACKER_CACHE_DIR
 export CURLOPT_SSL_VERIFYPEER=false
 
-packer build -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/proxy.conf fedora.json
+packer build -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/proxy.json fedora.json
 
-packer build -var "vm_name=minikube" -var "custom_docker_ce=true" -var "custom_libvirt=true" -var "custom_python_virtualenv=true" -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/proxy.conf fedora.json
+packer build -var "vm_name=minikube" -var "custom_docker_ce=true" -var "custom_libvirt=true" -var "custom_python_virtualenv=true" -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/proxy.json fedora.json
 
-packer build -var "vm_name=develop" -var "custom_docker_ce=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/proxy.conf fedora.json
+packer build -var "vm_name=develop" -var "custom_docker_ce=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/proxy.json fedora.json
 
-packer build -var "vm_name=libvirt" -var "custom_libvirt=true" -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/proxy.conf fedora.json
+packer build -var "vm_name=libvirt" -var "custom_libvirt=true" -var-file ../conf/fedora29.json -var-file ../conf/jaist.json -var-file ../conf/proxy.json fedora.json
 ```
 
 The following command can help to setup a new virtual machine
