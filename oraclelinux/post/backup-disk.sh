@@ -19,7 +19,8 @@ if [[ $SPARSIFY =~ true || $SPARSIFY =~ 1 || $SPARSIFY =~ yes ]] && [[ $(command
      [[ $EUID -gt 0 ]] && sudo virt-sparsify "$OUTPUT/$IMAGENAME.qcow2" "$DEST/$IMAGENAME.qcow2" && sudo chown "$(id -un):$(id -gn)" "$DEST/$IMAGENAME.qcow2"
      [[ -f $DEST/$IMAGENAME.qcow2 ]] && mv -f "$DEST/$IMAGENAME.qcow2" "$OUTPUT/$IMAGENAME.qcow2"
 fi
-qemu-img convert -c -O qcow2 -o compat=0.10 "$OUTPUT/$IMAGENAME.qcow2" "$DEST/$IMAGENAME$VERSION.qcow2c"
+# qemu-img convert -c -O qcow2 -o compat=0.10 "$OUTPUT/$IMAGENAME.qcow2" "$DEST/$IMAGENAME$VERSION.qcow2c"
+qemu-img convert -c -O qcow2 "$OUTPUT/$IMAGENAME.qcow2" "$DEST/$IMAGENAME$VERSION.qcow2c"
 # [[ -f $OUTPUT/$IMAGENAME.qcow2 ]] && qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2
 # [[ $(command -v pxz) ]] && pxz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME$VERSION.qcow2.xz
 # [[ -f $DEST/$IMAGENAME$VERSION.qcow2.xz ]] || xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME$VERSION.qcow2.xz
