@@ -9,16 +9,16 @@ export PACKER_CACHE_DIR=~/.cache/packer
 [ -d $PACKER_CACHE_DIR ] || mkdir -p $PACKER_CACHE_DIR
 export CURLOPT_SSL_VERIFYPEER=false
 
-packer build -var-file ../conf/oraclelinux74.json -var-file ../conf/proxy.json oraclelinux.json
+packer build -var-file ../conf/oraclelinux76.json -var-file ../conf/proxy.json oraclelinux.json
 
-packer build -var "vm_name=minikube" -var "custom_docker=true" -var "custom_libvirt=true" -var "custom_python_virtualenv=true" -var-file ../conf/oraclelinux74.json -var-file ../conf/proxy.json oraclelinux.json
+packer build -var "vm_name=minikube" -var "custom_docker=true" -var "custom_libvirt=true" -var-file ../conf/oraclelinux76.json -var-file ../conf/proxy.json oraclelinux.json
 
-packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var "custom_python_virtualenv=true" -var-file ../conf/oraclelinux74.json -var-file ../conf/proxy.json oraclelinux.json
+packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/oraclelinux76.json -var-file ../conf/proxy.json oraclelinux.json
 ```
 
 ## Use our own image
 
-Oracle has not provide openstack image after oracle linux 7.4.
+Oracle has not provide openstack image after oracle linux 7.4 for long time (Now 7.5 and 7.6 image come out).
 I have to build by myself.
 
 ```bash
@@ -31,7 +31,7 @@ The following command can help to setup a new virtual machine
 
 ```bash
 base_image=$(ls -1 /var/lib/libvirt/images/ol74-minikube-*)
-vm_name=oraclelinux74
+vm_name=oraclelinux76
 virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
 virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}
 qemu-img create -b $base_image -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2
@@ -53,5 +53,5 @@ tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
 virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
 rm -fr ${vm_name}.tar ${ROOT_DIR}
 
-virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant ol7.4 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant ol7.6 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
