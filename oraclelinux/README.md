@@ -22,6 +22,15 @@ packer build -var "headless=false" -var "os_dist=ol76" -var-file conf/ol76.json 
 packer build -var "headless=false" -var "custom_group=nncentral" -var "custom_user=nncentral" -var "os_dist=ol76" -var "vm_name=nncentral" -var-file conf/ol76.json ol7-kvm-minimal.json
 ```
 
+Change the following
+
+```text
+repo --name=ol7_latest --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/ --proxy=http://10.113.69.101:5900
+repo --name=ol7_optional_latest --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/optional/latest/x86_64 --proxy=http://10.113.69.101:5900
+repo --name=ol7_addons --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/addons/x86_64/ --proxy=http://10.113.69.101:5900
+repo --name=ol7_UEKR5 --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/UEKR5/x86_64/ --proxy=http://10.113.69.101:5900
+```
+
 ## Explaination
 
 - `create-user.sh` help to create a customized user, you choose `vagrant`
