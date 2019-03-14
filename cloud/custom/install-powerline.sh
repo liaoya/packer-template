@@ -1,6 +1,8 @@
 #!/bin/bash
 #shellcheck disable=SC1090,SC1091
 
+[[ -n ${CUSTOM_POWERLINE} && "${CUSTOM_POWERLINE}" == "true" ]] || exit 0
+
 pathmunge () {
     case ":${PATH}:" in
         *:"$1":*)

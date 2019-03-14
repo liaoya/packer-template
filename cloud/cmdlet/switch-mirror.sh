@@ -121,15 +121,15 @@ if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
         /usr/bin/ol_yum_configure.sh
         rm -f /etc/yum.repos.d/public-yum-ol*
     fi
-    for item in /etc/yum.repos.d/oracle*.repo; do
+    for item in /etc/yum.repos.d/*"ol${RELEASE}.repo"; do
         if [[ ! -f "$item.origin" ]]; then cp "$item" "$item.origin"; fi
     done
-    sed -i "s/https:/http:/g" /etc/yum.repos.d/oracle*.repo
+    sed -i "s/https:/http:/g" /etc/yum.repos.d/*"ol${RELEASE}.repo"
     yum install -y -q "oracle-epel-release-el${RELEASE}"
-    for item in /etc/yum.repos.d/oracle*.repo; do
+    for item in /etc/yum.repos.d/*"ol${RELEASE}.repo"; do
         if [[ ! -f "$item.origin" ]]; then cp "$item" "$item.origin"; fi
     done
-    sed -i "s/https:/http:/g" /etc/yum.repos.d/oracle*.repo
+    sed -i "s/https:/http:/g" /etc/yum.repos.d/*"ol${RELEASE}.repo"
     
     yum install -y -q yum-utils
     if yum repolist disabled | grep -s -q "ol${RELEASE}_developer_EPEL"; then yum-config-manager --enable "ol${RELEASE}_developer_EPEL" >/dev/null; fi

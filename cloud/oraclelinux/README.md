@@ -32,26 +32,28 @@ The following command can help to setup a new virtual machine
 ```bash
 base_image=$(ls -1 /var/lib/libvirt/images/ol74-minikube-*)
 vm_name=oraclelinux76
-virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
-virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}
-qemu-img create -b $base_image -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2
+virsh list --name | grep -s -q "${vm_name}" && virsh destroy "${vm_name}"
+virsh list --inactive --name | grep "${vm_name}" && virsh undefine --remove-all-storage "${vm_name}"
+qemu-img create -f qcow2 "/var/lib/libvirt/images/${vm_name}.qcow2" 64G
+virt-resize --expand /dev/sda1 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
+
 
 ROOT_DIR=$(mktemp -d)
-mkdir -p ${ROOT_DIR}/etc/sysconfig/network-scripts
+mkdir -p "${ROOT_DIR}/etc/sysconfig/network-scripts"
 cat <<EOF > ${ROOT_DIR}/etc/sysconfig/network-scripts/ifcfg-eth0
 BOOTPROTO=none
 DEVICE=eth0
 ONBOOT=yes
 TYPE=Ethernet
-IPADDR=10.113.20.27
+IPADDR=10.113.20.29
 PREFIX=22
 GATEWAY=10.113.20.1
 EOF
-cp /etc/resolv.conf ${ROOT_DIR}/etc/
-echo ${vm_name} > ${ROOT_DIR}/etc/hostname
-tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
-virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
-rm -fr ${vm_name}.tar ${ROOT_DIR}
+cp /etc/resolv.conf "${ROOT_DIR}/etc/"
+echo "${vm_name}" > "${ROOT_DIR}/etc/hostname"
+tar -cf "${vm_name}.tar" -C "${ROOT_DIR}/etc" .
+virt-tar-in -a "/var/lib/libvirt/images/${vm_name}.qcow2" "${vm_name}.tar" /etc
+rm -fr "${vm_name}.tar" "${ROOT_DIR}"
 
-virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant ol7.6 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host --disk "/var/lib/libvirt/images/${vm_name}.qcow2" --os-variant ol7.6 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
