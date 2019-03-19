@@ -37,7 +37,7 @@ Use the following command to build at Nanjing site, qcow2 file is under image/ a
 ```bash
 export http_proxy=
 rm -fr qemu/* image/* box/*
-packer build -only qemu -var-file conf/3.9.0.json alpine.json
+packer build -only qemu -var-file conf/3.9.2.json alpine.json
 ```
 
 ### Build virtualbox ova and its corresponding vagrant box
@@ -78,7 +78,7 @@ vboxmanage import alpine-3.7.0-virtualbox.ova --vsys 0 --vmname alpine --unit 9 
 Use `virtual-install` or **Virtual Manager**
 
 ```bash
-base_image=$(ls -1 /var/lib/libvirt/images/alpine*)
+base_image=$(ls -1 /var/lib/libvirt/images/alpine-3*)
 vm_name=alpine
 virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
 virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}

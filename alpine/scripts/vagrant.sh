@@ -19,8 +19,12 @@ SSH_USER="vagrant"
 SSH_GROUP="users"
 SSH_PASS="vagrant"
 
+if ! getent group $SSH_GROUP; then
+    addgroup $SSH_GROUP
+fi
+
 if [ -n "$(command -v bash)" ]; then
-    adduser -D -G $SSH_GROUP -g "${SSH_USER}" -s /bin/bash $SSH_USER
+    adduser -D -G $SSH_GROUP -g "${SSH_USER}" -s "$(command -v bash)" $SSH_USER
 else
     adduser -D -G $SSH_GROUP -g "${SSH_USER}" $SSH_USER
 fi
