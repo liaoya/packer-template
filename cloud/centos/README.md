@@ -23,17 +23,17 @@ packer build -var "vm_name=libvirt" -var "custom_libvirt=true" -var-file ../conf
 The following command can help to setup a new virtual machine
 
 ```bash
-base_image=$(ls -1 /var/lib/libvirt/images/centos7-develop-*)
-vm_name=centos7-minikube
+base_image=$(find /var/lib/libvirt/images -iname 'centos7-libvirt-*' | tail -n 1)
+
+vm_name=c7-libvirt
 virsh list --name | grep -s -q "${vm_name}" && virsh destroy "${vm_name}"
 virsh list --inactive --name | grep "${vm_name}" && virsh undefine --remove-all-storage "${vm_name}"
 qemu-img create -f qcow2 "/var/lib/libvirt/images/${vm_name}.qcow2" 64G
 virt-resize --expand /dev/sda1 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
 
-
 ROOT_DIR=$(mktemp -d)
 mkdir -p "${ROOT_DIR}/etc/sysconfig/network-scripts"
-cat <<EOF > ${ROOT_DIR}/etc/sysconfig/network-scripts/ifcfg-eth0
+cat <<EOF > "${ROOT_DIR}/etc/sysconfig/network-scripts/ifcfg-eth0"
 BOOTPROTO=none
 DEVICE=eth0
 ONBOOT=yes
@@ -113,4 +113,4 @@ rm -fr ${vm_name}.tar ${ROOT_DIR}
 virt-install --name ${vm_name} --memory=65536 --vcpus=16 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant centos7.0 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --network bridge=ovsbr0,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
 
-Run `sudo xfs_growfs /dev/vda1` after ssh login, this is prefer
+Run `sudo xfs_growfs /dev/vda1` after ssh login, this is the prefer
