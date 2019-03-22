@@ -20,7 +20,7 @@ THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
 
 if [[ $UID -eq 0 ]]; then
     if [[ -n "${SUDO_USER}" ]]; then
-        su -l "${SUDO_USER}" -c "set -a; source /etc/environment; bash -e -x ${THIS_FILE}"
+        su -l "${SUDO_USER}" -c "export CUSTOM_POWERLINE=true; source /etc/environment; bash -e -x ${THIS_FILE}"
         exit 0
     fi
 fi
