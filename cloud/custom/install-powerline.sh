@@ -3,6 +3,15 @@
 
 [[ -n ${CUSTOM_POWERLINE} && "${CUSTOM_POWERLINE}" == "true" ]] || exit 0
 
+if [[ ! -f /tmp/get-pip.py ]]; then
+    curl -sL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+fi
+
+if [[ ! -f /tmp/get-pip.py ]]; then
+    echo "Fail to download /tmp/get-pip.py"
+    exit 0
+fi
+
 pathmunge () {
     case ":${PATH}:" in
         *:"$1":*)
@@ -20,7 +29,7 @@ THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
 
 if [[ $UID -eq 0 ]]; then
     if [[ -n "${SUDO_USER}" ]]; then
-        su -l "${SUDO_USER}" -c "export CUSTOM_POWERLINE=true; source /etc/environment; bash -e -x ${THIS_FILE}"
+        su -l "${SUDO_USER}" -c "set -a -x; export CUSTOM_POWERLINE=true; source /etc/environment; bash -e -x ${THIS_FILE}"
         exit 0
     fi
 fi
@@ -45,17 +54,15 @@ EOF
     pathmunge "${HOME}/.local/bin"
 fi
 
-get_pip_filename=$(mktemp --suffix .py)
-curl -sL https://bootstrap.pypa.io/get-pip.py -o "${get_pip_filename}"
 if [[ $(command -v pip3) ]]; then
     pip3 install --user --upgrade powerline-status powerline-shell
 elif [[ $(command -v pip2) ]]; then
     pip2 install --user --upgrade powerline-status powerline-shell
 elif [[ $(command -v python3) ]]; then
-    python3 "${get_pip_filename}" --user
+    python3 /tmp/get-pip.py --user
     pip3 install --user --upgrade powerline-status powerline-shell
 elif [[ $(command -v python2) ]]; then
-    python2 "${get_pip_filename}" --user
+    python2 /tmp/get-pip.py --user
     pip2 install --user --upgrade powerline-status powerline-shell
 else
     exit 0
