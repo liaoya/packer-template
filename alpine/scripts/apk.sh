@@ -5,9 +5,8 @@ set -eux
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 # Never install ifupdown
 apk update -q --no-progress
-apk add -q --no-progress bash curl nano
-apk add -q --no-progress ethtool vlan
-# apk add -q --no-progress sshpass wget file iproute2 net-tools
+apk add -q --no-progress bash curl file nano sshpass tmux
+apk add -q --no-progress ethtool vlan iproute2 net-tools iputils
 
 if [ "$PACKER_BUILDER_TYPE" = "qemu" ]; then
     apk add -q --no-progress qemu-guest-agent

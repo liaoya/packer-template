@@ -19,11 +19,11 @@ export CURLOPT_SSL_VERIFYPEER=false
 ```
 
 ```bash
-packer build -var "headless=false" -var "os_dist=ol76" -var-file conf/ol76.json ol7-kvm-minimal.json
+packer build -var "headless=false" -var "os_dist=oraclelinux76" -var-file conf/ol76.json ol7-qemu.json
 ```
 
 ```bash
-packer build -var "headless=false" -var "custom_group=nncentral" -var "custom_user=nncentral" -var "os_dist=ol76" -var "vm_name=nncentral" -var-file conf/ol76.json ol7-kvm-minimal.json
+packer build -var "headless=false" -var "custom_group=nncentral" -var "custom_user=nncentral" -var "os_dist=ol76" -var "vm_name=nncentral" -var-file conf/ol76.json ol7-qemu.json
 ```
 
 Change the following to use proxy

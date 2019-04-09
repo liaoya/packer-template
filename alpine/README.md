@@ -37,7 +37,7 @@ Use the following command to build at Nanjing site, qcow2 file is under image/ a
 ```bash
 export http_proxy=
 rm -fr qemu/* image/* box/*
-packer build -only qemu -var-file conf/3.9.2.json alpine.json
+packer build -only qemu -var "headless=false" -var-file conf/3.9.3.json alpine.json
 ```
 
 ### Build virtualbox ova and its corresponding vagrant box
@@ -102,7 +102,11 @@ tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
 virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
 rm -fr ${vm_name}.tar ${ROOT_DIR}
 
-virt-install --name ${vm_name} --memory=128 --vcpus=1 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-type linux --network bridge=ovsbr502,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name ${vm_name} --os-variant alpinelinux3.8 \
+             --memory=128 --vcpus=1 --cpu host \
+             --disk /var/lib/libvirt/images/${vm_name}.qcow2 \
+             --network bridge=ovsbr502,model=virtio,virtualport_type=openvswitch \
+             --noautoconsole --import
 ```
 
 #### Import to Vagrant

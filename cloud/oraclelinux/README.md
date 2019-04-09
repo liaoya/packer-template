@@ -22,9 +22,9 @@ Oracle has not provide openstack image after oracle linux 7.4 for long time (Now
 I have to build by myself.
 
 ```bash
-image_name=ol76-kvm-minimal-20190314.qcow2c
+image_name=oraclelinux76-qemu-20190401.qcow2c
 image_checksum=$(sha256sum ~/.cache/packer/${image_name} | cut -d' ' -f 1)
-packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var "iso_name=${image_name}" -var "iso_checksum=${image_checksum}" -var "oracle_name=ol76" -var "ssh_password=vagrant" -var "ssh_username=vagrant" -var-file ../conf/proxy.json oraclelinux.json
+packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var "iso_name=${image_name}" -var "iso_checksum=${image_checksum}" -var "oracle_name=oraclelinux76" -var "ssh_password=vagrant" -var "ssh_username=vagrant" -var-file ../conf/proxy.json oraclelinux.json
 ```
 
 The following command can help to setup a new virtual machine

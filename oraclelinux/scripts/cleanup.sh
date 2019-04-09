@@ -14,6 +14,7 @@ rm -rf /dev/.udev/
 
 for ndev in /etc/sysconfig/network-scripts/ifcfg-*; do
     if [ "$ndev" != "/etc/sysconfig/network-scripts/ifcfg-lo" ]; then
+        sed -i '/PEER/d' "$ndev"
         sed -i '/^HWADDR/d' "$ndev"
         sed -i '/^UUID/d' "$ndev"
     fi
