@@ -92,6 +92,7 @@
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
                 "../custom/ubuntu/setup.sh",
+                "../custom/ubuntu/install-ppa.sh",
                 "../custom/ubuntu/install-common.sh",
                 "../custom/install-asdf.sh",
                 "../custom/ubuntu/install-docker.sh",
@@ -101,7 +102,6 @@
                 "../custom/install-nvm.sh",
                 "../custom/install-ojet.sh",
                 "../custom/install-powerline.sh",
-                "../custom/ubuntu/install-python-virtualenv.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
                 "../custom/ubuntu/cleanup.sh"
