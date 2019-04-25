@@ -23,11 +23,12 @@ packer build -var "vm_name=libvirt" -var "custom_libvirt=true" -var-file ../conf
 The following command can help to setup a new virtual machine
 
 ```bash
-base_image=$(find /var/lib/libvirt/images -iname 'centos7-libvirt-*' | tail -n 1)
+base_image=$(find /var/lib/libvirt/images -iname 'centos7-develop-*.qcow2c' -printf "%T@ %p\n" | sort -r | head -1 | cut -d' ' -f2)
 
-vm_name=c7-libvirt
+vm_name=c7-develop
 virsh list --name | grep -s -q "${vm_name}" && virsh destroy "${vm_name}"
 virsh list --inactive --name | grep "${vm_name}" && virsh undefine --remove-all-storage "${vm_name}"
+
 qemu-img create -f qcow2 "/var/lib/libvirt/images/${vm_name}.qcow2" 64G
 virt-resize --expand /dev/sda1 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
 
@@ -38,7 +39,7 @@ BOOTPROTO=none
 DEVICE=eth0
 ONBOOT=yes
 TYPE=Ethernet
-IPADDR=10.113.20.29
+IPADDR=10.113.20.28
 PREFIX=22
 GATEWAY=10.113.20.1
 EOF
@@ -48,7 +49,7 @@ tar -cf "${vm_name}.tar" -C "${ROOT_DIR}/etc" .
 virt-tar-in -a "/var/lib/libvirt/images/${vm_name}.qcow2" "${vm_name}.tar" /etc
 rm -fr "${vm_name}.tar" "${ROOT_DIR}"
 
-virt-install --name "${vm_name}" --memory=32768 --vcpus=8 --cpu host-passthrough --disk "/var/lib/libvirt/images/${vm_name}.qcow2" --os-variant centos7.0 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name "${vm_name}" --memory=32768 --vcpus=8 --cpu host-passthrough --disk "/var/lib/libvirt/images/${vm_name}.qcow2" --os-variant centos7.0 --network bridge=ovsbr0-506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
 
 ## Expand the xfs image

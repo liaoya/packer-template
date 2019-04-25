@@ -36,11 +36,16 @@ Run the command `bash gen-ova.sh` to generate ova file
 The following command can help to setup a new virtual machine
 
 ```bash
-base_image=$(ls -1 /var/lib/libvirt/images/bionic-minikube-*)
-vm_name=bionic-minikube
-virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
-virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}
-qemu-img create -b $base_image -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2
+base_image=$(find /var/lib/libvirt/images -iname 'bionic-develop-*.qcow2c' -printf "%T@ %p\n" | sort -r | head -1 | cut -d' ' -f2)
+vm_name=bionic-develop
+virsh list --name | grep -s -q "${vm_name}" && virsh destroy "${vm_name}"
+virsh list --inactive --name | grep "${vm_name}" && virsh undefine --remove-all-storage "${vm_name}"
+qemu-img convert -f qcow2 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
+qemu-img resize "/var/lib/libvirt/images/${vm_name}.qcow2" 64G
+
+# The following will not work if the host is RHEL 7.x family
+#qemu-img create -f qcow2 "/var/lib/libvirt/images/${vm_name}.qcow2" 64G
+#virt-resize --expand /dev/sda1 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
 
 ROOT_DIR=$(mktemp -d)
 mkdir -p ${ROOT_DIR}/etc/netplan/
@@ -63,5 +68,7 @@ tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
 virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
 rm -fr ${vm_name}.tar ${ROOT_DIR}
 
-virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant ubuntu17.04 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant ubuntu18.04 --network bridge=ovsbr0-506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
+
+On CentOS, can't call virt-resize since its `e2fsck` is too old. Run `parted`, `cdisk` and `resize2fs` to use the whole disk.
