@@ -45,23 +45,6 @@ if [[ -d /etc/apt ]]; then
     sed -i -e 's/^deb-src/#deb-src/' /etc/apt/sources.list
 fi
 
-if [[ -f /etc/fedora-release && -n ${DNF_MIRROR_SERVER} && -n ${DNF_MIRROR_PATH} ]]; then
-    echo "DNF_MIRROR_SERVER is \"${DNF_MIRROR_SERVER}\", DNF_MIRROR_PATH is \"${DNF_MIRROR_PATH}\""
-    for elem in /etc/yum.repos.d/fedora*.repo; do
-        [[ -e "${elem}" ]] || continue
-        [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
-        [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
-        grep -s -q -e "^metalink=" "${elem}" && sed -i -e "s/^metalink=/#metalink=/g" "${elem}"
-        grep -s -q -e "^#baseurl=" "${elem}" && grep -s -q -e "^baseurl=" "${elem}" && sed -i -e "/^baseurl=/d" "${elem}";
-        grep -s -q -e "^#baseurl=" "${elem}" && sed -i -e "s/^#baseurl=/baseurl=/g" "${elem}"
-        sed -i -e "s%^baseurl=.*%#&\\n&%g" "${elem}"
-        sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" "${elem}"
-    done
-    dnf install -y -q yum-utils
-    # I find the issue when use a specific mirror on Fedora 28
-    sed -i "s%os/%%g" /etc/yum.repos.d/fedora-updates.repo
-fi
-
 if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
     for elem in /etc/yum.repos.d/CentOS*.repo; do
         [[ -e "${elem}" ]] || continue
@@ -99,6 +82,14 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
 #    yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
 #    yum install -y -q http://rpms.remirepo.net/enterprise/remi-release-${CENTOS_RELEASE}.rpm
 #    yum install -y -q http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el${CENTOS_RELEASE}.noarch.rpm
+fi
+
+if [[ -f /etc/fedora-release ]; then
+    for elem in /etc/yum.repos.d/fedora*.repo; do
+        [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
+        [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
+        sed -i "s/arch=\$basearch/arch=\$basearch\&type=http/g" "${elem}"
+    done
 fi
 
 if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
@@ -140,20 +131,6 @@ if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
     if yum repolist enabled | grep -s -q "^epel/"; then yum-config-manager --disable epel > /dev/null; fi
 
     curl -sL https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-7/outman-emacs-epel-7.repo -o /etc/yum.repos.d/emacs-copr.repo
-fi
-
-if [[ -f /etc/fedora-release && -f /etc/dnf/dnf.conf && -n $DNF_MIRROR_SERVER && -n $DNF_MIRROR_PATH ]]; then
-    for elem in /etc/yum.repos.d/fedora*.repo; do [ -f "${elem}.origin" ] || cp "${elem}" "${elem}.origin"; done
-    for elem in /etc/yum.repos.d/fedora*.repo; do
-        grep -s -q -e "^metalink=" "${elem}" && sed -i -e "s/^metalink=/#metalink=/g" "${elem}"
-        grep -s -q -e "^#baseurl=" "${elem}" && grep -s -q -e "^baseurl=" "${elem}" && sed -i -e "/^baseurl=/d" "${elem}";
-        grep -s -q -e "^#baseurl=" "${elem}" && sed -i -e "s/^#baseurl=/baseurl=/g" "${elem}"
-        sed -i -e "s%^baseurl=.*%#&\\n&%g" "${elem}"
-        sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub/fedora/linux%baseurl=${DNF_MIRROR_SERVER}${DNF_MIRROR_PATH}%g" "${elem}"
-    done
-    dnf install -y -q yum-utils
-    # I find the issue when use a specific mirror on Fedora 28
-    sed -i "s%os/%%g" /etc/yum.repos.d/fedora-updates.repo
 fi
 
 [[ -n ${DOCKER_MIRROR_SERVER} ]] && cat <<EOF >> /etc/docker/daemon.json

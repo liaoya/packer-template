@@ -2,6 +2,6 @@
 
 echo "==> Install Fedora common packages"
 
-dnf install -y -q zip unzip bzip2 xz fish screen tmux sshpass fish git tig nano vim moreutils
+dnf install -y -q bzip2 fish fish git jq moreutils nano screen sshpass tig tmux unzip vim xz zip
 
 if [[ -n ${CUSTOM_UPDATE} && "${CUSTOM_UPDATE}" == "true" ]]; then dnf -y -q update; fi
