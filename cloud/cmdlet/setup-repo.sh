@@ -28,7 +28,9 @@ if [[ $LOCATION == "jp" ]]; then
 elif [[ $LOCATION == "cn" ]]; then
     APT_MIRROR_SERVER="http://mirrors.ustc.edu.cn/"
     APT_MIRROR_PATH="/ubuntu"
+#shellcheck disable=SC2034
     DNF_MIRROR_SERVER="http://mirrors.ustc.edu.cn/"
+#shellcheck disable=SC2034
     DNF_MIRROR_PATH="/fedora"
     DOCKER_MIRROR_SERVER="registry.docker-cn.com"
 #    NPM_MIRROR_SERVER="https://registry.npm.taobao.org"
@@ -84,7 +86,7 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
 #    yum install -y -q http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el${CENTOS_RELEASE}.noarch.rpm
 fi
 
-if [[ -f /etc/fedora-release ]; then
+if [[ -f /etc/fedora-release ]]; then
     for elem in /etc/yum.repos.d/fedora*.repo; do
         [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
         [[ -f "${elem}.origin" ]] && cp -fpr "${elem}.origin" "${elem}"
