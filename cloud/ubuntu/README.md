@@ -74,7 +74,7 @@ virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host-passthrough -
 On CentOS, can't call virt-resize since its `e2fsck` is too old. Run `parted`, `cdisk` and `resize2fs` to use the whole disk.
 
 ```bash
-size=$(sudo parted /dev/vda -m print | head -n 2 | tail -n 1 | cut -d ':' -f 2)
+size=$(echo -e "Yes\n" | sudo parted /dev/vda -m print | head -n 2 | tail -n 1 | cut -d ':' -f 2)
 echo -e "Yes\n$size\n" | sudo parted ---pretend-input-tty /dev/vda resizepart 1
 sudo resize2fs /dev/vda1
 ```
