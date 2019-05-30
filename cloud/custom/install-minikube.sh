@@ -1,26 +1,22 @@
-#!/bin/bash -eux
+#!/bin/bash
 
-[[ -n ${CUSTOM_KUBERNETES} && "${CUSTOM_KUBERNETES}" == "true" ]] || exit 0
-echo "==> Install CentOS Kubernetes packages"
+[[ -n ${CUSTOM_MINIKUBE} && "${CUSTOM_MINIKUBE}" == "true" ]] || exit 0
 
-cat <<EOF > /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-EOF
+if [[ -n $(command -v minikube) ]]; then
+    MINIKUBE_VERSION=$(curl -s "https://api.github.com/repos/kubernetes/minikube/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    MINIKUBE_VERSION=${MINIKUBE_VERSION:-1.1.0}
+    curl -sLo minikube "https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-amd64"
+    chmod a+x minikube
+    mv minikube /usr/local/bin
+fi
 
-cat <<'EOF' > /etc/yum.repos.d/kubernetes.repo
-
-[kubernetes]
-name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-EOF
-
-yum -y install kubeadm kubelet kubectl
-systemctl enable kubelet.service
+if [[ -n $(command -v kubectl) ]]; then
+    KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+    KUBECTL_VERSION=${KUBECTL_VERSION:-v1.14.2}
+    curl -sLO "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+    chmod a+x kubectl
+    mv kubectl /usr/local/bin
+fi
 
 if [[ -n $(command -v jq) ]]; then
     JQ_VERSION=$(curl --silent "https://api.github.com/repos/stedolan/jq/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
@@ -32,7 +28,7 @@ if [[ -n $(command -v jq) ]]; then
 fi
 
 if [[ -n $(command -v kubeval) ]]; then
-    KUBEVAL_VERSION=$(curl --silent "https://api.github.com/repos/garethr/kubeval/releases/latest" | jq .tag_name | sed 's/"//g')
+    KUBEVAL_VERSION=$(curl --silent "https://api.github.com/repos/garethr/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     KUBEVAL_VERSION=${KUBEVAL_VERSION:-0.9.2}
     curl -sLO "https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
     tar -xf kubeval-linux-amd64.tar.gz
