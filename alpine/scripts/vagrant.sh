@@ -20,21 +20,21 @@ SSH_GROUP="users"
 SSH_PASS="vagrant"
 
 if ! getent group $SSH_GROUP; then
-    addgroup $SSH_GROUP
+    addgroup "$SSH_GROUP"
 fi
 
 if [ -n "$(command -v bash)" ]; then
-    adduser -D -G $SSH_GROUP -g "${SSH_USER}" -s "$(command -v bash)" $SSH_USER
+    adduser -D -G "$SSH_GROUP" -g "$SSH_USER" -s "$(command -v bash)" $SSH_USER
 else
-    adduser -D -G $SSH_GROUP -g "${SSH_USER}" $SSH_USER
+    adduser -D -G "$SSH_GROUP" -g "$SSH_USER" "$SSH_USER"
 fi
 echo "$SSH_USER:$SSH_PASS" | chpasswd
 
-mkdir -pm 700 /home/vagrant/.ssh
+mkdir -pm 700 "/home/$SSH_USER/.ssh"
 
 VAGRANT_INSECURE_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key"
-echo "${VAGRANT_INSECURE_KEY}" > /home/$SSH_USER/.ssh/authorized_keys
-echo "${VAGRANT_INSECURE_KEY}" > /home/$SSH_USER/.ssh/id_rsa.pub
+echo "$VAGRANT_INSECURE_KEY" > "/home/$SSH_USER/.ssh/authorized_keys"
+echo "$VAGRANT_INSECURE_KEY" > "/home/$SSH_USER/.ssh/id_rsa.pub"
 cat << 'EOF' > /home/$SSH_USER/.ssh/id_rsa
 -----BEGIN RSA PRIVATE KEY-----
 MIIEogIBAAKCAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzI
@@ -69,13 +69,13 @@ EOF
 # cp /home/$SSH_USER/.ssh/authorized_keys /home/$SSH_USER/.ssh/id_rsa.pub
 # curl -s -S -L https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant -o /home/$SSH_USER/.ssh/id_rsa
 
-chown -R $SSH_USER:$SSH_GROUP /home/$SSH_USER/.ssh
-chmod -R go-rwsx /home/$SSH_USER/.ssh
-chmod 644 /home/$SSH_USER/.ssh/authorized_keys
-chmod 644 /home/$SSH_USER/.ssh/id_rsa.pub
-chmod 600 /home/$SSH_USER/.ssh/id_rsa
+chown -R "$SSH_USER:$SSH_GROUP" "/home/$SSH_USER/.ssh"
+chmod -R go-rwsx "/home/$SSH_USER/.ssh"
+chmod 644 "/home/$SSH_USER/.ssh/authorized_keys"
+chmod 644 "/home/$SSH_USER/.ssh/id_rsa.pub"
+chmod 600 "/home/$SSH_USER/.ssh/id_rsa"
 
-cat << 'EOF' >> /home/$SSH_USER/.bashrc
+cat << 'EOF' >> "/home/$SSH_USER/.bashrc"
 # .bashrc
 
 # Source global definitions
@@ -86,7 +86,7 @@ fi
 # User specific aliases and functions
 EOF
 
-cat << 'EOF' >> /home/$SSH_USER/.bash_profile
+cat << 'EOF' >> "/home/$SSH_USER/.bash_profile"
 # .bash_profile
 
 # Get the aliases and functions
@@ -98,4 +98,4 @@ fi
 # export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 EOF
 
-chown $SSH_USER:$SSH_GROUP /home/$SSH_USER/.bashrc /home/$SSH_USER/.bash_profile
+chown "$SSH_USER:$SSH_GROUP" "/home/$SSH_USER/.bashrc" "/home/$SSH_USER/.bash_profile"
