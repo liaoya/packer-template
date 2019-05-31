@@ -104,6 +104,7 @@
                 "../custom/install-nvm.sh",
                 "../custom/install-ojet.sh",
                 "../custom/install-powerline.sh",
+                "../custom/setup-config.sh",
                 "../custom/clean-proxy.sh",              
                 "../custom/motd.sh",
                 "../custom/centos/cleanup.sh"
