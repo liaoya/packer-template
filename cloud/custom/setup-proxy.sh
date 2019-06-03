@@ -29,10 +29,12 @@ fi
 if [[ -z ${YUM_PROXY} && -n ${http_proxy} ]]; then YUM_PROXY=${http_proxy}; fi
 if [[ -f /etc/yum.conf && -n ${YUM_PROXY} ]]; then
     echo "==> Use ${YUM_PROXY} for yum"
+    sed -i "/^proxy/Id" /etc/yum.conf
     sed -i "/^installonly_limit/i proxy=${YUM_PROXY}" /etc/yum.conf
 fi
 if [[ -f /etc/dnf/dnf.conf && -n ${YUM_PROXY} ]]; then
     echo "==> Use ${YUM_PROXY} for dnf"
+    sed -i "/^proxy/Id" /etc/dnf/dnf.conf
     sed -i "/^installonly_limit/i proxy=${YUM_PROXY}" /etc/dnf/dnf.conf
 fi
 

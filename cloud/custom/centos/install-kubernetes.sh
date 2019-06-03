@@ -32,9 +32,9 @@ if [[ -n $(command -v jq) ]]; then
 fi
 
 if [[ -n $(command -v kubeval) ]]; then
-    KUBEVAL_VERSION=$(curl --silent "https://api.github.com/repos/garethr/kubeval/releases/latest" | jq .tag_name | sed 's/"//g')
+    KUBEVAL_VERSION=$(curl --silent "https://api.github.com/repos/instrumenta/kubeval/releases/latest" | jq .tag_name | sed 's/"//g')
     KUBEVAL_VERSION=${KUBEVAL_VERSION:-0.9.2}
-    curl -sLO "https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
+    curl -sLO "https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
     tar -xf kubeval-linux-amd64.tar.gz
     chmod a+x kubeval
     [[ $(command -v strip) ]] && strip kubeval

@@ -48,6 +48,8 @@ if [[ -d /etc/apt ]]; then
 fi
 
 if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n $YUM_MIRROR_EPEL_PATH && -n $YUM_MIRROR_PATH ]]; then
+    CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' "$(rpm -qf /etc/redhat-release)")
+
     for elem in /etc/yum.repos.d/CentOS*.repo; do
         [[ -e "${elem}" ]] || continue
         [[ -f "${elem}.origin" ]] || cp "${elem}" "${elem}.origin"
@@ -58,7 +60,10 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
         sed -i -e "s%^baseurl=.*%#&\\n&%g" "${elem}"
         sed -i -e "s%^baseurl=http://mirror.centos.org/centos%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_PATH}%g" "${elem}"
     done
-    yum install -y -q epel-release
+
+    if ! yum repolist all | grep -s -q "^epel/"; then
+        yum install -y -q epel-release
+    fi
 
     for elem in /etc/yum.repos.d/epel*.repo; do
         [[ -e "${elem}" ]] || continue
@@ -72,18 +77,33 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
         sed -i -e "s%^baseurl=http://download.fedoraproject.org/pub%baseurl=${YUM_MIRROR_SERVER}${YUM_MIRROR_EPEL_PATH}%g" "${elem}"
     done
 
-    # CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' "$(rpm -qf /etc/redhat-release)")
-    # yum install -y -q "https://centos${CENTOS_RELEASE}.iuscommunity.org/ius-release.rpm"
-    curl -sL https://setup.ius.io/ -o- | bash
+    if ! yum repolist all | grep -s -q "^ius/"; then
+        curl -sL https://setup.ius.io/ -o- | bash
+    fi
     if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager --disable ius > /dev/null; fi
 
-    curl -sL https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-7/outman-emacs-epel-7.repo -o /etc/yum.repos.d/emacs-copr.repo
-    curl -sL https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-7/carlwgeorge-ripgrep-epel-7.repo -o /etc/yum.repos.d/ripgrep.repo
+    if ! yum repolist all | grep -s -q "shells_fish_release_3"; then
+        yum-config-manager --add-repo "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${CENTOS_RELEASE}/shells:fish:release:3.repo"
+    fi
+    if ! yum repolist all | grep -s -q "outman-emacs/"; then
+        curl -sL "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${CENTOS_RELEASE}/outman-emacs-epel-${CENTOS_RELEASE}.repo" -o /etc/yum.repos.d/emacs-copr.repo
+    fi
+    if ! yum repolist all | grep -s -q "carlwgeorge-ripgrep/"; then
+        curl -sL "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${CENTOS_RELEASE}/carlwgeorge-ripgrep-epel-${CENTOS_RELEASE}.repo" -o /etc/yum.repos.d/ripgrep.repo
+    fi
     
-#    yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
-#    yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
-#    yum install -y -q http://rpms.remirepo.net/enterprise/remi-release-${CENTOS_RELEASE}.rpm
-#    yum install -y -q http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el${CENTOS_RELEASE}.noarch.rpm
+    # if ! yum repolist all | grep -s -q "rpmfusion-free-updates"; then
+    #     yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
+    # fi
+    # if ! yum repolist all | grep -s -q "rpmfusion-nonfree-updates"; then
+    #     yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
+    # fi
+    # if ! yum repolist all | grep -s -q "remi-safe"; then
+    #     yum install -y -q http://rpms.remirepo.net/enterprise/remi-release-${CENTOS_RELEASE}.rpm
+    # fi
+    # if ! yum repolist all | grep -s -q "gf/"; then
+    #     yum install -y -q http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el${CENTOS_RELEASE}.noarch.rpm
+    # fi
 fi
 
 if [[ -f /etc/fedora-release ]]; then
@@ -129,10 +149,21 @@ if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
     if yum repolist disabled | grep -s -w -q "ol${RELEASE}_addons"; then yum-config-manager --enable grep "ol${RELEASE}_addons" > /dev/null; fi
     if yum repolist disabled | grep -s -w -q "ol${RELEASE}_optional_latest"; then yum-config-manager --enable grep "ol${RELEASE}_optional_latest" > /dev/null; fi
 
-    yum install -y -q "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm" "https://rhel${RELEASE}.iuscommunity.org/ius-release.rpm"
-    if yum repolist enabled | grep -s -q "^epel/"; then yum-config-manager --disable epel > /dev/null; fi
+    if ! yum repolist all | grep -s -q "^ius/"; then
+        yum install -y -q "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm" "https://rhel${RELEASE}.iuscommunity.org/ius-release.rpm"
+        if yum repolist enabled | grep -s -q "^epel/"; then yum-config-manager --disable epel > /dev/null; fi
+    fi
+    if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager --disable ius > /dev/null; fi
 
-    curl -sL https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-7/outman-emacs-epel-7.repo -o /etc/yum.repos.d/emacs-copr.repo
+    if ! yum repolist all | grep -s -q "shells_fish_release_3"; then
+        yum-config-manager --add-repo "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${RELEASE}/shells:fish:release:3.repo"
+    fi
+    if ! yum repolist all | grep -s -q "outman-emacs/"; then
+        curl -sL "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" -o /etc/yum.repos.d/emacs-copr.repo
+    fi
+    if ! yum repolist all | grep -s -q "carlwgeorge-ripgrep/"; then
+        curl -sL "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${RELEASE}/carlwgeorge-ripgrep-epel-${RELEASE}.repo" -o /etc/yum.repos.d/ripgrep.repo
+    fi
 fi
 
 [[ -n ${DOCKER_MIRROR_SERVER} ]] && cat <<EOF >> /etc/docker/daemon.json

@@ -11,7 +11,7 @@ export CURLOPT_SSL_VERIFYPEER=false
 
 packer build -var-file ../conf/oraclelinux76.json -var-file ../conf/proxy.json oraclelinux.json
 
-packer build -var "vm_name=minikube" -var "custom_docker=true" -var "custom_libvirt=true" -var-file ../conf/oraclelinux76.json -var-file ../conf/proxy.json oraclelinux.json
+packer build -var "vm_name=minikube"  -var "custom_asdf=false" -var "custom_docker_ce=true" -var "custom_minikube=true" -var-file ../conf/oraclelinux76.json -var-file ../conf/proxy.json oraclelinux.json
 
 packer build -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/oraclelinux76.json -var-file ../conf/proxy.json oraclelinux.json
 ```

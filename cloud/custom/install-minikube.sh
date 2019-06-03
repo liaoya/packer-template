@@ -1,8 +1,8 @@
 #!/bin/bash
 
-[[ -z ${CUSTOM_MINIKUBE} && "${CUSTOM_MINIKUBE}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_MINIKUBE} && "${CUSTOM_MINIKUBE}" == "true" ]] || exit 0
 
-if [[ -z $(command -v minikube) ]]; then
+if [[ ! $(command -v minikube) ]]; then
     MINIKUBE_VERSION=$(curl -s "https://api.github.com/repos/kubernetes/minikube/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     MINIKUBE_VERSION=${MINIKUBE_VERSION:-1.1.0}
     curl -sLo minikube "https://storage.googleapis.com/minikube/releases/${MINIKUBE_VERSION}/minikube-linux-amd64"
@@ -10,7 +10,7 @@ if [[ -z $(command -v minikube) ]]; then
     mv minikube /usr/local/bin
 fi
 
-if [[ -z $(command -v kubectl) ]]; then
+if [[ ! $(command -v kubectl) ]]; then
     KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
     KUBECTL_VERSION=${KUBECTL_VERSION:-v1.14.2}
     curl -sLO "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
@@ -18,7 +18,7 @@ if [[ -z $(command -v kubectl) ]]; then
     mv kubectl /usr/local/bin
 fi
 
-if [[ -z $(command -v jq) ]]; then
+if [[ ! $(command -v jq) ]]; then
     JQ_VERSION=$(curl --silent "https://api.github.com/repos/stedolan/jq/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     JQ_VERSION=${JQ_VERSION:-jq-1.6}
     curl -sL "https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64" -o jq
@@ -27,10 +27,10 @@ if [[ -z $(command -v jq) ]]; then
     mv jq /usr/local/bin/
 fi
 
-if [[ -z $(command -v kubeval) ]]; then
-    KUBEVAL_VERSION=$(curl --silent "https://api.github.com/repos/garethr/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+if [[ ! $(command -v kubeval) ]]; then
+    KUBEVAL_VERSION=$(curl --silent "https://api.github.com/repos/instrumenta/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     KUBEVAL_VERSION=${KUBEVAL_VERSION:-0.9.2}
-    curl -sLO "https://github.com/garethr/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
+    curl -sLO "https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
     tar -xf kubeval-linux-amd64.tar.gz
     chmod a+x kubeval
     [[ $(command -v strip) ]] && strip kubeval
@@ -39,7 +39,7 @@ if [[ -z $(command -v kubeval) ]]; then
     rm -f kubeval-linux-amd64.tar.gz
 fi
 
-if [[ -z $(command -v yq) ]]; then
+if [[ ! $(command -v yq) ]]; then
     YQ_VERSION=$(curl -sL https://api.github.com/repos/mikefarah/yq/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     YQ_VERSION=${YQ_VERSION:-2.4.0}
     curl -sL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" -o yq
