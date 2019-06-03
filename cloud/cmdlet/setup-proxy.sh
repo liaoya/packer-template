@@ -136,3 +136,9 @@ EnvironmentFile=/etc/environment
 EOF
     systemctl daemon-reload && systemctl restart snapd
 fi
+
+if [[ -n ${http_proxy} && -f /var/snap/microk8s/current/args/containerd-env ]]; then
+    sed -i '/^HTTPS_PROXY/d' /var/snap/microk8s/current/args/containerd-env
+    echo "HTTPS_PROXY=$http_proxy" | tee -a /var/snap/microk8s/current/args/containerd-env
+    systemctl restart snap.microk8s.daemon-containerd.service
+fi
