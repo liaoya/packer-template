@@ -14,9 +14,11 @@ bash ../seed/gen.sh
 ```bash
 packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
-packer build -only qemu -var "vm_name=micro8s" -var "custom_asdf=false" -var "custom_docker=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+packer build -only qemu -var "vm_name=minimal" -var "custom_asdf=false" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-minimal-1804.json ubuntu.json
 
-packer build -only qemu -var "vm_name=minikube" -var "custom_docker=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+packer build -only qemu -var "vm_name=microk8s" -var "custom_asdf=false" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+
+packer build -only qemu -var "vm_name=minikube" -var "custom_docker=true" -var "custom_minikube=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
 packer build -only qemu -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
@@ -42,7 +44,7 @@ base_image=$(find /var/lib/libvirt/images -iname 'bionic-develop-*.qcow2c' -prin
 vm_name=bionic-develop
 virsh list --name | grep -s -q "${vm_name}" && virsh destroy "${vm_name}"
 virsh list --inactive --name | grep "${vm_name}" && virsh undefine --remove-all-storage "${vm_name}"
-qemu-img convert -f qcow2 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
+qemu-img convert -f qcow2 -O qcow2 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
 qemu-img resize "/var/lib/libvirt/images/${vm_name}.qcow2" 64G
 
 # The following will not work if the host is RHEL 7.x family
@@ -79,4 +81,18 @@ On CentOS, can't call virt-resize since its `e2fsck` is too old. Run `parted`, `
 size=$(echo -e "Yes\n" | sudo parted /dev/vda -m print | head -n 2 | tail -n 1 | cut -d ':' -f 2)
 echo -e "Yes\n$size\n" | sudo parted ---pretend-input-tty /dev/vda resizepart 1
 sudo resize2fs /dev/vda1
+
+sudo netplan apply
+```
+
+`sudo netplan apply` to make nameserver works
+
+## set no_proxy for microk8s
+
+```bash
+if [[ -n ${no_proxy} ]]; then
+    printf -v microk8s_no_proxy '%s,' 10.152.183.{1..255}
+    export no_proxy="$no_proxy,${microk8s_no_proxy%,}"
+    export NO_PROXY=$no_proxy
+fi
 ```

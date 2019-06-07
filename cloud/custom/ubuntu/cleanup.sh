@@ -31,6 +31,12 @@ if [[ ${UBUNTU_VERSION} == 16.04 ]] || [[ ${UBUNTU_VERSION} == 16.10 ]] || [[ ${
     sed -i "s/ens33/ens32/g" /etc/network/interfaces
 fi
 
+# Handle netplan from ubuntu 17.10
+if [[ -d /etc/netplan ]]; then
+    rm -f /etc/netplan/*
+    netplan apply
+fi
+
 # Add delay to prevent "vagrant reload" from failing
 echo "pre-up sleep 2" >> /etc/network/interfaces
 

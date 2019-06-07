@@ -4,7 +4,7 @@
 
 # https://www.server-world.info/en/note?os=CentOS_7&p=openstack_queens&f=2
 
-yum -y -q install centos-release-openstack-queens
+yum -y -q install entos-release-openstack-stein
 sed -i -e "s/enabled=1/enabled=0/g" /etc/yum.repos.d/CentOS-OpenStack-queens.repo
 
 yum --enablerepo=centos-openstack-queens -y install mariadb-server 

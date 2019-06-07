@@ -25,7 +25,7 @@ base_image=$(find /var/lib/libvirt/images -iname 'fedora30-base-*.qcow2c' -print
 vm_name=fedora30-base
 virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
 virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage "${vm_name}"
-qemu-img convert -f qcow2 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
+qemu-img convert -f qcow2 -O qcow2 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
 qemu-img resize "/var/lib/libvirt/images/${vm_name}.qcow2" 64G
 
 ROOT_DIR=$(mktemp -d)

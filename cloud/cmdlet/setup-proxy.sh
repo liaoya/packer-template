@@ -78,6 +78,13 @@ proxy_on() {
 proxy_off() {
     unset ftp_proxy http_proxy https_proxy no_proxy FTP_PROXY HTTP_PROXY HTTPS_PROXY NO_PROXY 
 }
+setup_microk8s_noproxy() {
+    if [[ -n ${no_proxy} ]]; then
+        printf -v microk8s_no_proxy '%s,' 10.152.183.{1..255}
+        export no_proxy="$no_proxy,${microk8s_no_proxy%,}"
+        export NO_PROXY=$no_proxy
+    fi
+}
 EOF
 
 echo "Set Proxy for $LOCATION"
@@ -128,7 +135,7 @@ EOF
     systemctl daemon-reload && systemctl restart docker
 fi
 
-if [[ $(command -v snapd) ]]; then
+if [[ $(command -v snap) ]]; then
     mkdir -p /etc/systemd/system/snapd.service.d/
     cat <<EOF >/etc/systemd/system/snapd.service.d/override.conf
 [Service]

@@ -23,8 +23,3 @@ if [[ $PACKER_BUILDER_TYPE == qemu ]]; then
     fi
 fi
 
-# Handle netplan from ubuntu 17.10
-if [[ -d /etc/netplan ]]; then
-    rm -f /etc/netplan/*
-    netplan apply
-fi
