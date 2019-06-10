@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+# Depreciate it
+
 [[ -n ${CUSTOM_PYTHON_VIRTUALENV} && "${CUSTOM_PYTHON_VIRTUALENV}" == "true" ]] || exit 0
 echo "==> Install Ubuntu virtualenv packages"
 

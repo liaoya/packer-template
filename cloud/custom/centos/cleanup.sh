@@ -11,7 +11,8 @@ fi
 sed -i '/PEER/d' /etc/sysconfig/network-scripts/ifcfg-e*
 sed -i '/HWADDR/d' /etc/sysconfig/network-scripts/ifcfg-e*
 sed -i '/UUID/d' /etc/sysconfig/network-scripts/ifcfg-e*
-#sed -i 's/BOOTPROTO=dhcp/BOOTPROTO=none/g' /etc/sysconfig/network-scripts/ifcfg-*
+# dhcp must the default for network
+# sed -i 's/BOOTPROTO=dhcp/BOOTPROTO=none/g' /etc/sysconfig/network-scripts/ifcfg-*
 
 # Clean up network interface persistence
 rm -f /etc/udev/rules.d/70-persistent-net.rules

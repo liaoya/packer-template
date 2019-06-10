@@ -1,5 +1,7 @@
 #!/bin/bash -eux
 
+# This script is not used now
+
 cat <<'EOF' >/etc/yum.repos.d/CentOS-libvirt-latest.repo
 [libvirt-latest]
 name=CentOS-$releasever - libvirt-latest

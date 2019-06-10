@@ -11,5 +11,4 @@ if [[ -n ${SUDO_USER} ]]; then
     if getent group qemu; then usermod -aG qemu "${SUDO_USER}"; fi
     if getent group kvm; then usermod -aG kvm "${SUDO_USER}"; fi
     su -l "${SUDO_USER}" -c 'echo export LIBVIRT_DEFAULT_URI="qemu:///system" >> ~/.bashrc'
-
 fi

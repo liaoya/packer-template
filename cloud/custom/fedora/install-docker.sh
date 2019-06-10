@@ -1,16 +1,20 @@
 #!/bin/bash -eux
 
 [[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]] || exit 0
-echo "==> Install Fedora docker packages"
 
 if [[ -n  ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
+    echo "==> Install Fedora docker-ce packages"
     dnf -y -q install dnf-plugins-core
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     releasever=$(cut -d " " -f 3 /etc/fedora-release)
-    curl -sL "https://download.docker.com/linux/fedora/${releasever}/x86_64/stable/Packages/" | grep -s -q 'href="docker-ce' || releasever=$((releasever-1))
-    sed -i "s/\$releasever/${releasever}/g" /etc/yum.repos.d/docker-ce.repo
+    # The docker-ce for current release has not available
+    if curl -sL "https://download.docker.com/linux/fedora/${releasever}/x86_64/stable/Packages/" | grep -s -q 'href="docker-ce'; then
+        releasever=$((releasever-1))
+        sed -i "s/\$releasever/${releasever}/g" /etc/yum.repos.d/docker-ce.repo
+    fi
     dnf -y -q install docker-ce
 else
+    echo "==> Install Fedora docker packages"
     dnf install -y -q docker
 fi
 
