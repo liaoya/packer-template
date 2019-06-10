@@ -54,9 +54,9 @@ EOF
     pathmunge "${HOME}/.local/bin"
 fi
 
-PYTHON_EXEC=$(find /usr/bin -type f -iname "python3*" | grep -v "m$" | tail -1)
+PYTHON_EXEC=$(find /usr/bin -type f -iname "python3.*" | grep -v "m$" | tail -1)
 if [[ -z ${PYTHON_EXEC} ]]; then
-    PYTHON_EXEC=$(find /usr/bin -type f -iname "python2*" | tail -1)
+    PYTHON_EXEC=$(find /usr/bin -type f -iname "python2.*" | tail -1)
 fi
 eval "${PYTHON_EXEC}" /tmp/get-pip.py --user
 pip install --user --upgrade powerline-status powerline-shell

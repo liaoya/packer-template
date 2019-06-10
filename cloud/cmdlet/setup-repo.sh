@@ -177,7 +177,7 @@ if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
     done
     sed -i "s/https:/http:/g" /etc/yum.repos.d/*"ol${RELEASE}.repo"
     
-    yum install -y -q yum-utils
+    if [[ -z $(command -v repomanage) ]]; then yum install -y -q yum-utils; fi
     if yum repolist disabled | grep -s -q "ol${RELEASE}_developer_EPEL"; then yum-config-manager --enable "ol${RELEASE}_developer_EPEL" >/dev/null; fi
     if yum repolist disabled | grep -s -w -q "ol${RELEASE}_addons"; then yum-config-manager --enable grep "ol${RELEASE}_addons" > /dev/null; fi
     if yum repolist disabled | grep -s -w -q "ol${RELEASE}_optional_latest"; then yum-config-manager --enable grep "ol${RELEASE}_optional_latest" > /dev/null; fi

@@ -6,7 +6,7 @@ yum install -y -q bridge-utils
 
 if [[ -n  ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
     echo '==> Install docker-ce for CentOS'
-    yum install -y -q yum-utils
+    if [[ -z $(command -v repomanage) ]]; then yum install -y -q yum-utils; fi
     yum-config-manager --add-repo http://download.docker.com/linux/centos/docker-ce.repo
     yum install -y -q docker-ce
     if yum repolist enabled | grep -s -q "docker-ce-stable"; then
