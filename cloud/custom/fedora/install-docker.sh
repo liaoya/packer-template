@@ -8,7 +8,7 @@ if [[ -n  ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     releasever=$(cut -d " " -f 3 /etc/fedora-release)
     # The docker-ce for current release has not available
-    if curl -sL "https://download.docker.com/linux/fedora/${releasever}/x86_64/stable/Packages/" | grep -s -q 'href="docker-ce'; then
+    if ! curl -sL "https://download.docker.com/linux/fedora/${releasever}/x86_64/stable/Packages/" | grep -s -q 'href="docker-ce'; then
         releasever=$((releasever-1))
         sed -i "s/\$releasever/${releasever}/g" /etc/yum.repos.d/docker-ce.repo
     fi

@@ -61,20 +61,6 @@ fi
 eval "${PYTHON_EXEC}" /tmp/get-pip.py --user
 pip install --user --upgrade powerline-status powerline-shell
 
-# if [[ $(command -v pip3) ]]; then
-#     pip3 install --user --upgrade powerline-status powerline-shell
-# elif [[ $(command -v pip2) ]]; then
-#     pip2 install --user --upgrade powerline-status powerline-shell
-# elif [[ $(command -v python3) ]]; then
-#     python3 /tmp/get-pip.py --user
-#     pip3 install --user --upgrade powerline-status powerline-shell
-# elif [[ $(command -v python2) ]]; then
-#     python2 /tmp/get-pip.py --user
-#     pip2 install --user --upgrade powerline-status powerline-shell
-# else
-#     exit 0
-# fi
-
 mkdir -p ~/.config/powerline-shell && powerline-shell --generate-config > ~/.config/powerline-shell/config.json
 if [[ $(command -v jq) && $(command -v sponge) ]]; then
     jq 'del(.segments[1]) | del(.segments[2])' ~/.config/powerline-shell/config.json | sponge ~/.config/powerline-shell/config.json

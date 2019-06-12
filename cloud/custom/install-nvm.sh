@@ -3,7 +3,8 @@
 [[ -n ${CUSTOM_NVM} && ${CUSTOM_NVM} == true ]] || exit 0
 echo "==> Install nvm"
 
-NVM_VERSION=$(curl -s "https://api.github.com/repos/creationix/nvm/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+NVM_VERSION=$(curl -sL "https://api.github.com/repos/creationix/nvm/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+NVM_VERSION=${NVM_VERSION:-v0.34.0}
 export NVM_DIR=/opt/nvm
 [[ -d ${NVM_DIR} ]] || mkdir -p ${NVM_DIR}
 

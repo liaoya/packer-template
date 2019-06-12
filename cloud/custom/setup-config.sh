@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Run this script after all the software installed
+THIS_FILE=$(readlink -f "${BASH_SOURCE[0]}")
 
 if [[ $UID -eq 0 ]]; then
     if [[ -n "${SUDO_USER}" ]]; then

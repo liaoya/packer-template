@@ -9,7 +9,7 @@ export ASDF_DATA_DIR=/opt/asdf
 if [[ $(command -v jq) ]]; then
     ASDF_VERSION=$(curl -sL https://api.github.com/repos/asdf-vm/asdf/tags | jq .[].name | tr -d '"' | head -1)
 fi
-if [[ -z ${ASDF_VERSION} ]]; then ASDF_VERSION=v0.7.1; fi
+ASDF_VERSION=${ASDF_VERSION:-v0.7.2}
 git clone https://github.com/asdf-vm/asdf.git ${ASDF_DATA_DIR} --branch "${ASDF_VERSION}"
 if [[ -n "$(ls -A ${ASDF_DATA_DIR})" ]]; then
     if [[ -f "${ASDF_DATA_DIR}/asdf.sh" ]]; then

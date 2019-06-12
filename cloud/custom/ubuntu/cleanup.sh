@@ -44,7 +44,10 @@ echo "==> Cleaning up tmp"
 rm -rf /tmp/*
 
 # Cleanup apt cache
-apt-get -y -qq autoremove --purge
+if [[ ! ${VM_NAME} == *"minimal"* ]]; then
+# Avoid that Ubuntu minimal cloud image will remove netplan.io
+    apt-get -y -qq autoremove --purge
+fi
 apt-get -y -qq clean
 apt-get -y -qq autoclean
 
@@ -53,14 +56,6 @@ find /var/lib/apt -type f -exec rm -f {} \;
 echo "==> Removing caches"
 find /var/cache -type f -exec rm -rf {} \;
 rm -fr /tmp/*
-
-# Remove Bash history
-unset HISTFILE
-rm -f /root/.bash_history
-if [[ -n ${SUDO_USER} ]]; then
-    user_home=$(getent passwd "${SUDO_USER}" | cut -d: -f6)
-    rm -f "${user_home}/.bash_history"
-fi
 
 # Clean up log files
 find /var/log -type f | while read -r f; do echo -ne '' > "${f}"; done;

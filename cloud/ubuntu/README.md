@@ -14,15 +14,15 @@ bash ../seed/gen.sh
 ```bash
 packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
-packer build -only qemu -var "vm_name=minimal" -var "custom_asdf=false" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-minimal-1804.json ubuntu.json
+packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-minimal-1804.json ubuntu.json
 
-packer build -only qemu -var "vm_name=microk8s" -var "custom_asdf=false" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+packer build -only qemu -var "vm_name=develop"  -var "custom_asdf=true" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+
+packer build -only qemu -var "vm_name=libvirt" -var "custom_libvirt=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-minimal-1804.json ubuntu.json
+
+packer build -only qemu -var "vm_name=microk8s" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
 packer build -only qemu -var "vm_name=minikube" -var "custom_docker=true" -var "custom_minikube=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
-
-packer build -only qemu -var "vm_name=develop" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
-
-packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804-i386.json ubuntu.json
 ```
 
 Download the latest official **ubuntu/bionic64** vagrant box and export for packer virtualbox-ovf build.

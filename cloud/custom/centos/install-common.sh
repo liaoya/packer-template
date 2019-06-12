@@ -12,7 +12,7 @@ yum install -y -q zip unzip bzip2 xz
 yum install -y -q jq moreutils python36 sshpass screen tig wget vim
 
 if [[ -z $(command -v repomanage) ]]; then yum install -y -q yum-utils; fi
-if ! yum repolist all | grep -s -q "^shells_fish_release_3"; then
+if yum repolist all | grep -s -q "^shells_fish_release_3"; then
     yum install -y -q fish
 fi
 

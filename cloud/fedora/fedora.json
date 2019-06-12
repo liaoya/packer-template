@@ -105,7 +105,8 @@
                 "../custom/setup-config.sh",
                 "../custom/clean-proxy.sh",
                 "../custom/motd.sh",
-                "../custom/fedora/cleanup.sh"
+                "../custom/fedora/cleanup.sh",
+                "../custom/cleanup.sh"
             ],
             "type": "shell"
         }
@@ -171,7 +172,7 @@
         "sparsify": "true",
         "ssh_password": "vagrant",
         "ssh_username": "vagrant",
-        "ssh_timeout": "15m",
+        "ssh_timeout": "20m",
         "version": "{{isotime \"20060102\"}}",
         "vm_name": "base",
         "yum_proxy":""

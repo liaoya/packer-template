@@ -103,7 +103,8 @@
                 "../custom/setup-config.sh",
                 "../custom/clean-proxy.sh",              
                 "../custom/motd.sh",
-                "../custom/oraclelinux/cleanup.sh"
+                "../custom/oraclelinux/cleanup.sh",
+                "../custom/cleanup.sh"
             ],
             "type": "shell"
         }
