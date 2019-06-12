@@ -23,7 +23,7 @@ yum -y install kubeadm kubelet kubectl
 systemctl enable kubelet.service
 
 if [[ -z $(command -v jq) ]]; then
-    JQ_VERSION=$(curl --silent "https://api.github.com/repos/stedolan/jq/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    JQ_VERSION=$(curl -sL "https://api.github.com/repos/stedolan/jq/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     JQ_VERSION=${JQ_VERSION:-jq-1.6}
     curl -sL "https://github.com/stedolan/jq/releases/download/${JQ_VERSION}/jq-linux64" -o jq
     chmod a+x jq
@@ -32,8 +32,8 @@ if [[ -z $(command -v jq) ]]; then
 fi
 
 if [[ -z $(command -v kubeval) ]]; then
-    KUBEVAL_VERSION=$(curl --silent "https://api.github.com/repos/instrumenta/kubeval/releases/latest" | jq .tag_name | sed 's/"//g')
-    KUBEVAL_VERSION=${KUBEVAL_VERSION:-0.9.2}
+    KUBEVAL_VERSION=$(curl -sL "https://api.github.com/repos/instrumenta/kubeval/releases/latest" | jq .tag_name | sed 's/"//g')
+    KUBEVAL_VERSION=${KUBEVAL_VERSION:0.10.0}
     curl -sLO "https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
     tar -xf kubeval-linux-amd64.tar.gz
     chmod a+x kubeval

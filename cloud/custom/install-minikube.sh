@@ -29,7 +29,7 @@ fi
 
 if [[ ! $(command -v kubeval) ]]; then
     KUBEVAL_VERSION=$(curl -sL "https://api.github.com/repos/instrumenta/kubeval/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-    KUBEVAL_VERSION=${KUBEVAL_VERSION:-0.9.2}
+    KUBEVAL_VERSION=${KUBEVAL_VERSION:0.10.0}
     curl -sLO "https://github.com/instrumenta/kubeval/releases/download/${KUBEVAL_VERSION}/kubeval-linux-amd64.tar.gz"
     tar -xf kubeval-linux-amd64.tar.gz
     chmod a+x kubeval
