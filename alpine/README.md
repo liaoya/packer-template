@@ -6,13 +6,12 @@
 
 ### Prepare
 
-Packer 1.1.3 is required.
-
 ```bash
-version=1.1.3
+version=$(curl -sL https://api.github.com/repos/hashicorp/packer/tags | jq .[0].name | tr -d '"v')
 curl -s -L -O "https://releases.hashicorp.com/packer/${version}/packer_${version}_linux_amd64.zip"
 unzip "packer_${version}_linux_amd64.zip"
 strip packer
+chmod a+x packer
 mv -f packer /usr/local/bin
 ```
 
@@ -28,7 +27,7 @@ export CURLOPT_SSL_VERIFYPEER=false
 
 More boot time is required for virtualbox-iso. Setup proper `http_proxy` if behind a firewall.
 
-if build at home, use `-var "iso_url=http://mirrors.ustc.edu.cn/alpine/v3.7.0/releases/x86_64/alpine-virt-3.7.0.0-x86_64.iso"`
+if build at home, use `-var "iso_url=http://mirrors.ustc.edu.cn/alpine/v3.10.0/releases/x86_64/alpine-virt-3.10.0.0-x86_64.iso"`
 
 ### Build qcow2 file and its corresponding vagrant box
 
@@ -37,7 +36,7 @@ Use the following command to build at Nanjing site, qcow2 file is under image/ a
 ```bash
 export http_proxy=
 rm -fr qemu/* image/* box/*
-packer build -only qemu -var "headless=false" -var-file conf/3.9.3.json alpine.json
+packer build -only qemu -var "headless=false" -var-file conf/3.10.0.json alpine.json
 ```
 
 ### Build virtualbox ova and its corresponding vagrant box
@@ -47,7 +46,7 @@ Use the following command to build at Nanjing site, ova file is under image/ and
 ```bash
 export http_proxy=
 rm -fr virtualbox/* image/* box/*
-packer build -only virtualbox-iso -var-file conf/3.9.0.json alpine.json
+packer build -only virtualbox-iso -var-file conf/3.10.0.json alpine.json
 ```
 
 The root is disabled via ssh from remote. Please use vagrant/vagrant for login.
@@ -56,21 +55,21 @@ The root is disabled via ssh from remote. Please use vagrant/vagrant for login.
 
 ```bash
 rm -f vagrant-box-def.json
-python ../gen-vagrant-def.py -n "alpine/3.7.0" -v "20171016" -p "virtualbox" -u "box/alpine-3.7.0/alpine-3.7.0-virtualbox-20171016.box"
-python ../gen-vagrant-def.py -n "alpine/3.7.0" -v "20171016" -p "libvirt" -u "box/alpine-3.7.0/alpine-3.7.0-libvirt-20171016.box"
+python ../gen-vagrant-def.py -n "alpine/3.10.0" -v "20190620" -p "virtualbox" -u "box/alpine-3.10.0/alpine-3.10.0-virtualbox-20171016.box"
+python ../gen-vagrant-def.py -n "alpine/3.10.0" -v "20190620" -p "libvirt" -u "box/alpine-3.10.0/alpine-3.10.0-libvirt-20171016.box"
 ```
 
 ### Import
 
 #### Import OVA
 
-You can use GUI to import ova file from Menu **File** -> **Import Applicance** or by the command `vboxmanage import alpine-3.7.0-virtualbox.ova`
+You can use GUI to import ova file from Menu **File** -> **Import Applicance** or by the command `vboxmanage import alpine-3.10.0-virtualbox.ova`
 
-If you want to give another name, e.g. alpine instead of alpine-3.7.0, use the following command, the demo is on Linux
+If you want to give another name, e.g. alpine instead of alpine-3.10.0, use the following command, the demo is on Linux
 
 ```bash
 mkdir -p "/home/tshen/VirtualBox VMs/alpine"
-vboxmanage import alpine-3.7.0-virtualbox.ova --vsys 0 --vmname alpine --unit 9 --disk "/home/tshen/VirtualBox VMs/alpine/alpine.vmdk"
+vboxmanage import alpine-3.10.0-virtualbox.ova --vsys 0 --vmname alpine --unit 9 --disk "/home/tshen/VirtualBox VMs/alpine/alpine.vmdk"
 ```
 
 #### Import qcow2
@@ -78,10 +77,11 @@ vboxmanage import alpine-3.7.0-virtualbox.ova --vsys 0 --vmname alpine --unit 9 
 Use `virtual-install` or **Virtual Manager**
 
 ```bash
-base_image=$(ls -1 /var/lib/libvirt/images/alpine-3*)
+base_image=$(find /var/lib/libvirt/images -iname 'alpinelinux-*.qcow2c' -printf "%T@ %p\n" | sort -r | head -1 | cut -d' ' -f2)
 vm_name=alpine
 virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
 virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}
+qemu-img create -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2 2G
 qemu-img create -b $base_image -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2
 
 ROOT_DIR=$(mktemp -d)
@@ -92,9 +92,9 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet static
-        address 10.113.4.30
+        address 10.113.20.21
         netmask 255.255.252.0
-        gateway 10.113.4.1
+        gateway 10.113.20.1
 EOF
 cp /etc/resolv.conf ${ROOT_DIR}/etc/
 echo ${vm_name} > ${ROOT_DIR}/etc/hostname
@@ -105,7 +105,7 @@ rm -fr ${vm_name}.tar ${ROOT_DIR}
 virt-install --name ${vm_name} --os-variant alpinelinux3.8 \
              --memory=128 --vcpus=1 --cpu host \
              --disk /var/lib/libvirt/images/${vm_name}.qcow2 \
-             --network bridge=ovsbr502,model=virtio,virtualport_type=openvswitch \
+             --network bridge=ovsbr0-506,model=virtio,virtualport_type=openvswitch \
              --noautoconsole --import
 ```
 

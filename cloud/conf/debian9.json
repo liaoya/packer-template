@@ -2,7 +2,6 @@
     "iso_checksum": "edcb7c5e1ee8b97131aa076415705d49d0906fcb8076be3ef46dc9a8b88f79b1",
     "iso_checksum_type": "sha256",
     "iso_name": "debian-9.8.2-20190303-openstack-amd64.qcow2",
-    "iso_path": "",
     "iso_url": "https://cdimage.debian.org/cdimage/openstack/9.8.2-20190303/debian-9.8.2-20190303-openstack-amd64.qcow2",
     "ubuntu_name": "stretch"
 }

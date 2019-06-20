@@ -3,6 +3,5 @@
     "iso_checksum": "d987209719fadaf81b8bff85c5d3590a1d3dac6357e4838fde8357086c49b5b4",
     "iso_checksum_type": "sha256",
     "iso_name": "Fedora-Cloud-Base-28-1.1.x86_64.qcow2",
-    "iso_path": "",
     "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/28/Cloud/x86_64/images/Fedora-Cloud-Base-28-1.1.x86_64.qcow2"
 }

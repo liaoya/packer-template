@@ -3,7 +3,6 @@
     "iso_checksum": "72b6ae7b4ed09a4dccd6e966e1b3ac69bd97da419de9760b410e837ba00b4e26",
     "iso_checksum_type": "sha256",
     "iso_name": "Fedora-Cloud-Base-30-1.2.x86_64.qcow2",
-    "iso_path": "",
     "iso_url": "http://download.fedoraproject.org/pub/fedora/linux/releases/30/Cloud/x86_64/images/Fedora-Cloud-Base-30-1.2.x86_64.qcow2"
 }
 

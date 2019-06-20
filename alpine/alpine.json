@@ -163,7 +163,7 @@
         "https_proxy": "{{env `https_proxy`}}",
         "headless": "true",
         "iso_name": "",
-        "iso_path": "",
+        "iso_path": "{{env `PACKER_CACHE_DIR`}}",
         "iso_url": "",
         "iso_checksum": "",
         "iso_checksum_type": "sha256",

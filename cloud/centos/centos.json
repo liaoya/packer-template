@@ -171,7 +171,7 @@
         "iso_checksum": "",
         "iso_checksum_type": "sha256",
         "iso_name": "",
-        "iso_path": "",
+        "iso_path": "{{env `PACKER_CACHE_DIR`}}",
         "iso_url": "",
         "memory": "2048",
         "no_proxy": "{{env `no_proxy`}}",

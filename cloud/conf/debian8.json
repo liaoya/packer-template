@@ -2,7 +2,6 @@
     "iso_checksum": "9a5e6fc845eff404942a116abce200b7f8e3b92e9c55313dadfca76850c75975",
     "iso_checksum_type": "sha256",
     "iso_name": "debian-8.11.5-20181005-openstack-amd64.qcow2",
-    "iso_path": "",
     "iso_url": "https://cdimage.debian.org/cdimage/openstack/archive/8.11.5-20181005/debian-8.11.5-20181005-openstack-amd64.qcow2",
     "ubuntu_name": "jessie"
 }
