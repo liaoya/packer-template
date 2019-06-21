@@ -7,6 +7,7 @@ set -eux
 apk update -q --no-progress
 apk add -q --no-progress bash curl file nano sshpass tmux
 apk add -q --no-progress ethtool vlan iproute2 net-tools iputils
+apk add -q --no-progress parted e2fsprogs-extra
 
 if [ "$PACKER_BUILDER_TYPE" = "qemu" ]; then
     apk add -q --no-progress qemu-guest-agent

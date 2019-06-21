@@ -79,14 +79,14 @@ Use `virtual-install` or **Virtual Manager**
 ```bash
 base_image=$(find /var/lib/libvirt/images -iname 'alpinelinux-*.qcow2c' -printf "%T@ %p\n" | sort -r | head -1 | cut -d' ' -f2)
 vm_name=alpine
-virsh list --name | grep -s -q ${vm_name} && virsh destroy ${vm_name}
-virsh list --inactive --name | grep ${vm_name} && virsh undefine --remove-all-storage ${vm_name}
-qemu-img create -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2 2G
-qemu-img create -b $base_image -f qcow2 /var/lib/libvirt/images/${vm_name}.qcow2
+virsh list --name | grep -s -q "${vm_name}" && virsh destroy "${vm_name}"
+virsh list --inactive --name | grep "${vm_name}" && virsh undefine --remove-all-storage "${vm_name}"
+qemu-img create -f qcow2 "/var/lib/libvirt/images/${vm_name}.qcow2" 2G
+qemu-img create -b "${base_image}" -f qcow2 "/var/lib/libvirt/images/${vm_name}.qcow2"
 
 ROOT_DIR=$(mktemp -d)
-mkdir -p ${ROOT_DIR}/etc/network
-cat <<EOF > ${ROOT_DIR}/etc/network/interfaces
+mkdir -p "${ROOT_DIR}/etc/network"
+cat <<EOF > "${ROOT_DIR}/etc/network/interfaces"
 auto lo
 iface lo inet loopback
 
@@ -96,15 +96,15 @@ iface eth0 inet static
         netmask 255.255.252.0
         gateway 10.113.20.1
 EOF
-cp /etc/resolv.conf ${ROOT_DIR}/etc/
-echo ${vm_name} > ${ROOT_DIR}/etc/hostname
-tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
-virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
-rm -fr ${vm_name}.tar ${ROOT_DIR}
+cp /etc/resolv.conf "${ROOT_DIR}/etc/"
+echo "${vm_name}" > "${ROOT_DIR}/etc/hostname"
+tar -cf "${vm_name}.tar" -C "${ROOT_DIR}/etc" .
+virt-tar-in -a "/var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar" /etc
+rm -fr "${vm_name}.tar" "${ROOT_DIR}"
 
-virt-install --name ${vm_name} --os-variant alpinelinux3.8 \
+virt-install --name "${vm_name}" --os-variant alpinelinux3.8 \
              --memory=128 --vcpus=1 --cpu host \
-             --disk /var/lib/libvirt/images/${vm_name}.qcow2 \
+             --disk "/var/lib/libvirt/images/${vm_name}.qcow2",bus=virtio \
              --network bridge=ovsbr0-506,model=virtio,virtualport_type=openvswitch \
              --noautoconsole --import
 ```
@@ -124,3 +124,9 @@ Modify `vagrant.json` change the following
 - **url** of **providers**, use correct the relative path
 
 Then run `vagrant box add --insecure vagrant.json`
+
+```bash
+size=$(sudo parted /dev/vda -m print | head -n 2 | tail -n 1 | cut -d ':' -f 2)
+echo -e "$size\n" | sudo parted ---pretend-input-tty /dev/vda resizepart 2
+sudo pvresize /dev/vda2
+```

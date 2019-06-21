@@ -27,6 +27,7 @@
                 "<enter>"
             ],
             "disk_size": "{{ user `disk_size` }}",
+            "disk_interface": "virtio",
             "headless": "{{ user `headless` }}",
             "iso_checksum": "{{ user `iso_checksum` }}",
             "iso_checksum_type": "{{ user `iso_checksum_type` }}",

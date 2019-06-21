@@ -5,11 +5,10 @@ set -eux
 [ -f /etc/profile.d/proxy.sh ] && . /etc/profile.d/proxy.sh
 apk update -q --no-progress
 apk add -q --no-progress sudo
-adduser vagrant wheel
 
-cat << EOF > /etc/sudoers
+cat << EOF >> /etc/sudoers
 Defaults exempt_group=wheel
-%wheel ALL=NOPASSWD:ALL
+%wheel ALL=(ALL) NOPASSWD: ALL
 
 Defaults    env_reset
 Defaults    env_keep =  "COLORS DISPLAY HOSTNAME HISTSIZE KDEDIR LS_COLORS"

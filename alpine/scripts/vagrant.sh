@@ -24,9 +24,11 @@ if ! getent group $SSH_GROUP; then
 fi
 
 if [ -n "$(command -v bash)" ]; then
-    adduser -D -G "$SSH_GROUP" -g "$SSH_USER" -G wheel -s "$(command -v bash)" $SSH_USER
+    adduser -D -G "$SSH_GROUP" -g "$SSH_USER" -s "$(command -v bash)" $SSH_USER
+    addgroup vagrant wheel
 else
-    adduser -D -G "$SSH_GROUP" -g "$SSH_USER" -G wheel "$SSH_USER"
+    adduser -D -G "$SSH_GROUP" -g "$SSH_USER" "$SSH_USER"
+    addgroup vagrant wheel
 fi
 echo "$SSH_USER:$SSH_PASS" | chpasswd
 

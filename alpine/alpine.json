@@ -25,6 +25,7 @@
                 "sh install.sh -p {{user `ssh_password`}} -P {{user `http_proxy`}} -r {{user `repository`}} -z {{user `timezone`}}<enter>"
             ],
             "disk_size": "{{ user `disk_size` }}",
+            "disk_interface": "virtio",
             "headless": "{{ user `headless` }}",
             "http_directory": "http",
             "iso_checksum": "{{user `iso_checksum`}}",

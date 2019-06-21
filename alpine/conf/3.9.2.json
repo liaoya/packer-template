@@ -1,6 +1,5 @@
 {
     "iso_name": "alpine-virt-3.9.2-x86_64.iso",
-    "iso_path": "",
     "iso_url": "http://dl-cdn.alpinelinux.org/alpine/v3.9/releases/x86_64/alpine-virt-3.9.2-x86_64.iso",
     "iso_checksum": "75a784aa16ab6311dbf597bdec86259183ba5e74633e7e9201300d848d457216",
     "iso_checksum_type": "sha256",
