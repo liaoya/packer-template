@@ -1,0 +1,7 @@
+{
+    "iso_checksum": "ef7fb49847aaec0012d9d848c7492a969531fe31e36fdd53d150762d40521b17",
+    "iso_checksum_type": "sha256",
+    "iso_name": "OracleLinux-R8-U0-Server-x86_64-dvd.iso",
+    "iso_url": "http://mirrors.kernel.org/oracle/OL8/u0/x86_64/OracleLinux-R8-U0-Server-x86_64-dvd.iso",
+    "os_dist": "oraclelinux80"
+}

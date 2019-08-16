@@ -1,8 +1,8 @@
 {
-    "iso_checksum": "3442cfc192ce9f837888912f1b2125e2e2e9b050d93499b2afafdef2a18a34e2",
+    "iso_checksum": "73dcd70d6f73d4e79b269647aa5d8fdc1e4c99ee9b5fe2194214ae8f556bfa82",
     "iso_checksum_type": "sha256",
     "iso_name": "ubuntu-18.04-minimal-cloudimg-amd64.img",
-    "iso_url": "https://cloud-images.ubuntu.com/minimal/releases/bionic/release-20190606.1/ubuntu-18.04-minimal-cloudimg-amd64.img",
+    "iso_url": "https://cloud-images.ubuntu.com/minimal/releases/bionic/release-20190731/ubuntu-18.04-minimal-cloudimg-amd64.img",
     "ubuntu_name": "bionic",
     "vm_name": "minimal"
 }

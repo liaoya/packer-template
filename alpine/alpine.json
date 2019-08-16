@@ -132,7 +132,7 @@
             ],
             "inline": [
                 "[ -d $DEST ] || mkdir -p $DEST",
-                "qemu-img convert -c -O qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME-{{user `version`}}.qcow2c"
+                "qemu-img convert -c -O qcow2 $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME-{{user `version`}}.qcow2c"
             ]
         },
         {

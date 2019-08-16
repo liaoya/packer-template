@@ -24,7 +24,7 @@ done
 find /var/log/ -name "*.log" -exec rm -f {} \;
 rm -fr /tmp/*
 
-passwd -l root
 passwd -d root
+passwd -l root
 sync
 shutdown -P now

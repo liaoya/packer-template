@@ -99,7 +99,7 @@ EOF
 cp /etc/resolv.conf "${ROOT_DIR}/etc/"
 echo "${vm_name}" > "${ROOT_DIR}/etc/hostname"
 tar -cf "${vm_name}.tar" -C "${ROOT_DIR}/etc" .
-virt-tar-in -a "/var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar" /etc
+virt-tar-in -a "/var/lib/libvirt/images/${vm_name}.qcow2" "${vm_name}.tar" /etc
 rm -fr "${vm_name}.tar" "${ROOT_DIR}"
 
 virt-install --name "${vm_name}" --os-variant alpinelinux3.8 \
@@ -129,4 +129,5 @@ Then run `vagrant box add --insecure vagrant.json`
 size=$(sudo parted /dev/vda -m print | head -n 2 | tail -n 1 | cut -d ':' -f 2)
 echo -e "$size\n" | sudo parted ---pretend-input-tty /dev/vda resizepart 2
 sudo pvresize /dev/vda2
+/dev/vg0/lv_root
 ```

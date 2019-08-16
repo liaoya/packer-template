@@ -3,7 +3,7 @@
 echo "==> Install Oracle Linux common packages"
 
 if yum repolist all | grep -s -q "^ius/" && [[ -n ${CUSTOM_IUS} && "${CUSTOM_IUS}" == "true" ]]; then
-    yum --enablerepo=ius install -y -q git2u tmux2u yum-plugin-replace
+    yum --enablerepo=ius install -y -q git222 tmux2 yum-plugin-replace
 else
     yum -y -q install git
 fi

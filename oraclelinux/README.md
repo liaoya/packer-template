@@ -19,11 +19,15 @@ export CURLOPT_SSL_VERIFYPEER=false
 ```
 
 ```bash
-packer build -var "headless=false" -var "os_dist=oraclelinux76" -var-file conf/ol76.json ol7-qemu.json
+packer build -var "headless=false" -var-file conf/ol76.json ol7-qemu.json
 ```
 
 ```bash
-packer build -var "headless=false" -var "custom_group=nncentral" -var "custom_user=nncentral" -var "os_dist=ol76" -var "vm_name=nncentral" -var-file conf/ol76.json ol7-qemu.json
+packer build -only=qemu -var "headless=true" -var-file conf/ol80.json ol8-qemu.json
+```
+
+```bash
+packer build -var "headless=false" -var "custom_group=nncentral" -var "custom_user=nncentral" -var "vm_name=nncentral" -var-file conf/ol76.json ol7-qemu.json
 ```
 
 Change the following to use proxy
@@ -33,6 +37,7 @@ repo --name=ol7_latest --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/late
 repo --name=ol7_optional_latest --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/optional/latest/x86_64/ --cost=100 --proxy=http://10.113.69.101:5900
 repo --name=ol7_addons --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/addons/x86_64/ --cost=100 --proxy=http://10.113.69.101:5900
 repo --name=ol7_UEKR5 --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/UEKR5/x86_64/ --cost=100 --proxy=http://10.113.69.101:5900
+repo --name=ol7_developer_EPEL --baseurl=http://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/x86_64/ --cost=100 --proxy=http://10.113.69.101:5900
 ```
 
 ## Explaination
