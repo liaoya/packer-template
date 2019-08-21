@@ -44,6 +44,7 @@ The following command can help to setup a new virtual machine
 ```bash
 base_image=$(find /var/lib/libvirt/images -iname 'bionic-develop-*.qcow2c' -printf "%T@ %p\n" | sort -r | head -1 | cut -d' ' -f2)
 vm_name=bionic-develop
+#vm_name=$(basename -s .sh "${BASH_SOURCE[0]}")
 virsh list --name | grep -s -q "${vm_name}" && virsh destroy "${vm_name}"
 virsh list --inactive --name | grep "${vm_name}" && virsh undefine --remove-all-storage "${vm_name}"
 qemu-img convert -f qcow2 -O qcow2 "${base_image}" "/var/lib/libvirt/images/${vm_name}.qcow2"
@@ -83,6 +84,7 @@ virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host --os-variant 
 On CentOS, can't call virt-resize since its `e2fsck` is too old. Run `parted`, `cdisk` and `resize2fs` to use the whole disk.
 
 ```bash
+echo -e "Fix\n" | sudo parted ---pretend-input-tty /dev/vda -m print
 size=$(echo -e "Yes\n" | sudo parted /dev/vda -m print | head -n 2 | tail -n 1 | cut -d ':' -f 2)
 echo -e "Yes\n$size\n" | sudo parted ---pretend-input-tty /dev/vda resizepart 1
 sudo resize2fs /dev/vda1
