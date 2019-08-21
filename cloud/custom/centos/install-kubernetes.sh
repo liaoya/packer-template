@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-[[ -n ${CUSTOM_KUBERNETES} && "${CUSTOM_KUBERNETES}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_KUBERNETES} && "${CUSTOM_KUBERNETES^^}" == "TRUE" ]] || exit 0
 echo "==> Install CentOS Kubernetes packages"
 
 cat <<EOF > /etc/sysctl.d/k8s.conf

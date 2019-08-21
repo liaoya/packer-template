@@ -1,7 +1,11 @@
 #!/bin/bash
 
-[[ -n ${CUSTOM_MICROK8S} && "${CUSTOM_MICROK8S}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_MICROK8S} && "${CUSTOM_MICROK8S^^}" == "TRUE" ]] || exit 0
 
 if [[ $(command -v snap) ]]; then
-    snap install microk8s --classic
+    if [[ -n ${CUSTOM_MICROK8S_VERSION} ]]; then
+        snap install --classic --channel="${CUSTOM_MICROK8S_VERSION}" microk8s 
+    else
+        snap install --classic microk8s 
+    fi
 fi

@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-[[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER^^}" == "TRUE" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE^^}" == "TRUE" ]] || exit 0
 
 yum install -y -q bridge-utils
 

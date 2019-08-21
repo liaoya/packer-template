@@ -22,6 +22,8 @@ packer build -only qemu -var "vm_name=libvirt" -var "custom_libvirt=true" -var-f
 
 packer build -only qemu -var "vm_name=microk8s" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
+packer build -only qemu -var "vm_name=microk8s-1.10" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_microk8s_version=1.10/stable" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+
 packer build -only qemu -var "vm_name=minikube" -var "custom_docker=true" -var "custom_minikube=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 ```
 
@@ -60,7 +62,7 @@ network:
   ethernets:
     eth0:
       dhcp4: no
-      addresses: [10.113.20.21/22]
+      addresses: [10.113.20.28/22]
       gateway4: 10.113.20.1
       nameservers:
         addresses: [10.182.244.34]
@@ -72,7 +74,10 @@ tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
 virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
 rm -fr ${vm_name}.tar ${ROOT_DIR}
 
-virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant ubuntu18.04 --network bridge=ovsbr0-506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host --os-variant ubuntu18.04 \
+             --disk /var/lib/libvirt/images/${vm_name}.qcow2  \
+             --network bridge=ovs-bond0-506,model=virtio,virtualport_type=openvswitch \
+             --noautoconsole --import
 ```
 
 On CentOS, can't call virt-resize since its `e2fsck` is too old. Run `parted`, `cdisk` and `resize2fs` to use the whole disk.

@@ -1,7 +1,7 @@
 #!/bin/bash
 #shellcheck disable=SC1090,SC1091
 
-[[ -n ${CUSTOM_POWERLINE} && "${CUSTOM_POWERLINE}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_POWERLINE} && "${CUSTOM_POWERLINE^^}" == "TRUE" ]] || exit 0
 
 if [[ ! -f /tmp/get-pip.py ]]; then
     curl -sL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py

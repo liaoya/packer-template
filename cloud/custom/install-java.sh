@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-[[ -n ${CUSTOM_JAVA} && "${CUSTOM_JAVA}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_JAVA} && "${CUSTOM_JAVA^^}" == "TRUE" ]] || exit 0
 
 echo "==> Install Jabba"
 export JABBA_HOME=/opt/jabba

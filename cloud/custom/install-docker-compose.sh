@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER}" == "true" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE}" == "true" ]]; then
+if [[ -n ${CUSTOM_DOCKER} && "${CUSTOM_DOCKER^^}" == "TRUE" ]] || [[ -n ${CUSTOM_DOCKER_CE} && "${CUSTOM_DOCKER_CE^^}" == "TRUE" ]]; then
     if [[ -z $(command -v docker) ]]; then
         echo "Can't find docker installation"
         exit 0

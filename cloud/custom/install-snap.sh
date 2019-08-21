@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[[ -n ${CUSTOM_SNAP} && "${CUSTOM_SNAP}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_SNAP} && "${CUSTOM_SNAP^^}" == "TRUE" ]] || exit 0
 
 if [[ ! $(command -v snap) ]]; then
     if [[ ! $(command -v dnf) ]]; then

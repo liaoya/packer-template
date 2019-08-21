@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-[[ -n ${CUSTOM_NVM} && ${CUSTOM_NVM} == true ]] || exit 0
+[[ -n ${CUSTOM_NVM} && ${CUSTOM_NVM^^} == TRUE ]] || exit 0
 echo "==> Install nvm"
 
 NVM_VERSION=$(curl -sL "https://api.github.com/repos/creationix/nvm/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')

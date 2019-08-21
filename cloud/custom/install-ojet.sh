@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 #shellcheck disable=SC1090
 
-[[ -n ${CUSTOM_OJET} && ${CUSTOM_OJET} == true ]] || exit 0
+[[ -n ${CUSTOM_OJET} && ${CUSTOM_OJET^^} == TRUE ]] || exit 0
 echo "==> Install OJet"
 
 NVM_DIR=${NVM_DIR:-/opt/nvm}

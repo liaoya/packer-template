@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-[[ -n ${CUSTOM_LIBVIRT} && "${CUSTOM_LIBVIRT}" == "true" ]] || exit 0
+[[ -n ${CUSTOM_LIBVIRT} && "${CUSTOM_LIBVIRT^^}" == "TRUE" ]] || exit 0
 echo '==> Install libvirt for CentOS'
 
 yum install -y -q libvirt libvirt-daemon-kvm qemu-kvm virt-install virt-top libvirt-python
