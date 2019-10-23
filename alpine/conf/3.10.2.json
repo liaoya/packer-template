@@ -1,0 +1,8 @@
+{
+    "iso_name": "alpine-virt-3.10.2-x86_64.iso",
+    "iso_url": "http://dl-cdn.alpinelinux.org/alpine/v3.10/releases/x86_64/alpine-virt-3.10.2-x86_64.iso",
+    "iso_checksum": "06eab9a4d3ce28ce31d413b78b6ff94285e432179b6a6cba711e6c6653667567",
+    "iso_checksum_type": "sha256",
+    "repository": "http://dl-cdn.alpinelinux.org/alpine/v3.10/main"
+  }
+  
