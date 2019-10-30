@@ -3,7 +3,7 @@
       {
         "accelerator": "kvm",
         "boot_command": [
-          "<up><wait><tab><wait> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/ol8-kvm-ks.cfg<enter><wait>"
+          "<up><wait><tab><wait> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/centos8-qemu.ks<enter><wait>"
         ],
         "boot_wait": "6s",
         "disk_compression": "{{user `disk_compression`}}",
@@ -35,35 +35,7 @@
         "shutdown_command": "",
         "type": "qemu",
         "vm_name": "{{user `vm_name`}}.qcow2"
-      },
-  
-      {
-        "boot_command": [
-          "<up><wait><tab><wait> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/ol8-kvm-ks.cfg<enter><wait>"
-        ],
-        "boot_wait": "6s",
-        "disk_size": "{{user `disk_size`}}",
-        "headless": "{{user `headless`}}",
-        "http_directory": "http",
-        "http_port_min": 10082,
-        "http_port_max": 10089,
-        "iso_checksum": "{{user `iso_checksum`}}",
-        "iso_checksum_type": "{{user `iso_checksum_type`}}",
-        "iso_urls": [
-          "{{user `iso_path`}}/{{user `iso_name`}}",
-          "{{user `iso_url`}}"
-        ],
-        "network": "nat",
-        "output_directory": "vmware/{{user `os_dist`}}-{{user `vm_name`}}",
-        "ssh_username": "{{user `ssh_username`}}",
-        "ssh_password": "{{user `ssh_password`}}",
-        "ssh_port": 22,
-        "ssh_wait_timeout": "1800s",
-        "shutdown_command": "",
-        "type": "vmware-iso",
-        "vm_name": "{{user `vm_name`}}"
       }
-  
     ],
   
     "provisioners": [
@@ -106,8 +78,8 @@
     "variables": {
       "cpus": "2",
       "custom_group": "",
-      "custom_password": "oracle",
-      "custom_user": "oracle",
+      "custom_password": "centos",
+      "custom_user": "centos",
       "disk_compression": "true",
       "disk_size": "8192",
       "headless": "true",
@@ -117,13 +89,13 @@
       "iso_path": "{{env `HOME`}}/.cache/packer",
       "iso_url": "",
       "memory": "4096",
-      "os_dist": "oraclelinux",
+      "os_dist": "centos",
       "shutdown_command": "shutdown -P now",
       "sparsify": "true",
       "ssh_username": "root",
-      "ssh_password": "oracle",
+      "ssh_password": "centos",
       "version": "{{isotime \"20060102\"}}",
-      "vm_name": "oraclelinux8"
+      "vm_name": "centos8"
     }
   }
   

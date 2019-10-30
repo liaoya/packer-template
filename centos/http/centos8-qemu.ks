@@ -5,15 +5,12 @@ install
 # new format:
 keyboard --vckeymap=us --xlayouts='us'
 # Root password
-rootpw --plaintext oracle
+rootpw --plaintext centos
 # System language
 lang en_US
-#repo --name=ol8_addons --baseurl=http://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/x64_86/ --cost=100
-#repo --name=ol8_appstream --baseurl=http://yum.oracle.com/repo/OracleLinux/OL8/appstream/x64_86/ --cost=100
-#repo --name=ol8_baseos_latest --baseurl=http://yum.oracle.com/repo/OracleLinux/OL8/addons/x64_86/ --cost=100
 
 # System authorization information
-auth  --useshadow  --passalgo=sha512
+auth --useshadow  --passalgo=sha512
 # Use CDROM installation media
 cdrom
 # Use graphical install
@@ -65,5 +62,14 @@ part / --fstype="xfs" --grow --size=1
 -iwl6000g2b-firmware
 -iwl6050-firmware
 -iwl7260-firmware
+
+%end
+%addon com_redhat_kdump --disable --reserve-mb='auto'
+
+%end
+
+%post
+
+# I must make it work again
 
 %end
