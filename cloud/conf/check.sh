@@ -16,4 +16,27 @@ function check_centos7() {
     fi
 }
 
+function check_ubuntu_image() {
+    local json_file url_prefix image_name
+    json_file=$1; shift 1
+    url_prefix=$1; shift 1
+    image_name=$1; shift 1
+    release_date=$(curl -sL "${url_prefix}/release/unpacked/build-info.txt" | grep "serial=" | cut -d "=" -f2)
+    if [[ $(jq -r '.iso_url' "${json_file}") != "${url_prefix}/release-${release_date}/${image_name}" ]]; then
+        sha_value=$(curl -sL "${url_prefix}/release-${release_date}/SHA256SUMS" | grep "${image_name}" | cut -d' ' -f1)
+        eval "jq '.iso_url=\"${url_prefix}/release-${release_date}/${image_name}\"' ${json_file}" | sponge "${json_file}"
+        eval "jq '.iso_checksum=\"${sha_value}\"' ${json_file}" | sponge "${json_file}"
+    fi
+}
+
+function check_ubuntu() {
+    check_ubuntu_image "${THIS_DIR}/ubuntu-1804.json" https://cloud-images.ubuntu.com/releases/bionic ubuntu-18.04-server-cloudimg-amd64.img
+    check_ubuntu_image "${THIS_DIR}/ubuntu-1804-i386.json" https://cloud-images.ubuntu.com/releases/bionic ubuntu-18.04-server-cloudimg-i386.img
+    check_ubuntu_image "${THIS_DIR}/ubuntu-minimal-1804.json" https://cloud-images.ubuntu.com/minimal/releases/bionic ubuntu-18.04-minimal-cloudimg-amd64.img
+
+    check_ubuntu_image "${THIS_DIR}/ubuntu-1604.json" https://cloud-images.ubuntu.com/releases/xenial ubuntu-16.04-server-cloudimg-amd64-disk1.img
+    check_ubuntu_image "${THIS_DIR}/ubuntu-minimal-1604.json" https://cloud-images.ubuntu.com/minimal/releases/xenial ubuntu-16.04-minimal-cloudimg-amd64-disk1.img
+}
+
+check_ubuntu
 check_centos7
