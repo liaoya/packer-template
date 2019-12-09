@@ -19,7 +19,7 @@
         "ssh_username": "{{user `ssh_username`}}",
         "ssh_password": "{{user `ssh_password`}}",
         "ssh_port": 22,
-        "ssh_wait_timeout": "1200s",
+        "ssh_timeout": "1200s",
         "boot_wait": "6s",
         "shutdown_command": "{{user `shutdown_command`}}",
         "vboxmanage": [

@@ -39,7 +39,7 @@
             "ssh_password": "{{user `ssh_password`}}",
             "ssh_username": "{{user `ssh_username`}}",
             "ssh_timeout": "{{user `ssh_timeout`}}",
-            "ssh_wait_timeout": "{{user `ssh_timeout`}}"
+            "ssh_timeout": "{{user `ssh_timeout`}}"
         },
         {
             "type": "virtualbox-iso",
@@ -93,7 +93,7 @@
             "ssh_password": "{{user `ssh_password`}}",
             "ssh_username": "{{user `ssh_username`}}",
             "ssh_timeout": "{{user `ssh_timeout`}}",
-            "ssh_wait_timeout": "{{user `ssh_timeout`}}"
+            "ssh_timeout": "{{user `ssh_timeout`}}"
         }
     ],
     "provisioners": [

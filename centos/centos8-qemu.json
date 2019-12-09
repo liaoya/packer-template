@@ -31,7 +31,7 @@
         "ssh_username": "{{user `ssh_username`}}",
         "ssh_password": "{{user `ssh_password`}}",
         "ssh_port": 22,
-        "ssh_wait_timeout": "1800s",
+        "ssh_timeout": "1800s",
         "shutdown_command": "",
         "type": "qemu",
         "vm_name": "{{user `vm_name`}}.qcow2"
