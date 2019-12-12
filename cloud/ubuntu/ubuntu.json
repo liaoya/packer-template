@@ -146,8 +146,8 @@
     ],
 
     "variables": {
-        "apt_mirror_server": "{{en `apt_mirror_server`}}",
-        "apt_mirror_path": "{{en `apt_mirror_server`}}",
+        "apt_mirror_server": "{{env `apt_mirror_server`}}",
+        "apt_mirror_path": "{{env `apt_mirror_server`}}",
         "apt_proxy": "{{env `apt_proxy`}}",
         "cpus": "2",
         "custom_asdf": "false",
@@ -170,7 +170,7 @@
         "disk_size": "16384",
         "headless": "true",
         "http_proxy": "{{env `http_proxy`}}",
-        "https_proxy": "{{env `https_proxy`}}",        
+        "https_proxy": "{{env `https_proxy`}}",
         "install_vagrant_key": "true",
         "iso_checksum": "",
         "iso_checksum_type": "sha256",

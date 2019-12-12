@@ -169,6 +169,7 @@
         "ssh_username": "vagrant",
         "ssh_timeout": "15m",
         "version": "{{isotime \"20060102\"}}",
-        "vm_name": "base"
+        "vm_name": "base",
+        "yum_proxy":""
     }
 }
