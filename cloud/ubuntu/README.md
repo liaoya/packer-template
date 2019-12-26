@@ -24,6 +24,10 @@ packer build -only qemu -var "vm_name=microk8s" -var "custom_docker=true" -var "
 
 packer build -only qemu -var "vm_name=microk8s-1.10" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_microk8s_version=1.10/stable" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
+packer build -only qemu -var "vm_name=microk8s-1.15" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_microk8s_version=1.15/stable" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+
+packer build -only qemu -var "vm_name=microk8s" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+
 packer build -only qemu -var "vm_name=minikube" -var "custom_docker=true" -var "custom_minikube=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 ```
 
