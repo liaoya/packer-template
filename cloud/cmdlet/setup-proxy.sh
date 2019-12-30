@@ -79,10 +79,10 @@ proxy_off() {
     unset ftp_proxy http_proxy https_proxy no_proxy FTP_PROXY HTTP_PROXY HTTPS_PROXY NO_PROXY 
 }
 setup_microk8s_noproxy() {
-    if [[ -n ${no_proxy} ]]; then
+    if [[ -n \${no_proxy} && ! \${no_proxy} =~ '10.152.183.1' ]]; then
         printf -v microk8s_no_proxy '%s,' 10.152.183.{1..255}
-        export no_proxy="$no_proxy,${microk8s_no_proxy%,}"
-        export NO_PROXY=$no_proxy
+        export no_proxy="\$no_proxy,\${microk8s_no_proxy%,}"
+        export NO_PROXY=\$no_proxy
     fi
 }
 EOF

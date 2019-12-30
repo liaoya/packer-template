@@ -8,8 +8,8 @@ grep -s -q -w "swapfile" /etc/fstab && { echo "==> Disable swapfile"; swapoff /s
 systemctl stop apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer || true
 systemctl disable apt-daily-upgrade.service apt-daily.service apt-daily-upgrade.timer apt-daily.timer || true
 
-apt-get install -y -qq -o "Dpkg::Use-Pty=0" zip unzip bzip2 xz-utils screen httpie fish jq sshpass tmux moreutils >/dev/null
-if [[ ! ${VM_NAME} == *"minimal"* ]]; then
+apt-get install -y -qq -o "Dpkg::Use-Pty=0" zip unzip bzip2 xz-utils httpie fish jq sshpass tmux moreutils >/dev/null
+if [[ ! ${VM_NAME} == *"minimal"* || ! ${VM_NAME} =~ "microk8s" ]]; then
     apt-get install -y -qq -o "Dpkg::Use-Pty=0" git tig >/dev/null
 fi
 
