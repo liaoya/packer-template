@@ -16,7 +16,7 @@ packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/proxy.jso
 
 packer build -only qemu -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-minimal-1804.json ubuntu.json
 
-packer build -only qemu -var "vm_name=develop"  -var "custom_asdf=true" -var "custom_docker=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+packer build -only qemu -var "vm_name=develop"  -var "custom_asdf=true" -var "custom_docker=true" -var "custom_docker_compose=true" -var "custom_java=true" -var "custom_nvm=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
 packer build -only qemu -var "vm_name=libvirt" -var "custom_libvirt=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-minimal-1804.json ubuntu.json
 
