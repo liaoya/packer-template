@@ -55,7 +55,6 @@ if [[ -n ${DOCKER_MIRROR_SERVER} ]]; then
     DOCKER_MIRROR_SERVER_IP=$(echo "${DOCKER_MIRROR_SERVER}" | sed -e 's%http://%%' -e 's%https://%%')
     cat <<EOF > /etc/docker/daemon.json
 {
-    "disable-legacy-registry": true,
     "insecure-registries": ["${DOCKER_MIRROR_SERVER_IP}"],
     "registry-mirrors": ["${DOCKER_MIRROR_SERVER}"]
 }
@@ -66,8 +65,9 @@ EOF
             sed -i "s/NO_PROXY=/&${DOCKER_MIRROR_SERVER_IP},/" /etc/systemd/system/docker.service.d/http-proxy.conf
         fi
     fi
-    if [[ $(command -v docker) ]]; then
-        echo "==> Restart docker daemon"
-        systemctl daemon-reload && systemctl restart docker
-    fi
+fi
+
+if [[ $(command -v docker) ]]; then
+    echo "==> Restart docker daemon"
+    systemctl daemon-reload && systemctl restart docker
 fi

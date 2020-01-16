@@ -61,8 +61,6 @@
         {
             "environment_vars": [
                 "CUSTOM_ASDF={{user `custom_asdf`}}",
-                "CUSTOM_DOCKER={{user `custom_docker`}}",
-                "CUSTOM_DOCKER_CE={{user `custom_docker_ce`}}",
                 "CUSTOM_IUS={{user `custom_ius`}}",
                 "CUSTOM_JAVA={{user `custom_java`}}",
                 "CUSTOM_KUBERNETES={{user `custom_kubernetes`}}",
@@ -96,14 +94,10 @@
                 "../custom/clean-proxy.sh",
                 "../custom/setup-proxy.sh",
                 "../custom/setup-repos.sh",
-                "../custom/centos/install-common.sh",
+                "../custom/centos8/install-common.sh",
                 "../custom/install-snap.sh",
                 "../custom/install-asdf.sh",
-                "../custom/centos/install-docker.sh",
-                "../custom/install-docker-compose.sh",
                 "../custom/install-java.sh",
-                "../custom/centos/install-kubernetes.sh",
-                "../custom/centos/install-libvirt.sh",
                 "../custom/install-microk8s.sh",
                 "../custom/install-minikube.sh",
                 "../custom/install-nvm.sh",
@@ -112,7 +106,7 @@
                 "../custom/setup-config.sh",
                 "../custom/clean-proxy.sh",              
                 "../custom/motd.sh",
-                "../custom/centos/cleanup.sh",
+                "../custom/centos8/cleanup.sh",
                 "../custom/cleanup.sh"
             ],
             "type": "shell"

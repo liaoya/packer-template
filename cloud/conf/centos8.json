@@ -1,0 +1,7 @@
+{
+    "centos_name": "centos8",
+    "iso_checksum": "e2cf1081645b1089f574918fb808b32d247169ec4ec1a13bca9e14a74df6530e",
+    "iso_checksum_type": "sha256",
+    "iso_name": "CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2",
+    "iso_url": "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.1.1911-20200113.3.x86_64.qcow2"
+}
