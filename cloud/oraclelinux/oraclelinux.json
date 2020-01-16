@@ -61,8 +61,9 @@
         {
             "environment_vars": [
                 "CUSTOM_ASDF={{user `custom_asdf`}}",
-                "CUSTOM_DOCKER_CE={{user `custom_docker_ce`}}",
                 "CUSTOM_DOCKER={{user `custom_docker`}}",
+                "CUSTOM_DOCKER_CE={{user `custom_docker_ce`}}",
+                "CUSTOM_DOCKER_COMPOSE={{user `custom_docker_compose`}}",
                 "CUSTOM_IUS={{user `custom_ius`}}",
                 "CUSTOM_JAVA={{user `custom_java`}}",
                 "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
@@ -139,8 +140,9 @@
     "variables": {
         "cpus": "2",
         "custom_asdf": "false",
-        "custom_docker_ce": "false",
         "custom_docker": "false",
+        "custom_docker_ce": "false",
+        "custom_docker_compose": "false",
         "custom_ius": "true",
         "custom_java": "false",
         "custom_libvirt": "false",

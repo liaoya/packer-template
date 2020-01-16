@@ -46,10 +46,10 @@ setup_ppa() {
     if [[ -n ${http_proxy} ]]; then
         ppa_key=$1; shift
         if [[ ${UID} -eq 0 ]]; then
-            apt-key adv --keyserver-options http-proxy="$http_proxy" --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys "${ppa_key}"
+            apt-key adv --keyserver-options http-proxy="${http_proxy}" --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys "${ppa_key}"
             add-apt-repository -y -u "${ppa_repo}"
         else
-            sudo apt-key adv --keyserver-options http-proxy="$http_proxy" --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys "${ppa_key}"
+            sudo apt-key adv --keyserver-options http-proxy="${http_proxy}" --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys "${ppa_key}"
             sudo add-apt-repository -y -u "${ppa_repo}"
         fi
     else
@@ -72,6 +72,7 @@ if [[ -d /etc/apt ]]; then
         apt-get install -y -qq -o "Dpkg::Use-Pty=0" software-properties-common apt-utils >/dev/null
     fi
     setup_ppa ppa:kelleyk/emacs 873503A090750CDAEB0754D93FF0E01EEAAFC9CD
+    setup_ppa ppa:jonathonf/vim 4AB0F789CBA31744CC7DA76A8CF63AD3F06FC659
     setup_ppa ppa:fish-shell/release-3 59FDA1CE1B84B3FAD89366C027557F056DC33CA5
     setup_ppa ppa:kimura-o/ppa-tig 475470022784FBF6731C6CEC262F93255137610
     setup_ppa ppa:lazygit-team/release 41468D9A516AB58268042C6768CCF87596E97291
@@ -188,15 +189,12 @@ if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
     fi
     if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager --disable ius > /dev/null; fi
 
-    if ! yum repolist all | grep -s -q "shells_fish_release_3"; then
-        yum-config-manager --add-repo "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${RELEASE}/shells:fish:release:3.repo"
-    fi
-    if ! yum repolist all | grep -s -q "outman-emacs/"; then
-        curl -sL "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" -o /etc/yum.repos.d/emacs-copr.repo
-    fi
-    if ! yum repolist all | grep -s -q "carlwgeorge-ripgrep/"; then
-        curl -sL "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${RELEASE}/carlwgeorge-ripgrep-epel-${RELEASE}.repo" -o /etc/yum.repos.d/ripgrep.repo
-    fi
+    for repo_url in "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${RELEASE}/shells:fish:release:3.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${RELEASE}/carlwgeorge-ripgrep-epel-${RELEASE}.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/hnakamur/vim/repo/epel-${RELEASE}/hnakamur-vim-epel-${RELEASE}.repo"; do
+        yum-config-manager --add-repo "${repo_url}"
+    done
 fi
 
 [[ -n ${DOCKER_MIRROR_SERVER} ]] && cat <<EOF >> /etc/docker/daemon.json

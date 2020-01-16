@@ -89,7 +89,7 @@
       "iso_path": "{{env `HOME`}}/.cache/packer",
       "iso_url": "",
       "memory": "4096",
-      "os_dist": "centos",
+      "os_dist": "centos8",
       "shutdown_command": "shutdown -P now",
       "sparsify": "true",
       "ssh_username": "root",

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-yum -C -y remove linux-firmware
+dnf -C -y remove linux-firmware
 
 # Remove firewalld; it is required to be present for install/image building.
 # but we dont ship it in cloud
-yum -C -y remove firewalld --setopt="clean_requirements_on_remove=1"
+dnf -C -y remove firewalld --setopt="clean_requirements_on_remove=1"
 
 # Clean up network interface persistence
 rm -f /etc/udev/rules.d/70*
@@ -30,7 +30,7 @@ IPV6INIT="no"
 PERSISTENT_DHCLIENT="1"
 EOF
 
-yum clean all
+dnf clean all
 
 echo "Fixing SELinux contexts."
 touch /var/log/cron

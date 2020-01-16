@@ -28,6 +28,7 @@ if [[ -z $(command -v add-apt-repository) ]]; then
     apt-get install -y -qq -o "Dpkg::Use-Pty=0" software-properties-common apt-utils >/dev/null
 fi
 setup_ppa ppa:kelleyk/emacs 873503A090750CDAEB0754D93FF0E01EEAAFC9CD
+setup_ppa ppa:jonathonf/vim 4AB0F789CBA31744CC7DA76A8CF63AD3F06FC659
 setup_ppa ppa:fish-shell/release-3 59FDA1CE1B84B3FAD89366C027557F056DC33CA5
 setup_ppa ppa:kimura-o/ppa-tig 475470022784FBF6731C6CEC262F93255137610
 # setup_ppa ppa:lazygit-team/release 41468D9A516AB58268042C6768CCF87596E97291
