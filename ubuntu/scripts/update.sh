@@ -5,6 +5,7 @@ echo "==> Disabling the release upgrader"
 sed -i.bak 's/^Prompt=.*$/Prompt=never/' /etc/update-manager/release-upgrades
 
 echo "==> Checking version of Ubuntu"
+#shellcheck disable=SC1091
 . /etc/lsb-release
 
 if [[ $DISTRIB_RELEASE == 16.04 || $DISTRIB_RELEASE == 16.10 ]]; then

@@ -1,7 +1,7 @@
 {
-  "iso_checksum": "a720c34066dce5521134c0efa63d524c53f40c68db24cf161d759356a24aad0e",
+  "iso_checksum": "ae2c9391b71ad752d28973803b04eca29ec19572bc0809e71168ac779b1aa0d1",
   "iso_checksum_type": "sha256",
   "iso_name": "ubuntu-18.04-server-cloudimg-amd64.img",
-  "iso_url": "https://cloud-images.ubuntu.com/releases/bionic/release-20200107/ubuntu-18.04-server-cloudimg-amd64.img",
+  "iso_url": "https://cloud-images.ubuntu.com/releases/bionic/release-20200129.1/ubuntu-18.04-server-cloudimg-amd64.img",
   "ubuntu_name": "bionic"
 }

@@ -43,6 +43,7 @@ fi
 # https://askubuntu.com/questions/53146/how-do-i-get-add-apt-repository-to-work-through-a-proxy
 setup_ppa() {
     ppa_repo=$1; shift
+#shellcheck disable=SC2154
     if [[ -n ${http_proxy} ]]; then
         ppa_key=$1; shift
         if [[ ${UID} -eq 0 ]]; then

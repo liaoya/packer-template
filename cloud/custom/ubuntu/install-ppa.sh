@@ -5,6 +5,7 @@
 export APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=yes
 setup_ppa() {
     ppa_repo=$1; shift
+#shellcheck disable=SC2154
     if [[ -n ${http_proxy} ]]; then
         ppa_key=$1; shift
         if [[ ${UID} -eq 0 ]]; then
