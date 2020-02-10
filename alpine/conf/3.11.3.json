@@ -1,0 +1,8 @@
+{
+    "iso_name": "alpine-virt-3.11.3-x86_64.iso",
+    "iso_url": "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-virt-3.11.3-x86_64.iso",
+    "iso_checksum": "bf82e95b3fa0a4e35391202b60631bb687c935688bc09d4452159d92bf3d0172",
+    "iso_checksum_type": "sha256",
+    "repository": "http://dl-cdn.alpinelinux.org/alpine/v3.11/main",
+    "vm_name": "alpine-3.11.3"
+}

@@ -35,6 +35,12 @@ sed -i "/^rysnc_proxy/Id" /etc/environment
 [ -f /etc/apt/apt.conf.d/01proxy ] && rm -f /etc/apt/apt.conf.d/01proxy
 [ -f /etc/systemd/system/docker.service.d/http-proxy.conf ] && rm -f /etc/systemd/system/docker.service.d/http-proxy.conf
 [ -f /etc/docker/daemon.json ] && rm -f /etc/docker/daemon.json
+if [[ -f /var/snap/microk8s/current/args/containerd-env ]]; then
+    rm -f /var/snap/microk8s/current/args/containerd-env
+fi
+if [[ -f /etc/systemd/system/snapd.service.d/override.conf ]]; then
+    sed -i /etc/systemd/system/snapd.service.d/override.conf
+fi
 
 http_proxy="http://www-proxy-tyo.jp.oracle.com:80"
 no_proxy="localhost,127.0.0.1,$(hostname -f),$(hostname -I | cut -d " " -f 1),10.113.69.40,10.113.69.79,10.113.69.101"

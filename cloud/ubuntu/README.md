@@ -26,13 +26,13 @@ packer build -only qemu -var "vm_name=microk8s-1.10" -var "custom_docker=true" -
 
 packer build -only qemu -var "vm_name=microk8s-1.15" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_microk8s_version=1.15/stable" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 
-packer build -only qemu -var "vm_name=microk8s" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
+packer build -only qemu -var "vm_name=microk8s" -var "custom_docker=true" -var "custom_microk8s=true" -var "custom_snap=true" -var "ssh_timeout=30m" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-minimal-1804.json ubuntu.json
 
 packer build -only qemu -var "vm_name=minikube" -var "custom_docker=true" -var "custom_minikube=true" -var-file ../conf/jaist.json -var-file ../conf/proxy.json -var-file ../conf/ubuntu-1804.json ubuntu.json
 ```
 
 Download the latest official **ubuntu/bionic64** vagrant box and export for packer virtualbox-ovf build.
-The official ova image can not be used since it contain cloud-init service which will block the boot for ever and I have not way to hack it.
+The official ova image can not be used since it contain cloud-init service which will block the boot for ever and I have no way to hack it.
 
 The main changes refer to `script.sh`
 
@@ -84,6 +84,8 @@ virt-install --name ${vm_name} --memory=32768 --vcpus=8 --cpu host --os-variant 
              --network bridge=ovs-bond0-506,model=virtio,virtualport_type=openvswitch \
              --noautoconsole --import
 ```
+
+The following applied to **minimal** image
 
 ```bash
 base_image=$(find /var/lib/libvirt/images -iname 'xenial-minimal-*.qcow2c' -printf "%T@ %p\n" | sort -r | head -1 | cut -d' ' -f2)
