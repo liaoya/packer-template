@@ -19,9 +19,9 @@ fi
 
 if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_PATH} && -n ${YUM_MIRROR_PATH} ]]; then
 # This return the major version number on CentOS and return major.minor on Oracle Linux
-    CENTOS_RELEASE=$(rpm -q --qf '%{VERSION}' "$(rpm -qf /etc/redhat-release)")
+    RELEASE=$(rpm -q --qf '%{VERSION}' "$(rpm -qf /etc/redhat-release)")
 
-    if [[ ${CENTOS_RELEASE} == 7 ]]; then
+    if [[ ${RELEASE} == 7 ]]; then
         yum install -q -y yum-utils
         yum install -y -q epel-release
 
@@ -57,19 +57,19 @@ if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_
         fi
         sed -i "s/https:/http:/g" /etc/yum.repos.d/ius*.repo
 
-        for repo_url in "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${CENTOS_RELEASE}/shells:fish:release:3.repo" \
-                        "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${CENTOS_RELEASE}/outman-emacs-epel-${CENTOS_RELEASE}.repo" \
-                        "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${CENTOS_RELEASE}/carlwgeorge-ripgrep-epel-${CENTOS_RELEASE}.repo" \
-                        "https://copr.fedorainfracloud.org/coprs/ganto/vcsh/repo/epel-${CENTOS_RELEASE}/ganto-vcsh-epel-${CENTOS_RELEASE}.repo"
+        for repo_url in "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${RELEASE}/shells:fish:release:3.repo" \
+                        "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" \
+                        "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${RELEASE}/carlwgeorge-ripgrep-epel-${RELEASE}.repo" \
+                        "https://copr.fedorainfracloud.org/coprs/ganto/vcsh/repo/epel-${RELEASE}/ganto-vcsh-epel-${RELEASE}.repo"
         do
             yum-config-manager --add-repo "${repo_url}"
         done
 
-        # yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
-        # yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${CENTOS_RELEASE}.noarch.rpm
-        # yum install -y -q http://rpms.remirepo.net/enterprise/remi-release-${CENTOS_RELEASE}.rpm
-        # yum install -y -q http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el${CENTOS_RELEASE}.noarch.rpm
-    elif [[ ${CENTOS_RELEASE} == 8 ]]; then
+        # yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${RELEASE}.noarch.rpm
+        # yum install -y -q https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-${RELEASE}.noarch.rpm
+        # yum install -y -q http://rpms.remirepo.net/enterprise/remi-release-${RELEASE}.rpm
+        # yum install -y -q http://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el${RELEASE}.noarch.rpm
+    elif [[ ${RELEASE} == 8 ]]; then
         dnf install -q -y centos-release-stream epel-release elrepo-release
         dnf install -q -y yum-utils
         dnf config-manager --enable PowerTools
@@ -95,63 +95,63 @@ if [[ -f /etc/centos-release && -n ${YUM_MIRROR_SERVER} && -n ${YUM_MIRROR_EPEL_
     fi
 fi
 
-if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
+if [[ -f /etc/oracle-release ]]; then
     VERSION=$(cut -d " " -f 5 /etc/oracle-release)
-    ORACLE_RELEASE=$(echo "${VERSION}" | cut -d '.' -f 1)
+    RELEASE=$(echo "${VERSION}" | cut -d '.' -f 1)
 
-    if [[ ${ORACLE_RELEASE} == 7 ]]; then
-        if ! rpm -q "oraclelinux-release-el${ORACLE_RELEASE}"; then
-            if [[ -f "/etc/yum.repos.d/public-yum-ol${ORACLE_RELEASE}.repo" ]]; then
-                if [[ -f "/etc/yum.repos.d/public-yum-ol${ORACLE_RELEASE}.repo.origin" ]]; then
-                    sed -i "s/https:/http:/g" "/etc/yum.repos.d/public-yum-ol${ORACLE_RELEASE}.repo"
+    if [[ ${RELEASE} == 7 ]]; then
+        if ! rpm -q "oraclelinux-release-el${RELEASE}"; then
+            if [[ -f "/etc/yum.repos.d/public-yum-ol${RELEASE}.repo" ]]; then
+                if [[ -f "/etc/yum.repos.d/public-yum-ol${RELEASE}.repo.origin" ]]; then
+                    sed -i "s/https:/http:/g" "/etc/yum.repos.d/public-yum-ol${RELEASE}.repo"
                 else
-                    sed -i.origin "s/https:/http:/g" "/etc/yum.repos.d/public-yum-ol${ORACLE_RELEASE}.repo"
+                    sed -i.origin "s/https:/http:/g" "/etc/yum.repos.d/public-yum-ol${RELEASE}.repo"
                 fi
             fi
-            yum install -y -q "oraclelinux-release-el${ORACLE_RELEASE}"
-            if [[ -f "/etc/yum.repos.d/public-yum-ol${ORACLE_RELEASE}.repo.origin" ]]; then
-                cp -f "/etc/yum.repos.d/public-yum-ol${ORACLE_RELEASE}.repo.origin" "/etc/yum.repos.d/public-yum-ol${ORACLE_RELEASE}.repo"
+            yum install -y -q "oraclelinux-release-el${RELEASE}"
+            if [[ -f "/etc/yum.repos.d/public-yum-ol${RELEASE}.repo.origin" ]]; then
+                cp -f "/etc/yum.repos.d/public-yum-ol${RELEASE}.repo.origin" "/etc/yum.repos.d/public-yum-ol${RELEASE}.repo"
             fi
         fi
-        if [[ -f "/etc/yum.repos.d/public-yum-ol${ORACLE_RELEASE}.repo" && -x /usr/bin/ol_yum_configure.sh ]]; then
+        if [[ -f "/etc/yum.repos.d/public-yum-ol${RELEASE}.repo" && -x /usr/bin/ol_yum_configure.sh ]]; then
             /usr/bin/ol_yum_configure.sh
             rm -f /etc/yum.repos.d/public-yum-ol*
         fi
-        for item in /etc/yum.repos.d/*"ol${ORACLE_RELEASE}.repo"; do
+        for item in /etc/yum.repos.d/*"ol${RELEASE}.repo"; do
             if [[ ! -f "$item.origin" ]]; then cp "$item" "$item.origin"; fi
         done
-        sed -i "s/https:/http:/g" /etc/yum.repos.d/*"ol${ORACLE_RELEASE}.repo"
-        yum install -y -q "oracle-epel-release-el${ORACLE_RELEASE}"
-        for item in /etc/yum.repos.d/*"ol${ORACLE_RELEASE}.repo"; do
+        sed -i "s/https:/http:/g" /etc/yum.repos.d/*"ol${RELEASE}.repo"
+        yum install -y -q "oracle-epel-release-el${RELEASE}"
+        for item in /etc/yum.repos.d/*"ol${RELEASE}.repo"; do
             if [[ ! -f "$item.origin" ]]; then cp "$item" "$item.origin"; fi
         done
-        sed -i "s/https:/http:/g" /etc/yum.repos.d/*"ol${ORACLE_RELEASE}.repo"
+        sed -i "s/https:/http:/g" /etc/yum.repos.d/*"ol${RELEASE}.repo"
 
         if [[ -z $(command -v repomanage) ]]; then yum install -y -q yum-utils; fi
-        if yum repolist disabled | grep -s -q "ol${ORACLE_RELEASE}_developer_EPEL"; then yum-config-manager --enable "ol${ORACLE_RELEASE}_developer_EPEL" >/dev/null; fi
-        if yum repolist disabled | grep -s -w -q "ol${ORACLE_RELEASE}_addons"; then yum-config-manager --enable grep "ol${ORACLE_RELEASE}_addons" > /dev/null; fi
-        if yum repolist disabled | grep -s -w -q "ol${ORACLE_RELEASE}_optional_latest"; then yum-config-manager --enable grep "ol${ORACLE_RELEASE}_optional_latest" > /dev/null; fi
+        if yum repolist disabled | grep -s -q "ol${RELEASE}_developer_EPEL"; then yum-config-manager -q --enable "ol${RELEASE}_developer_EPEL"; fi
+        if yum repolist disabled | grep -s -w -q "ol${RELEASE}_addons"; then yum-config-manager -q --enable "ol${RELEASE}_addons"; fi
+        if yum repolist disabled | grep -s -w -q "ol${RELEASE}_optional_latest"; then yum-config-manager -q --enable "ol${RELEASE}_optional_latest"; fi
 
         if ! yum repolist all | grep -s -q "^ius/"; then
-            yum install -y -q "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${ORACLE_RELEASE}.noarch.rpm" "https://rhel${ORACLE_RELEASE}.iuscommunity.org/ius-release.rpm"
-            if yum repolist enabled | grep -s -q "^epel/"; then yum-config-manager --disable epel > /dev/null; fi
+            yum install -y -q "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm" "https://rhel${RELEASE}.iuscommunity.org/ius-release.rpm"
+            if yum repolist enabled | grep -s -q "epel/"; then yum-config-manager -q --disable epel; fi
             sed -i "s/https:/http:/g" /etc/yum.repos.d/ius*.repo
         fi
+        if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager -q --disable ius; fi
 
-        for repo_url in "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${CENTOS_RELEASE}/shells:fish:release:3.repo" \
-                        "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${CENTOS_RELEASE}/outman-emacs-epel-${CENTOS_RELEASE}.repo" \
-                        "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${CENTOS_RELEASE}/carlwgeorge-ripgrep-epel-${CENTOS_RELEASE}.repo" \
-                        "https://copr.fedorainfracloud.org/coprs/ganto/vcsh/repo/epel-${CENTOS_RELEASE}/ganto-vcsh-epel-${CENTOS_RELEASE}.repo"
-        do
-            yum-config-manager --add-repo "${repo_url}"
+        for repo_url in "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${RELEASE}/shells:fish:release:3.repo" \
+                        "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${RELEASE}/carlwgeorge-ripgrep-epel-${RELEASE}.repo" \
+                        "https://copr.fedorainfracloud.org/coprs/ganto/vcsh/repo/epel-${RELEASE}/ganto-vcsh-epel-${RELEASE}.repo" \
+                        "https://copr.fedorainfracloud.org/coprs/hnakamur/vim/repo/epel-${RELEASE}/hnakamur-vim-epel-${RELEASE}.repo" \
+                        "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" ; do
+            yum-config-manager -q --add-repo "${repo_url}"
         done
-    elif [[ ${ORACLE_RELEASE} == 8 ]]; then
-        if [[ -f /etc/oracle-release && -f /etc/dnf/dnf.conf ]]; then
-            sed -i -e "s|https://yum\$ociregion.oracle.com|http://yum\$ociregion.oracle.com|g" /etc/yum.repos.d/*.repo
-            sed -i -e "s|https://yum.oracle.com|http://yum.oracle.com|g" /etc/yum.repos.d/*.repo
+    fi
+    elif [[ ${RELEASE} == 8 ]]; then
+        sed -i -e "s|https://yum\$ociregion.oracle.com|http://yum\$ociregion.oracle.com|g" /etc/yum.repos.d/*.repo
+        sed -i -e "s|https://yum.oracle.com|http://yum.oracle.com|g" /etc/yum.repos.d/*.repo
 
-            dnf install -q -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${ORACLE_RELEASE}.noarch.rpm"
-        fi
+        dnf install -q -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm"
         for elem in /etc/yum.repos.d/epel*.repo; do [ -f "${elem}.origin" ] || cp "${elem}" "${elem}.origin"; done
         for elem in /etc/yum.repos.d/epel*.repo; do
             grep -s -q -e "^metalink=" "${elem}" && sed -i -e "s/^metalink=/#metalink=/g" "${elem}"

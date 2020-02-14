@@ -117,15 +117,13 @@ if [[ -f /etc/centos-release && -f /etc/yum.conf && -n $YUM_MIRROR_SERVER && -n 
     fi
     if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager --disable ius > /dev/null; fi
 
-    if ! yum repolist all | grep -s -q "shells_fish_release_3"; then
-        yum-config-manager --add-repo "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${CENTOS_RELEASE}/shells:fish:release:3.repo"
-    fi
-    if ! yum repolist all | grep -s -q "outman-emacs/"; then
-        curl -sL "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${CENTOS_RELEASE}/outman-emacs-epel-${CENTOS_RELEASE}.repo" -o /etc/yum.repos.d/emacs-copr.repo
-    fi
-    if ! yum repolist all | grep -s -q "carlwgeorge-ripgrep/"; then
-        curl -sL "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${CENTOS_RELEASE}/carlwgeorge-ripgrep-epel-${CENTOS_RELEASE}.repo" -o /etc/yum.repos.d/ripgrep.repo
-    fi
+    for repo_url in "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${RELEASE}/shells:fish:release:3.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${RELEASE}/carlwgeorge-ripgrep-epel-${RELEASE}.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/ganto/vcsh/repo/epel-${RELEASE}/ganto-vcsh-epel-${RELEASE}.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/hnakamur/vim/repo/epel-${RELEASE}/hnakamur-vim-epel-${RELEASE}.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" ; do
+        yum-config-manager -q --add-repo "${repo_url}"
+    done
     
     # if ! yum repolist all | grep -s -q "rpmfusion-free-updates"; then
     #     yum install -y -q https://download1.rpmfusion.org/free/el/rpmfusion-free-release-${CENTOS_RELEASE}.noarch.rpm
@@ -149,7 +147,7 @@ if [[ -f /etc/fedora-release ]]; then
     done
 fi
 
-if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
+if [[ -f /etc/oracle-release ]]; then
     version=$(cut -d " " -f 5 /etc/oracle-release)
     RELEASE=$(echo "${version}" | cut -d '.' -f 1)
     if ! rpm -q "oraclelinux-release-el${RELEASE}"; then
@@ -180,21 +178,23 @@ if [[ -f /etc/oracle-release && -f /etc/yum.conf ]]; then
     sed -i "s/https:/http:/g" /etc/yum.repos.d/*"ol${RELEASE}.repo"
     
     if [[ -z $(command -v repomanage) ]]; then yum install -y -q yum-utils; fi
-    if yum repolist disabled | grep -s -q "ol${RELEASE}_developer_EPEL"; then yum-config-manager --enable "ol${RELEASE}_developer_EPEL" >/dev/null; fi
-    if yum repolist disabled | grep -s -w -q "ol${RELEASE}_addons"; then yum-config-manager --enable grep "ol${RELEASE}_addons" > /dev/null; fi
-    if yum repolist disabled | grep -s -w -q "ol${RELEASE}_optional_latest"; then yum-config-manager --enable grep "ol${RELEASE}_optional_latest" > /dev/null; fi
+    if yum repolist disabled | grep -s -q "ol${RELEASE}_developer_EPEL"; then yum-config-manager -q --enable "ol${RELEASE}_developer_EPEL" > /dev/null; fi
+    if yum repolist disabled | grep -s -w -q "ol${RELEASE}_addons"; then yum-config-manager -q --enable "ol${RELEASE}_addons" > /dev/null; fi
+    if yum repolist disabled | grep -s -w -q "ol${RELEASE}_optional_latest"; then yum-config-manager -q --enable "ol${RELEASE}_optional_latest" > /dev/null; fi
 
     if ! yum repolist all | grep -s -q "^ius/"; then
         yum install -y -q "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RELEASE}.noarch.rpm" "https://rhel${RELEASE}.iuscommunity.org/ius-release.rpm"
-        if yum repolist enabled | grep -s -q "^epel/"; then yum-config-manager --disable epel > /dev/null; fi
+        if yum repolist enabled | grep -s -q "epel/"; then yum-config-manager -q --disable epel; fi
+        sed -i "s/https:/http:/g" /etc/yum.repos.d/ius*.repo
     fi
-    if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager --disable ius > /dev/null; fi
+    if yum repolist enabled | grep -s -q "^ius/"; then yum-config-manager -q --disable ius; fi
 
     for repo_url in "http://download.opensuse.org/repositories/shells:/fish:/release:/3/RHEL_${RELEASE}/shells:fish:release:3.repo" \
-                    "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" \
                     "https://copr.fedorainfracloud.org/coprs/carlwgeorge/ripgrep/repo/epel-${RELEASE}/carlwgeorge-ripgrep-epel-${RELEASE}.repo" \
-                    "https://copr.fedorainfracloud.org/coprs/hnakamur/vim/repo/epel-${RELEASE}/hnakamur-vim-epel-${RELEASE}.repo"; do
-        yum-config-manager --add-repo "${repo_url}"
+                    "https://copr.fedorainfracloud.org/coprs/ganto/vcsh/repo/epel-${RELEASE}/ganto-vcsh-epel-${RELEASE}.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/hnakamur/vim/repo/epel-${RELEASE}/hnakamur-vim-epel-${RELEASE}.repo" \
+                    "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" ; do
+        yum-config-manager -q --add-repo "${repo_url}"
     done
 fi
 
