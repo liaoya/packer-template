@@ -26,13 +26,19 @@ setup_ppa() {
 
 # Ubuntu minimal image does not has add-apt-repository
 if [[ -z $(command -v add-apt-repository) ]]; then
-    apt-get install -y -qq -o "Dpkg::Use-Pty=0" software-properties-common apt-utils >/dev/null
+    sudo apt-get install -y -qq -o "Dpkg::Use-Pty=0" software-properties-common apt-utils >/dev/null
 fi
-setup_ppa ppa:kelleyk/emacs 873503A090750CDAEB0754D93FF0E01EEAAFC9CD
-setup_ppa ppa:jonathonf/vim 4AB0F789CBA31744CC7DA76A8CF63AD3F06FC659
 setup_ppa ppa:fish-shell/release-3 59FDA1CE1B84B3FAD89366C027557F056DC33CA5
+setup_ppa ppa:jonathonf/vim 4AB0F789CBA31744CC7DA76A8CF63AD3F06FC659
+setup_ppa ppa:kelleyk/emacs 873503A090750CDAEB0754D93FF0E01EEAAFC9CD
 setup_ppa ppa:kimura-o/ppa-tig 475470022784FBF6731C6CEC262F93255137610
-# setup_ppa ppa:lazygit-team/release 41468D9A516AB58268042C6768CCF87596E97291
+setup_ppa ppa:lazygit-team/release 41468D9A516AB58268042C6768CCF87596E97291
+setup_ppa ppa:unilogicbv/shellcheck 1F1E6E3BC4F5C273B188A785ED771ADF80DC8996
+
+setup_ppa ppa:savoury1/backports E996735927E427A733BB653E374C7797FB006459
+if [[ $(lsb_release -sc) == bionic ]]; then
+    setup_ppa ppa:spvkgn/bionic-updates F2C37BD8BDF01321549242C9AEC82AC78B65E182
+fi
 # setup_ppa ppa:alexlarsson/flatpak 690951F1A4DE0F905496E8C6C793BFA2FA577F07
 # apt-get install -y -qq -o "Dpkg::Use-Pty=0"  flatpak >/dev/null
 # flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

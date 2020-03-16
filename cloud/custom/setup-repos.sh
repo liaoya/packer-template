@@ -146,7 +146,6 @@ if [[ -f /etc/oracle-release ]]; then
                         "https://copr.fedorainfracloud.org/coprs/outman/emacs/repo/epel-${RELEASE}/outman-emacs-epel-${RELEASE}.repo" ; do
             yum-config-manager -q --add-repo "${repo_url}"
         done
-    fi
     elif [[ ${RELEASE} == 8 ]]; then
         sed -i -e "s|https://yum\$ociregion.oracle.com|http://yum\$ociregion.oracle.com|g" /etc/yum.repos.d/*.repo
         sed -i -e "s|https://yum.oracle.com|http://yum.oracle.com|g" /etc/yum.repos.d/*.repo
