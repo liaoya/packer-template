@@ -47,6 +47,9 @@ function check_ubuntu() {
     check_ubuntu_image "${THIS_DIR}/ubuntu-1804-i386.json" https://cloud-images.ubuntu.com/releases/bionic ubuntu-18.04-server-cloudimg-i386.img
     check_ubuntu_image "${THIS_DIR}/ubuntu-minimal-1804.json" https://cloud-images.ubuntu.com/minimal/releases/bionic ubuntu-18.04-minimal-cloudimg-amd64.img
 
+    check_ubuntu_image "${THIS_DIR}/ubuntu-2004.json" https://cloud-images.ubuntu.com/releases/focal ubuntu-20.04-server-cloudimg-amd64.img
+    check_ubuntu_image "${THIS_DIR}/ubuntu-minimal-2004.json" https://cloud-images.ubuntu.com/minimal/releases/focal ubuntu-20.04-minimal-cloudimg-amd64.img
+
     check_ubuntu_image "${THIS_DIR}/ubuntu-1604.json" https://cloud-images.ubuntu.com/releases/xenial ubuntu-16.04-server-cloudimg-amd64-disk1.img
     check_ubuntu_image "${THIS_DIR}/ubuntu-minimal-1604.json" https://cloud-images.ubuntu.com/minimal/releases/xenial ubuntu-16.04-minimal-cloudimg-amd64-disk1.img
 }
