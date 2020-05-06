@@ -45,6 +45,8 @@ Run the command `bash gen-ova.sh` to generate ova file
 
 The following command can help to setup a new virtual machine
 
+## 18.04 LTS
+
 ```bash
 base_image=$(find /var/lib/libvirt/images -iname 'bionic-develop-*.qcow2c' -printf "%T@ %p\n" | sort -r | head -1 | cut -d' ' -f2)
 vm_name=bionic-develop
@@ -101,7 +103,7 @@ qemu-img resize "/var/lib/libvirt/images/${vm_name}.qcow2" 64G
 
 ROOT_DIR=$(mktemp -d)
 mkdir -p "${ROOT_DIR}/etc/network/interfaces.d"
-cat <<EOF > "${ROOT_DIR}/etc/network/interfaces"
+cat <<EOF > "${ROOT_DIR}/etc/network/interfaces.d/eth0"
 auto lo
 iface lo inet loopback
 
@@ -118,7 +120,7 @@ virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
 rm -fr ${vm_name}.tar ${ROOT_DIR}
 
 virt-install --name ${vm_name} --memory=16384 --vcpus=8 --cpu host --os-variant ubuntu16.04 \
-             --disk /var/lib/libvirt/images/${vm_name}.qcow2  \
+             --disk /var/lib/libvirt/images/${vm_name}.qcow2 \
              --network bridge=ovs-bond0-506,model=virtio,virtualport_type=openvswitch \
              --noautoconsole --import
 ```
