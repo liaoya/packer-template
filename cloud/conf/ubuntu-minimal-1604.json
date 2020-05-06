@@ -1,8 +1,8 @@
 {
-  "iso_checksum": "540d12d81951628fb24a49a5bdad3f9349dced386e0e18736ffe6b100c17227b",
+  "iso_checksum": "1e140339c47004c0303bd758e5c3c080a550123daf9c1d28126ada1f6f5aac51",
   "iso_checksum_type": "sha256",
   "iso_name": "ubuntu-16.04-server-cloudimg-amd64-disk1.img",
-  "iso_url": "https://cloud-images.ubuntu.com/minimal/releases/xenial/release-20200407/ubuntu-16.04-minimal-cloudimg-amd64-disk1.img",
+  "iso_url": "https://cloud-images.ubuntu.com/minimal/releases/xenial/release-20200429/ubuntu-16.04-minimal-cloudimg-amd64-disk1.img",
   "ubuntu_name": "xenial",
   "vm_name": "minimal"
 }

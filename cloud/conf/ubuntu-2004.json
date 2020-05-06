@@ -1,7 +1,7 @@
 {
-  "iso_checksum": "266663b10f788f784a425873086051910084bc08c059bf8e4a9490ce306f8d7e",
+  "iso_checksum": "e2a58fb6a513a9b544f12699292b5c5f55bef9c5b6b7b70e25daecc564c49bc5",
   "iso_checksum_type": "sha256",
   "iso_name": "ubuntu-20.04-server-cloudimg-amd64.img",
-  "iso_url": "https://cloud-images.ubuntu.com/releases/focal/release-20200423/ubuntu-20.04-server-cloudimg-amd64.img",
+  "iso_url": "https://cloud-images.ubuntu.com/releases/focal/release-20200504/ubuntu-20.04-server-cloudimg-amd64.img",
   "ubuntu_name": "focal"
 }
