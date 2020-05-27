@@ -1,8 +1,8 @@
 {
-  "iso_checksum": "c31dd240be86d349931f0a13a8a23684d713aac65caf69e946c0a0c269ac8b3b",
+  "iso_checksum": "79c22ab632b2f878e39a90ebc6a16f839dbd250b9b94717a382a2344f14830b5",
   "iso_checksum_type": "sha256",
   "iso_name": "ubuntu-20.04-minimal-cloudimg-amd64.img",
-  "iso_url": "https://cloud-images.ubuntu.com/minimal/releases/focal/release-20200505/ubuntu-20.04-minimal-cloudimg-amd64.img",
+  "iso_url": "https://cloud-images.ubuntu.com/minimal/releases/focal/release-20200526/ubuntu-20.04-minimal-cloudimg-amd64.img",
   "ubuntu_name": "focal",
   "vm_name": "minimal"
 }
