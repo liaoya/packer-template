@@ -4,5 +4,6 @@
   "iso_name": "ubuntu-16.04-server-cloudimg-amd64-disk1.img",
   "iso_url": "https://cloud-images.ubuntu.com/minimal/releases/xenial/release-20200520/ubuntu-16.04-minimal-cloudimg-amd64-disk1.img",
   "ubuntu_name": "xenial",
-  "vm_name": "minimal"
+  "vm_name": "minimal",
+  "version": "20200520"
 }

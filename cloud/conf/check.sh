@@ -36,6 +36,7 @@ function check_ubuntu_image() {
     image_name=$1; shift 1
     release_date=$(curl -sL "${url_prefix}/release/unpacked/build-info.txt" | grep "serial=" | cut -d "=" -f2)
     if [[ $(jq -r '.iso_url' "${json_file}") != "${url_prefix}/release-${release_date}/${image_name}" ]]; then
+        eval "jq '.version=\"${release_date}\"' ${json_file}" | sponge "${json_file}"
         sha_value=$(curl -sL "${url_prefix}/release-${release_date}/SHA256SUMS" | grep "${image_name}" | cut -d' ' -f1)
         eval "jq '.iso_url=\"${url_prefix}/release-${release_date}/${image_name}\"' ${json_file}" | sponge "${json_file}"
         eval "jq '.iso_checksum=\"${sha_value}\"' ${json_file}" | sponge "${json_file}"
