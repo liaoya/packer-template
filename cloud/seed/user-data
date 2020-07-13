@@ -23,3 +23,6 @@ chpasswd:
     root:cloud
     vagrant:vagrant
   expire: False
+
+runcmd:
+  - [ systemctl disable cloud-config cloud-final cloud-init-local cloud-init ]

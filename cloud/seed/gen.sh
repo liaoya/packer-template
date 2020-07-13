@@ -23,4 +23,5 @@ while getopts "ch" o; do
 done
 
 [[ -f $THIS_DIR/seed.iso && $CLEAN -gt 0 ]] && rm -f "$THIS_DIR/seed.iso"
-[[ -f $THIS_DIR/seed.iso ]] || cloud-localds "$THIS_DIR/seed.iso" "$THIS_DIR/user-data"
+#[[ -f $THIS_DIR/seed.iso ]] || cloud-localds "$THIS_DIR/seed.iso" "$THIS_DIR/user-data"
+[[ -f $THIS_DIR/seed.iso ]] || genisoimage -output "$THIS_DIR/seed.iso" -volid cidata -joliet -rock "$THIS_DIR/user-data" "$THIS_DIR/meta-data"

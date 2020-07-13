@@ -1,181 +1,175 @@
 {
-    "_comment": "Build with `packer build ubuntu.json`",
-    "builders": [
-        {
-            "type": "qemu",
-            "accelerator": "kvm",
-            "boot_wait": "6s",
-            "disk_image": "true",
-            "format": "qcow2",
-            "output_directory": "../qemu/{{ user `centos_name` }}-{{ user `vm_name` }}",
-            "qemuargs": [
-                [
-                    "-m",
-                    "{{ user `memory` }}"
-                ],
-                [
-                    "-smp",
-                    "cpus={{ user `cpus` }}"
-                ],
-                [
-                    "-cdrom",
-                    "../seed/seed.iso"
-                ]
-            ],
-            "vm_name": "{{ user `centos_name` }}-{{ user `vm_name` }}.qcow2",
-            "boot_command": [
-                "<enter>"
-            ],
-            "disk_size": "{{ user `disk_size` }}",
-            "disk_interface": "virtio",
-            "headless": "{{ user `headless` }}",
-            "iso_checksum": "{{ user `iso_checksum` }}",
-            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
-            "iso_urls": [
-                "{{ user `iso_path` }}/{{ user `iso_name` }}",
-                "{{ user `iso_url` }}"
-            ],
-            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
-            "ssh_password": "{{ user `ssh_password` }}",
-            "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_timeout": "{{user `ssh_timeout`}}"
-        }
-    ],
-
-    "provisioners": [
-        {
-            "type": "file",
-            "source": "../cmdlet",
-            "destination": "/tmp"
-        },
-
-        {
-            "type": "shell",
-            "inline": [
-                "chmod a+x /tmp/cmdlet/*.sh",
-                "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin",
-                "sudo chown root:root /usr/local/bin/*.sh"
-            ]
-        },
-        
-        {
-            "environment_vars": [
-                "CUSTOM_ASDF={{user `custom_asdf`}}",
-                "CUSTOM_IUS={{user `custom_ius`}}",
-                "CUSTOM_JAVA={{user `custom_java`}}",
-                "CUSTOM_KUBERNETES={{user `custom_kubernetes`}}",
-                "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
-                "CUSTOM_MICROK8S={{user `custom_microk8s`}}",
-                "CUSTOM_MICROK8S_VERSION={{user `custom_microk8s_version`}}",
-                "CUSTOM_MINIKUBE={{user `custom_minikube`}}",
-                "CUSTOM_NVM={{user `custom_nvm`}}",
-                "CUSTOM_OJET={{user `custom_ojet`}}",
-                "CUSTOM_POWERLINE={{user `custom_powerline`}}",
-                "CUSTOM_PYTHON_VIRTUALENV={{user `custom_python_virtualenv`}}",
-                "CUSTOM_SNAP={{user `custom_snap`}}",
-                "CUSTOM_UPDATE={{user `custom_update`}}",
-                "DISABLE_CLOUD_INIT={{user `disable_cloud_init`}}",
-                "VM_NAME={{user `centos_name`}}-{{user `vm_name`}}",
-                "YUM_MIRROR_SERVER={{user `yum_mirror_server`}}",
-                "YUM_MIRROR_EPEL_PATH={{user `yum_mirror_epel_path`}}",
-                "YUM_MIRROR_PATH={{user `yum_mirror_path`}}",
-                "YUM_PROXY={{user `yum_proxy`}}",
-                "http_proxy={{user `http_proxy`}}",
-                "https_proxy={{user `https_proxy`}}",
-                "ftp_proxy={{user `ftp_proxy`}}",
-                "no_proxy={{user `no_proxy`}}",
-                "rsync_proxy={{user `rsync_proxy`}}"
-            ],          
-            "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash -x '{{.Path}}'",
-            "scripts": [
-                "../custom/disable-cloud-init.sh",
-                "../custom/install-vagrant-key.sh",
-                "../custom/setup.sh",
-                "../custom/clean-proxy.sh",
-                "../custom/setup-proxy.sh",
-                "../custom/setup-repos.sh",
-                "../custom/centos8/install-common.sh",
-                "../custom/install-snap.sh",
-                "../custom/install-asdf.sh",
-                "../custom/install-java.sh",
-                "../custom/install-microk8s.sh",
-                "../custom/install-minikube.sh",
-                "../custom/install-nvm.sh",
-                "../custom/install-ojet.sh",
-                "../custom/install-powerline.sh",
-                "../custom/setup-config.sh",
-                "../custom/clean-proxy.sh",              
-                "../custom/motd.sh",
-                "../custom/centos8/cleanup.sh",
-                "../custom/cleanup.sh"
-            ],
-            "type": "shell"
-        }
-    ],
-
-    "post-processors": [
-        {
-            "environment_vars": [
-                "IMAGENAME={{user `centos_name`}}-{{ user `vm_name` }}",
-                "OUTPUT=../qemu/{{ user `centos_name` }}-{{ user `vm_name` }}",
-                "DEST=../image/{{ user `centos_name` }}",
-                "SPARSIFY={{ user `sparsify` }}",
-                "VERSION={{ user `version` }}"
-            ],
-            "type": "shell-local",
-            "only": [
-                "qemu"
-            ],
-            "scripts": [
-                "../post/backup-disk.sh"
-            ]
-        },
-
-        {
-            "keep_input_artifact": false,
-            "output": "../box/{{ user `centos_name` }}/{{user `centos_name`}}-{{ user `vm_name` }}-{{.Provider}}-{{user `version`}}.box",
-            "type": "vagrant",
-            "vagrantfile_template": "{{ user `vagrantfile_template` }}"
-        }
-    ],
-    
-    "variables": {
-        "centos_name": "",
-        "cpus": "2",
-        "custom_asdf": "false",
-        "custom_docker": "false",
-        "custom_docker_ce": "false",
-        "custom_ius": "true",
-        "custom_java": "false",
-        "custom_kubernetes": "false",
-        "custom_libvirt": "false",
-        "custom_microk8s": "false",
-        "custom_microk8s_version": "",
-        "custom_minikube": "false",
-        "custom_nvm": "false",
-        "custom_ojet": "false",
-        "custom_powerline": "true",
-        "custom_python_virtualenv": "false",
-        "custom_snap": "false",
-        "custom_update": "false",
-        "disable_cloud_init": "true",
-        "disk_size": "16384",
-        "headless": "true",
-        "http_proxy": "{{env `http_proxy`}}",
-        "https_proxy": "{{env `https_proxy`}}",
-        "install_vagrant_key": "true",
-        "iso_checksum": "",
-        "iso_checksum_type": "sha256",
-        "iso_name": "",
-        "iso_path": "{{env `PACKER_CACHE_DIR`}}",
-        "iso_url": "",
-        "memory": "2048",
-        "no_proxy": "{{env `no_proxy`}}",
-        "sparsify": "true",
-        "ssh_password": "vagrant",
-        "ssh_username": "vagrant",
-        "ssh_timeout": "15m",
-        "version": "{{isotime \"20060102\"}}",
-        "vm_name": "base"
+  "_comment": "Build with `packer build ubuntu.json`",
+  "builders": [
+    {
+      "accelerator": "kvm",
+      "boot_command": [
+        "<enter>"
+      ],
+      "boot_wait": "6s",
+      "disk_image": "true",
+      "disk_interface": "virtio",
+      "disk_size": "{{ user `disk_size` }}",
+      "format": "qcow2",
+      "headless": "{{ user `headless` }}",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "output_directory": "../qemu/{{ user `centos_name` }}-{{ user `vm_name` }}",
+      "qemuargs": [
+        [
+          "-m",
+          "{{ user `memory` }}"
+        ],
+        [
+          "-smp",
+          "cpus={{ user `cpus` }}"
+        ],
+        [
+          "-cdrom",
+          "../seed/seed.iso"
+        ]
+      ],
+      "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_timeout": "{{user `ssh_timeout`}}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "type": "qemu",
+      "vm_name": "{{ user `centos_name` }}-{{ user `vm_name` }}.qcow2"
     }
+  ],
+  "post-processors": [
+    {
+      "environment_vars": [
+        "IMAGENAME={{user `centos_name`}}-{{ user `vm_name` }}",
+        "OUTPUT=../qemu/{{ user `centos_name` }}-{{ user `vm_name` }}",
+        "DEST=../image/{{ user `centos_name` }}",
+        "SPARSIFY={{ user `sparsify` }}",
+        "VERSION={{ user `version` }}"
+      ],
+      "only": [
+        "qemu"
+      ],
+      "scripts": [
+        "../post/backup-disk.sh"
+      ],
+      "type": "shell-local"
+    },
+    {
+      "keep_input_artifact": false,
+      "output": "../box/{{ user `centos_name` }}/{{user `centos_name`}}-{{ user `vm_name` }}-{{.Provider}}-{{user `version`}}.box",
+      "type": "vagrant",
+      "vagrantfile_template": "{{ user `vagrantfile_template` }}"
+    }
+  ],
+  "provisioners": [
+    {
+      "destination": "/tmp",
+      "source": "../cmdlet",
+      "type": "file"
+    },
+    {
+      "inline": [
+        "chmod a+x /tmp/cmdlet/*.sh",
+        "sudo cp -pr /tmp/cmdlet/*.sh /usr/local/bin",
+        "sudo chown root:root /usr/local/bin/*.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "environment_vars": [
+        "CUSTOM_ASDF={{user `custom_asdf`}}",
+        "CUSTOM_IUS={{user `custom_ius`}}",
+        "CUSTOM_JAVA={{user `custom_java`}}",
+        "CUSTOM_KUBERNETES={{user `custom_kubernetes`}}",
+        "CUSTOM_LIBVIRT={{user `custom_libvirt`}}",
+        "CUSTOM_MICROK8S={{user `custom_microk8s`}}",
+        "CUSTOM_MICROK8S_VERSION={{user `custom_microk8s_version`}}",
+        "CUSTOM_MINIKUBE={{user `custom_minikube`}}",
+        "CUSTOM_NVM={{user `custom_nvm`}}",
+        "CUSTOM_OJET={{user `custom_ojet`}}",
+        "CUSTOM_POWERLINE={{user `custom_powerline`}}",
+        "CUSTOM_PYTHON_VIRTUALENV={{user `custom_python_virtualenv`}}",
+        "CUSTOM_SNAP={{user `custom_snap`}}",
+        "CUSTOM_UPDATE={{user `custom_update`}}",
+        "DISABLE_CLOUD_INIT={{user `disable_cloud_init`}}",
+        "VM_NAME={{user `centos_name`}}-{{user `vm_name`}}",
+        "YUM_MIRROR_SERVER={{user `yum_mirror_server`}}",
+        "YUM_MIRROR_EPEL_PATH={{user `yum_mirror_epel_path`}}",
+        "YUM_MIRROR_PATH={{user `yum_mirror_path`}}",
+        "YUM_PROXY={{user `yum_proxy`}}",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "no_proxy={{user `no_proxy`}}",
+        "rsync_proxy={{user `rsync_proxy`}}"
+      ],
+      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash -x '{{.Path}}'",
+      "scripts": [
+        "../custom/disable-cloud-init.sh",
+        "../custom/install-vagrant-key.sh",
+        "../custom/setup.sh",
+        "../custom/clean-proxy.sh",
+        "../custom/setup-proxy.sh",
+        "../custom/setup-repos.sh",
+        "../custom/centos8/install-common.sh",
+        "../custom/install-snap.sh",
+        "../custom/install-asdf.sh",
+        "../custom/install-java.sh",
+        "../custom/install-microk8s.sh",
+        "../custom/install-minikube.sh",
+        "../custom/install-nvm.sh",
+        "../custom/install-ojet.sh",
+        "../custom/install-powerline.sh",
+        "../custom/setup-config.sh",
+        "../custom/clean-proxy.sh",
+        "../custom/motd.sh",
+        "../custom/centos8/cleanup.sh",
+        "../custom/cleanup.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "centos_name": "",
+    "cpus": "2",
+    "custom_asdf": "false",
+    "custom_docker": "false",
+    "custom_docker_ce": "false",
+    "custom_ius": "true",
+    "custom_java": "false",
+    "custom_kubernetes": "false",
+    "custom_libvirt": "false",
+    "custom_microk8s": "false",
+    "custom_microk8s_version": "",
+    "custom_minikube": "false",
+    "custom_nvm": "false",
+    "custom_ojet": "false",
+    "custom_powerline": "true",
+    "custom_python_virtualenv": "false",
+    "custom_snap": "false",
+    "custom_update": "false",
+    "disable_cloud_init": "true",
+    "disk_size": "16384",
+    "headless": "true",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "install_vagrant_key": "true",
+    "iso_checksum": "",
+    "iso_checksum_type": "sha256",
+    "iso_name": "",
+    "iso_path": "{{env `PACKER_CACHE_DIR`}}",
+    "iso_url": "",
+    "memory": "2048",
+    "no_proxy": "{{env `no_proxy`}}",
+    "sparsify": "true",
+    "ssh_password": "vagrant",
+    "ssh_timeout": "15m",
+    "ssh_username": "vagrant",
+    "version": "{{isotime \"20060102\"}}",
+    "vm_name": "base"
+  }
 }
+
