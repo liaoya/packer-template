@@ -45,7 +45,7 @@ tar -cf "${vm_name}.tar" -C "${ROOT_DIR}/etc" .
 virt-tar-in -a "/var/lib/libvirt/images/${vm_name}.qcow2" "${vm_name}.tar" /etc
 rm -fr "${vm_name}.tar" "${ROOT_DIR}"
 
-virt-install --name "${vm_name}" --memory=16384 --vcpus=4 --cpu host --disk "/var/lib/libvirt/images/${vm_name}.qcow2" --os-variant fedora30 --network bridge=ovsbr0-506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name "${vm_name}" --memory=16384 --vcpus=4 --cpu host --disk "/var/lib/libvirt/images/${vm_name}.qcow2" --os-variant fedora30 --network bridge=ovs-bond0-506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
 
 On CentOS, can't call virt-resize since its `e2fsck` is too old. Run `parted`, `cdisk` and `resize2fs` to use the whole disk.

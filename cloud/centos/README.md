@@ -49,7 +49,7 @@ tar -cf "${vm_name}.tar" -C "${ROOT_DIR}/etc" .
 virt-tar-in -a "/var/lib/libvirt/images/${vm_name}.qcow2" "${vm_name}.tar" /etc
 rm -fr "${vm_name}.tar" "${ROOT_DIR}"
 
-virt-install --name "${vm_name}" --memory=32768 --vcpus=8 --cpu host-passthrough --disk "/var/lib/libvirt/images/${vm_name}.qcow2" --os-variant centos7.0 --network bridge=ovsbr0-506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name "${vm_name}" --memory=32768 --vcpus=8 --cpu host-passthrough --disk "/var/lib/libvirt/images/${vm_name}.qcow2" --os-variant centos7.0 --network bridge=ovs-bond0-506,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
 
 ## Expand the xfs image
@@ -80,7 +80,7 @@ tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
 virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
 rm -fr ${vm_name}.tar ${ROOT_DIR}
 
-virt-install --name ${vm_name} --memory=65536 --vcpus=16 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant centos7.0 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --network bridge=ovsbr0,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name ${vm_name} --memory=65536 --vcpus=16 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant centos7.0 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --network bridge=ovs-bond0,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
 
 Refer to <https://nerdbyday.com/resizing-an-ext4-partition-without-unmounting/> to extend xfs partition
@@ -111,7 +111,7 @@ tar -cf ${vm_name}.tar -C ${ROOT_DIR}/etc .
 virt-tar-in -a /var/lib/libvirt/images/${vm_name}.qcow2 ${vm_name}.tar /etc
 rm -fr ${vm_name}.tar ${ROOT_DIR}
 
-virt-install --name ${vm_name} --memory=65536 --vcpus=16 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant centos7.0 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --network bridge=ovsbr0,model=virtio,virtualport_type=openvswitch --noautoconsole --import
+virt-install --name ${vm_name} --memory=65536 --vcpus=16 --cpu host-passthrough --disk /var/lib/libvirt/images/${vm_name}.qcow2 --os-variant centos7.0 --network bridge=ovsbr506,model=virtio,virtualport_type=openvswitch --network bridge=ovs-bond0,model=virtio,virtualport_type=openvswitch --noautoconsole --import
 ```
 
 Run `sudo xfs_growfs /dev/vda1` after ssh login, this is the prefer

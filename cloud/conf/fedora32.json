@@ -1,0 +1,8 @@
+{
+    "fedora_name": "fedora32",
+    "iso_checksum": "423a4ce32fa32c50c11e3d3ff392db97a762533b81bef9d00599de518a7469c8",
+    "iso_checksum_type": "sha256",
+    "iso_name": "Fedora-Cloud-Base-32-1.6.x86_64.qcow2",
+    "iso_url": "http://download.fedoraproject.org/pub/fedora/linux/releases/32/Cloud/x86_64/images/Fedora-Cloud-Base-32-1.6.x86_64.qcow2"
+}
+

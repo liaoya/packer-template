@@ -3,5 +3,6 @@
   "iso_checksum": "b7555ecf90b24111f2efbc03c1e80f7b38f1e1fc7e1b15d8fee277d1a4575e87",
   "iso_checksum_type": "sha256",
   "iso_name": "CentOS-7-x86_64-GenericCloud-2003.qcow2c",
-  "iso_url": "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-2003.qcow2c"
+  "iso_url": "https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-2003.qcow2c",
+  "version": "2003"
 }

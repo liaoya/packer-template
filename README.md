@@ -18,6 +18,13 @@ export PACKER_CACHE_DIR=~/.cache/packer
 export CURLOPT_SSL_VERIFYPEER=false
 ```
 
+### CentOS 8
+
+```bash
+dnf copr enable -y stenstorp/EL8_Cross_Architecture_Tools
+dnf install -y qemu-system-x86
+```
+
 ### On Windows
 
 ```dos

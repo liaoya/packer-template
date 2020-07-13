@@ -78,7 +78,7 @@ Use `virtual-install` or **Virtual Manager**
 
 ```bash
 base_image=$(find /var/lib/libvirt/images -iname 'alpinelinux-*.qcow2c' -printf "%T@ %p\n" | sort -r | head -1 | cut -d' ' -f2)
-vm_name=alpine
+vm_name=$(basename -s .sh "${BASH_SOURCE[0]}")
 virsh list --name | grep -s -q "${vm_name}" && virsh destroy "${vm_name}"
 virsh list --inactive --name | grep "${vm_name}" && virsh undefine --remove-all-storage "${vm_name}"
 qemu-img create -f qcow2 "/var/lib/libvirt/images/${vm_name}.qcow2" 2G
@@ -105,7 +105,7 @@ rm -fr "${vm_name}.tar" "${ROOT_DIR}"
 virt-install --name "${vm_name}" --os-variant alpinelinux3.8 \
              --memory=128 --vcpus=1 --cpu host \
              --disk "/var/lib/libvirt/images/${vm_name}.qcow2",bus=virtio \
-             --network bridge=ovsbr0-506,model=virtio,virtualport_type=openvswitch \
+             --network bridge=ovs-bond0-506,model=virtio,virtualport_type=openvswitch \
              --noautoconsole --import
 ```
 
