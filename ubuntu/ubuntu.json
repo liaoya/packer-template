@@ -1,231 +1,230 @@
 {
-    "_comment": "Build with `packer build ubuntu.json`",
-    "builders": [
-        {
-            "type": "qemu",
-            "boot_wait": "6s",
-            "accelerator": "kvm",
-            "format": "qcow2",
-            "output_directory": "qemu/{{ user `vm_name` }}",
-            "qemuargs": [
-                [
-                    "-m",
-                    "{{ user `memory` }}"
-                ],
-                [
-                    "-smp",
-                    "cpus={{ user `cpus` }}"
-                ]
-            ],
-            "vm_name": "{{ user `vm_name` }}.qcow2",
-            "boot_command": [
-                "{{ user `boot_command_prefix` }}",
-                "/install/vmlinuz noapic ",
-                "initrd=/install/initrd.gz ",
-                "file=/floppy/{{ user `preseed` }} ",
-                "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
-                "hostname={{ user `hostname` }} ",
-                "grub-installer/bootdev=/dev/vda<wait> ",
-                "fb=false debconf/frontend=noninteractive ",
-                "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
-                "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
-                "passwd/user-fullname={{ user `ssh_fullname` }} ",
-                "passwd/user-password={{ user `ssh_password` }} ",
-                "passwd/user-password-again={{ user `ssh_password` }} ",
-                "passwd/username={{ user `ssh_username` }} ",
-                "-- <enter>"
-            ],
-            "disk_size": "{{ user `disk_size` }}",
-            "floppy_files": [
-                "http/{{ user `preseed` }}"
-            ],
-            "headless": "{{ user `headless` }}",
-            "iso_checksum": "{{ user `iso_checksum` }}",
-            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
-            "iso_urls": [
-                "{{ user `iso_path` }}/{{ user `iso_name` }}",
-                "{{ user `iso_url` }}"
-            ],
-            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
-            "ssh_password": "{{ user `ssh_password` }}",
-            "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_timeout": "{{user `ssh_timeout`}}"
-        },
-        {
-            "type": "virtualbox-iso",
-            "boot_wait": "10s",
-            "export_opts": [
-                "--vsys",
-                "0"
-            ],
-            "format": "ova",
-            "guest_additions_mode": "disable",
-            "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
-            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
-            "hard_drive_interface": "sata",
-            "output_directory": "virtualbox/{{ user `vm_name` }}",
-            "post_shutdown_delay": "1m",
-            "vboxmanage": [
-                [
-                    "modifyvm",
-                    "{{.Name}}",
-                    "--audio",
-                    "none",
-                    "--cpus",
-                    "{{user `cpus`}}",
-                    "--memory",
-                    "{{user `memory`}}",
-                    "--nictype1",
-                    "virtio",
-                    "--usb",
-                    "off"
-                ]
-            ],
-            "virtualbox_version_file": ".vbox_version",
-            "vm_name": "{{ user `vm_name` }}",
-            "boot_command": [
-                "{{ user `boot_command_prefix` }}",
-                "/install/vmlinuz noapic ",
-                "initrd=/install/initrd.gz ",
-                "file=/floppy/{{ user `preseed` }} ",
-                "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
-                "hostname={{ user `hostname` }} ",
-                "grub-installer/bootdev=/dev/sda<wait> ",
-                "fb=false debconf/frontend=noninteractive ",
-                "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
-                "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
-                "passwd/user-fullname={{ user `ssh_fullname` }} ",
-                "passwd/user-password={{ user `ssh_password` }} ",
-                "passwd/user-password-again={{ user `ssh_password` }} ",
-                "passwd/username={{ user `ssh_username` }} ",
-                "-- <enter>"
-            ],
-            "disk_size": "{{ user `disk_size` }}",
-            "floppy_files": [
-                "http/{{ user `preseed` }}"
-            ],
-            "headless": "{{ user `headless` }}",
-            "iso_checksum": "{{ user `iso_checksum` }}",
-            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
-            "iso_urls": [
-                "{{ user `iso_path` }}/{{ user `iso_name` }}",
-                "{{ user `iso_url` }}"
-            ],
-            "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
-            "ssh_password": "{{ user `ssh_password` }}",
-            "ssh_username": "{{ user `ssh_username` }}",
-            "ssh_timeout": "{{user `ssh_timeout`}}"
-        }
-    ],
-    "post-processors": [
-        {
-            "environment_vars": [
-                "IMAGENAME={{user `vm_name`}}",
-                "OUTPUT=qemu/{{ user `vm_name` }}",
-                "DEST=image/{{ user `vm_name` }}"
-            ],
-            "type": "shell-local",
-            "only": [
-                "qemu"
-            ],
-            "inline": [
-                "qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2",
-                "mkdir -p $DEST",
-                "export LIBGUESTFS_BACKEND=direct",
-                "[ $(command -v virt-sparsify) ] && virt-sparsify $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME.qcow2",
-                "[ -f $DEST/$IMAGENAME.qcow2 ] && mv -f $DEST/$IMAGENAME.qcow2 $OUTPUT/$IMAGENAME.qcow2",
-                "[ $(command -v pxz) ] && pxz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz",
-                "[ -f $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz ] || xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz"
-            ]
-        },
-        {
-            "environment_vars": [
-                "IMAGENAME={{user `vm_name`}}",
-                "OUTPUT=virtualbox/{{ user `vm_name` }}",
-                "DEST=image/{{ user `vm_name` }}"
-            ],
-            "type": "shell-local",
-            "only": [
-                "virtualbox-iso"
-            ],
-            "inline": [
-                "mkdir -p $DEST",
-                "cp -pr $OUTPUT/$IMAGENAME.ova $DEST/$IMAGENAME-virtualbox-{{user `version`}}.ova"
-            ]
-        },
-        {
-            "keep_input_artifact": false,
-            "output": "box/{{ user `vm_name` }}/{{user `vm_name`}}-{{user `version`}}-{{.Provider}}.box",
-            "type": "vagrant",
-            "vagrantfile_template": "{{ user `vagrantfile_template` }}"
-        }
-    ],
-    "provisioners": [
-        {
-            "environment_vars": [
-                "APT_MIRROR_SERVER={{user `apt_mirror_server`}}",
-                "APT_MIRROR_PATH={{user `apt_mirror_path`}}",
-                "APT_PROXY={{user `apt_proxy`}}",
-                "CLEANUP_PAUSE={{user `cleanup_pause`}}",
-                "UPDATE={{user `update`}}",
-                "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
-                "SSH_USERNAME={{user `ssh_username`}}",
-                "SSH_PASSWORD={{user `ssh_password`}}",
-                "http_proxy={{user `http_proxy`}}",
-                "https_proxy={{user `https_proxy`}}",
-                "ftp_proxy={{user `ftp_proxy`}}",
-                "rsync_proxy={{user `rsync_proxy`}}",
-                "no_proxy={{user `no_proxy`}}"
-            ],
-            "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
-            "scripts": [
-                "custom/setup-repos.sh",
-                "custom/setup-proxy.sh",
-                "custom/setup.sh",
-                "scripts/update.sh",
-                "scripts/vagrant.sh",
-                "scripts/sshd.sh",
-                "scripts/virtualbox.sh",
-                "scripts/motd.sh",
-                "custom/setup-repos.sh",
-                "custom/clean.sh",
-                "scripts/cleanup.sh"
-            ],
-            "type": "shell"
-        }
-    ],
-    "variables": {
-        "apt_mirror_server": "",
-        "apt_mirror_path": "",
-        "apt_proxy": "",
-        "boot_command_prefix": "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
-        "cleanup_pause": "",
-        "cpus": "1",
-        "disk_size": "16384",
-        "ftp_proxy": "{{env `ftp_proxy`}}",
-        "headless": "true",
-        "hostname": "ubuntu",
-        "http_proxy": "{{env `http_proxy`}}",
-        "https_proxy": "{{env `https_proxy`}}",
-        "install_vagrant_key": "true",
-        "iso_checksum": "",
-        "iso_checksum_type": "sha1",
-        "iso_name": "",
-        "iso_path": "",
-        "iso_url": "",
-        "locale": "en_US",
-        "memory": "1024",
-        "no_proxy": "{{env `no_proxy`}}",
-        "preseed": "preseed.cfg",
-        "rsync_proxy": "{{env `rsync_proxy`}}",
-        "ssh_fullname": "vagrant",
-        "ssh_password": "vagrant",
-        "ssh_username": "vagrant",
-        "ssh_timeout": "150m",
-        "update": "true",
-        "vagrantfile_template": "",
-        "version": "{{isotime \"20060102\"}}",
-        "virtualbox_guest_os_type": "Ubuntu_64",
-        "vm_name": ""
+  "_comment": "Build with `packer build ubuntu.json`",
+  "builders": [
+    {
+      "accelerator": "kvm",
+      "boot_command": [
+        "{{ user `boot_command_prefix` }}",
+        "/install/vmlinuz noapic ",
+        "initrd=/install/initrd.gz ",
+        "file=/floppy/{{ user `preseed` }} ",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+        "hostname={{ user `hostname` }} ",
+        "grub-installer/bootdev=/dev/vda<wait> ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+        "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+        "passwd/user-fullname={{ user `ssh_fullname` }} ",
+        "passwd/user-password={{ user `ssh_password` }} ",
+        "passwd/user-password-again={{ user `ssh_password` }} ",
+        "passwd/username={{ user `ssh_username` }} ",
+        "-- <enter>"
+      ],
+      "boot_wait": "6s",
+      "disk_size": "{{ user `disk_size` }}",
+      "floppy_files": [
+        "http/{{ user `preseed` }}"
+      ],
+      "format": "qcow2",
+      "headless": "{{ user `headless` }}",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "output_directory": "qemu/{{ user `vm_name` }}",
+      "qemuargs": [
+        [
+          "-m",
+          "{{ user `memory` }}"
+        ],
+        [
+          "-smp",
+          "cpus={{ user `cpus` }}"
+        ]
+      ],
+      "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_timeout": "{{user `ssh_timeout`}}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "type": "qemu",
+      "vm_name": "{{ user `vm_name` }}.qcow2"
+    },
+    {
+      "boot_command": [
+        "{{ user `boot_command_prefix` }}",
+        "/install/vmlinuz noapic ",
+        "initrd=/install/initrd.gz ",
+        "file=/floppy/{{ user `preseed` }} ",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+        "hostname={{ user `hostname` }} ",
+        "grub-installer/bootdev=/dev/sda<wait> ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+        "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+        "passwd/user-fullname={{ user `ssh_fullname` }} ",
+        "passwd/user-password={{ user `ssh_password` }} ",
+        "passwd/user-password-again={{ user `ssh_password` }} ",
+        "passwd/username={{ user `ssh_username` }} ",
+        "-- <enter>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{ user `disk_size` }}",
+      "export_opts": [
+        "--vsys",
+        "0"
+      ],
+      "floppy_files": [
+        "http/{{ user `preseed` }}"
+      ],
+      "format": "ova",
+      "guest_additions_mode": "disable",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
+      "hard_drive_interface": "sata",
+      "headless": "{{ user `headless` }}",
+      "iso_checksum": "{{ user `iso_checksum_type` }}:{{ user `iso_checksum` }}",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "output_directory": "virtualbox/{{ user `vm_name` }}",
+      "post_shutdown_delay": "1m",
+      "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_timeout": "{{user `ssh_timeout`}}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--audio",
+          "none",
+          "--cpus",
+          "{{user `cpus`}}",
+          "--memory",
+          "{{user `memory`}}",
+          "--nictype1",
+          "virtio",
+          "--usb",
+          "off"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "{{ user `vm_name` }}"
     }
+  ],
+  "post-processors": [
+    {
+      "environment_vars": [
+        "IMAGENAME={{user `vm_name`}}",
+        "OUTPUT=qemu/{{ user `vm_name` }}",
+        "DEST=image/{{ user `vm_name` }}"
+      ],
+      "inline": [
+        "qemu-img amend -f qcow2 -o compat=0.10 $OUTPUT/$IMAGENAME.qcow2",
+        "mkdir -p $DEST",
+        "export LIBGUESTFS_BACKEND=direct",
+        "[ $(command -v virt-sparsify) ] \u0026\u0026 virt-sparsify $OUTPUT/$IMAGENAME.qcow2 $DEST/$IMAGENAME.qcow2",
+        "[ -f $DEST/$IMAGENAME.qcow2 ] \u0026\u0026 mv -f $DEST/$IMAGENAME.qcow2 $OUTPUT/$IMAGENAME.qcow2",
+        "[ $(command -v pxz) ] \u0026\u0026 pxz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz",
+        "[ -f $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz ] || xz -c $OUTPUT/$IMAGENAME.qcow2 > $DEST/$IMAGENAME-{{user `version`}}.qcow2.xz"
+      ],
+      "only": [
+        "qemu"
+      ],
+      "type": "shell-local"
+    },
+    {
+      "environment_vars": [
+        "IMAGENAME={{user `vm_name`}}",
+        "OUTPUT=virtualbox/{{ user `vm_name` }}",
+        "DEST=image/{{ user `vm_name` }}"
+      ],
+      "inline": [
+        "mkdir -p $DEST",
+        "cp -pr $OUTPUT/$IMAGENAME.ova $DEST/$IMAGENAME-virtualbox-{{user `version`}}.ova"
+      ],
+      "only": [
+        "virtualbox-iso"
+      ],
+      "type": "shell-local"
+    },
+    {
+      "keep_input_artifact": false,
+      "output": "box/{{ user `vm_name` }}/{{user `vm_name`}}-{{user `version`}}-{{.Provider}}.box",
+      "type": "vagrant",
+      "vagrantfile_template": "{{ user `vagrantfile_template` }}"
+    }
+  ],
+  "provisioners": [
+    {
+      "environment_vars": [
+        "APT_MIRROR_SERVER={{user `apt_mirror_server`}}",
+        "APT_MIRROR_PATH={{user `apt_mirror_path`}}",
+        "APT_PROXY={{user `apt_proxy`}}",
+        "CLEANUP_PAUSE={{user `cleanup_pause`}}",
+        "UPDATE={{user `update`}}",
+        "INSTALL_VAGRANT_KEY={{user `install_vagrant_key`}}",
+        "SSH_USERNAME={{user `ssh_username`}}",
+        "SSH_PASSWORD={{user `ssh_password`}}",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "rsync_proxy={{user `rsync_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "custom/setup-repos.sh",
+        "custom/setup-proxy.sh",
+        "custom/setup.sh",
+        "scripts/update.sh",
+        "scripts/vagrant.sh",
+        "scripts/sshd.sh",
+        "scripts/virtualbox.sh",
+        "scripts/motd.sh",
+        "custom/setup-repos.sh",
+        "custom/clean.sh",
+        "scripts/cleanup.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "apt_mirror_path": "",
+    "apt_mirror_server": "",
+    "apt_proxy": "",
+    "boot_command_prefix": "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+    "cleanup_pause": "",
+    "cpus": "1",
+    "disk_size": "16384",
+    "ftp_proxy": "{{env `ftp_proxy`}}",
+    "headless": "true",
+    "hostname": "ubuntu",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "install_vagrant_key": "true",
+    "iso_checksum": "",
+    "iso_checksum_type": "sha1",
+    "iso_name": "",
+    "iso_path": "",
+    "iso_url": "",
+    "locale": "en_US",
+    "memory": "1024",
+    "no_proxy": "{{env `no_proxy`}}",
+    "preseed": "preseed.cfg",
+    "rsync_proxy": "{{env `rsync_proxy`}}",
+    "ssh_fullname": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_timeout": "150m",
+    "ssh_username": "vagrant",
+    "update": "true",
+    "vagrantfile_template": "",
+    "version": "{{isotime \"20060102\"}}",
+    "virtualbox_guest_os_type": "Ubuntu_64",
+    "vm_name": ""
+  }
 }
+
