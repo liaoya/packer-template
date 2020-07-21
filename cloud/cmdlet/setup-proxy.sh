@@ -39,7 +39,7 @@ if [[ -f /var/snap/microk8s/current/args/containerd-env ]]; then
     rm -f /var/snap/microk8s/current/args/containerd-env
 fi
 if [[ -f /etc/systemd/system/snapd.service.d/override.conf ]]; then
-    sed -i /etc/systemd/system/snapd.service.d/override.conf
+    rm -f /etc/systemd/system/snapd.service.d/override.conf
 fi
 
 http_proxy="http://www-proxy-tyo.jp.oracle.com:80"
