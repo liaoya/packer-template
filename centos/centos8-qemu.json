@@ -1,101 +1,103 @@
 {
-    "builders": [
-      {
-        "accelerator": "kvm",
-        "boot_command": [
-          "<up><wait><tab><wait> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/centos8-qemu.ks<enter><wait>"
+  "builders": [
+    {
+      "accelerator": "kvm",
+      "boot_command": [
+        "<up><wait><tab><wait> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/centos8-qemu.ks<enter><wait>"
+      ],
+      "boot_wait": "6s",
+      "disk_compression": "{{user `disk_compression`}}",
+      "disk_interface": "virtio",
+      "disk_size": "{{user `disk_size`}}",
+      "format": "qcow2",
+      "headless": "{{user `headless`}}",
+      "host_port_max": 2229,
+      "host_port_min": 2222,
+      "http_directory": "http",
+      "http_port_max": 10089,
+      "http_port_min": 10082,
+      "iso_checksum": "{{user `iso_checksum_type`}}:{{user `iso_checksum`}}",
+      "iso_urls": [
+        "{{user `iso_path`}}/{{user `iso_name`}}",
+        "{{user `iso_url`}}"
+      ],
+      "net_device": "virtio-net",
+      "output_directory": "qemu/{{user `os_dist`}}-{{user `vm_name`}}",
+      "qemuargs": [
+        [
+          "-m",
+          "{{user `memory`}}"
         ],
-        "boot_wait": "6s",
-        "disk_compression": "{{user `disk_compression`}}",
-        "disk_interface": "virtio",
-        "disk_size": "{{user `disk_size`}}",
-        "format": "qcow2",
-        "headless": "{{user `headless`}}",
-        "http_directory": "http",
-        "http_port_min": 10082,
-        "http_port_max": 10089,
-        "iso_checksum": "{{user `iso_checksum`}}",
-        "iso_checksum_type": "{{user `iso_checksum_type`}}",
-        "iso_urls": [
-          "{{user `iso_path`}}/{{user `iso_name`}}",
-          "{{user `iso_url`}}"
-        ],
-        "net_device": "virtio-net",
-        "output_directory": "qemu/{{user `os_dist`}}-{{user `vm_name`}}",
-        "qemuargs": [
-          ["-m", "{{user `memory`}}"],
-          ["-smp", "cpus={{user `cpus`}}"]
-        ],
-        "ssh_host_port_min": 2222,
-        "ssh_host_port_max": 2229,
-        "ssh_username": "{{user `ssh_username`}}",
-        "ssh_password": "{{user `ssh_password`}}",
-        "ssh_port": 22,
-        "ssh_timeout": "1800s",
-        "shutdown_command": "",
-        "type": "qemu",
-        "vm_name": "{{user `vm_name`}}.qcow2"
-      }
-    ],
-  
-    "provisioners": [
-       {
-         "environment_vars": [
-           "CUSTOM_GROUP={{user `custom_group`}}",
-           "CUSTOM_PASSWORD={{user `custom_password`}}",
-           "CUSTOM_USER={{user `custom_user`}}"
-         ],
-         "execute_command": "{{.Vars}} bash -e -x '{{.Path}}'",
-         "expect_disconnect": "true",
-         "scripts": [
-           "scripts/create-user.sh",
-           "scripts/cleanup.sh"
-         ],
-         "skip_clean": true,
-         "type": "shell"
-      }
-    ],
-  
-    "post-processors": [
-      {
-        "environment_vars": [
-          "IMAGENAME={{user `vm_name`}}",
-          "OUTPUT=qemu/{{user `os_dist`}}-{{user `vm_name`}}",
-          "DEST=image/{{user `os_dist`}}",
-          "SPARSIFY={{user `sparsify`}}",
-          "VERSION={{user `version`}}"
-        ],
-        "type": "shell-local",
-        "only": [
-          "qemu"
-        ],
-        "scripts": [
-          "post/backup-disk.sh"
+        [
+          "-smp",
+          "cpus={{user `cpus`}}"
         ]
-      }
-    ],
-  
-    "variables": {
-      "cpus": "2",
-      "custom_group": "",
-      "custom_password": "centos",
-      "custom_user": "centos",
-      "disk_compression": "true",
-      "disk_size": "8192",
-      "headless": "true",
-      "iso_checksum": "",
-      "iso_checksum_type": "sha256",
-      "iso_name": "",
-      "iso_path": "{{env `HOME`}}/.cache/packer",
-      "iso_url": "",
-      "memory": "4096",
-      "os_dist": "centos8",
-      "shutdown_command": "shutdown -P now",
-      "sparsify": "true",
-      "ssh_username": "root",
-      "ssh_password": "centos",
-      "version": "{{isotime \"20060102\"}}",
-      "vm_name": "centos8"
+      ],
+      "shutdown_command": "",
+      "ssh_password": "{{user `ssh_password`}}",
+      "ssh_port": 22,
+      "ssh_timeout": "1800s",
+      "ssh_username": "{{user `ssh_username`}}",
+      "type": "qemu",
+      "vm_name": "{{user `vm_name`}}.qcow2"
     }
+  ],
+  "post-processors": [
+    {
+      "environment_vars": [
+        "IMAGENAME={{user `vm_name`}}",
+        "OUTPUT=qemu/{{user `os_dist`}}-{{user `vm_name`}}",
+        "DEST=image/{{user `os_dist`}}",
+        "SPARSIFY={{user `sparsify`}}",
+        "VERSION={{user `version`}}"
+      ],
+      "only": [
+        "qemu"
+      ],
+      "scripts": [
+        "post/backup-disk.sh"
+      ],
+      "type": "shell-local"
+    }
+  ],
+  "provisioners": [
+    {
+      "environment_vars": [
+        "CUSTOM_GROUP={{user `custom_group`}}",
+        "CUSTOM_PASSWORD={{user `custom_password`}}",
+        "CUSTOM_USER={{user `custom_user`}}"
+      ],
+      "execute_command": "{{.Vars}} bash -e -x '{{.Path}}'",
+      "expect_disconnect": "true",
+      "scripts": [
+        "scripts/create-user.sh",
+        "scripts/cleanup.sh"
+      ],
+      "skip_clean": true,
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "cpus": "2",
+    "custom_group": "",
+    "custom_password": "centos",
+    "custom_user": "centos",
+    "disk_compression": "true",
+    "disk_size": "8192",
+    "headless": "true",
+    "iso_checksum": "",
+    "iso_checksum_type": "sha256",
+    "iso_name": "",
+    "iso_path": "{{env `HOME`}}/.cache/packer",
+    "iso_url": "",
+    "memory": "4096",
+    "os_dist": "centos8",
+    "shutdown_command": "shutdown -P now",
+    "sparsify": "true",
+    "ssh_password": "centos",
+    "ssh_username": "root",
+    "version": "{{isotime \"20060102\"}}",
+    "vm_name": "centos8"
   }
-  
+}
+
