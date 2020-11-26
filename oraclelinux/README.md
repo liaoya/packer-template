@@ -16,6 +16,8 @@ export PACKER_KEY_INTERVAL=10ms
 export PACKER_CACHE_DIR=~/.cache/packer
 [ -d $PACKER_CACHE_DIR ] || mkdir -p $PACKER_CACHE_DIR
 export CURLOPT_SSL_VERIFYPEER=false
+
+find . -type f | xargs dos2unix
 ```
 
 ```bash

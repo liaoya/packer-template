@@ -7,9 +7,9 @@ VAGRANT_INSECURE_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrt
 function create-user() {
     if [[ $# -eq 0 ]]; then echo "Require <user> [password] [group]"; return 1; fi
     local user password group
-    if [[ $# -ge 1 ]]; then user=$1; fi
-    if [[ $# -ge 2 ]]; then password=$2; else password=$1; fi
-    if [[ $# -ge 3 ]]; then group=$3; else group=$1; fi
+    if [[ $# -eq 1 ]]; then user=$1; password=$1; group=users; fi
+    if [[ $# -eq 2 ]]; then user=$1; password=$1; group=$2; fi
+    if [[ $# -eq 3 ]]; then user=$1; password=$2; group=$3; fi
 
     if ! getent group "${group}"; then
         groupadd "${group}"
