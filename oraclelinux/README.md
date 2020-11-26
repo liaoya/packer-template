@@ -19,11 +19,11 @@ export CURLOPT_SSL_VERIFYPEER=false
 ```
 
 ```bash
-packer build -var "headless=false" -var-file conf/ol76.json ol7-qemu.json
+packer build -var "headless=false" -var-file conf/ol79.json ol7-qemu.json
 ```
 
 ```bash
-packer build -only=qemu -var "headless=true" -var-file conf/ol80.json ol8-qemu.json
+packer build -only=qemu -var "headless=true" -var-file conf/ol83.json ol8-qemu.json
 ```
 
 ```bash

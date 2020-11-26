@@ -1,0 +1,8 @@
+{
+    "iso_checksum": "771e383adfd5406d1a360ff24822011a88cbb45b6019e2f1095758c46a406aaa",
+    "iso_checksum_type": "sha256",
+    "iso_name": "OracleLinux-R8-U3-x86_64-dvd.iso",
+    "iso_url": "http://mirrors.kernel.org/oracle/OL8/u3/x86_64/OracleLinux-R8-U3-x86_64-dvd.iso",
+    "os_dist": "oraclelinux8",
+    "vm_name": "oraclelinux83"
+}

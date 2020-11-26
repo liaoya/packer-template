@@ -1,0 +1,9 @@
+{
+    "iso_checksum": "dc2782bfd92b4c060cf8006fbc6e18036c27f599eebf3584a1a2ac54f008bf2f",
+    "iso_checksum_type": "sha256",
+    "iso_name": "OracleLinux-R7-U9-Server-x86_64-dvd.iso",
+    "iso_url": "http://mirrors.kernel.org/oracle/OL7/u9/x86_64/OracleLinux-R7-U9-Server-x86_64-dvd.iso",
+    "os_dist": "oraclelinux7",
+    "vm_name": "oraclelinux79"
+  }
+  

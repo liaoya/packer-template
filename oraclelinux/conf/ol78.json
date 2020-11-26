@@ -1,0 +1,9 @@
+{
+    "iso_checksum": "6e1069ff42f7e59b19af4e2fcacae2fca3f195c7f2904275b0df386efdcd616d",
+    "iso_checksum_type": "sha256",
+    "iso_name": "OracleLinux-R7-U8-Server-x86_64-dvd.iso",
+    "iso_url": "http://mirrors.kernel.org/oracle/OL7/u8/x86_64/OracleLinux-R7-U8-Server-x86_64-dvd.iso",
+    "os_dist": "oraclelinux7",
+    "vm_name": "oraclelinux78"
+  }
+  
