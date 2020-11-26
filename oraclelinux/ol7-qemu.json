@@ -14,8 +14,7 @@
             "http_directory": "http",
             "http_port_min": 10082,
             "http_port_max": 10089,
-            "iso_checksum": "{{user `iso_checksum`}}",
-            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "iso_checksum": "{{user `iso_checksum_type`}}:{{user `iso_checksum`}}",
             "iso_urls": [
                 "{{user `iso_path`}}/{{user `iso_name`}}",
                 "{{user `iso_url`}}"
@@ -47,7 +46,6 @@
             "execute_command": "{{.Vars}} bash -e -x '{{.Path}}'",
             "expect_disconnect": "true",
             "scripts": [
-                "scripts/create-user.sh",
                 "scripts/cleanup.sh"
             ],
             "skip_clean": true,
@@ -58,7 +56,7 @@
     "post-processors": [
         {
             "environment_vars": [
-                "IMAGENAME={{user `os_dist`}}-{{user `vm_name`}}",
+                "IMAGENAME={{user `vm_name`}}",
                 "OUTPUT=qemu/{{user `os_dist`}}-{{user `vm_name`}}",
                 "DEST=image/{{user `os_dist`}}",
                 "SPARSIFY={{user `sparsify`}}",

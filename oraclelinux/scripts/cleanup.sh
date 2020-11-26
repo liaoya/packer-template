@@ -7,16 +7,16 @@ if [[ "$PACKER_BUILDER_TYPE" = "qemu" ]]; then
 #    grub2-mkconfig -o /boot/grub2/grub.cfg
 fi
 
-if getent group docker; then
-    systemctl enable docker
-    systemctl start docker
-    cat <<EOF >>/etc/sysctl.conf
+# For docker
+cat <<EOF >>/etc/sysctl.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
-fi
 
-[ -f /etc/NetworkManager/NetworkManager.conf ] && sed -i '/^plugins=ifcfg-rh/a dns=none' /etc/NetworkManager/NetworkManager.conf
+# Do not overwrite /etc/resolv.conf
+if [[ -f /etc/NetworkManager/NetworkManager.conf ]]; then
+    sed -i '/^plugins=ifcfg-rh/a dns=none' /etc/NetworkManager/NetworkManager.conf
+fi
 
 # Clean up network interface persistence
 rm -f /etc/udev/rules.d/70-persistent-net.rules
@@ -25,15 +25,6 @@ rm -f /lib/udev/rules.d/75-persistent-net-generator.rules
 rm -rf /dev/.udev/
 rm -f /etc/udev/rules.d/80-net-name-slot.rules
 ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules
-
-# simple eth0 config, again not hard-coded to the build hardware
-cat > /etc/sysconfig/network-scripts/ifcfg-eth0 << EOF
-DEVICE="eth0"
-NAME="eth0"
-BOOTPROTO="dhcp"
-ONBOOT="yes"
-TYPE="Ethernet"
-EOF
 
 for ndev in /etc/sysconfig/network-scripts/ifcfg-*; do
     if [ "$ndev" != "/etc/sysconfig/network-scripts/ifcfg-lo" ]; then

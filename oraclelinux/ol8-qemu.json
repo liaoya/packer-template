@@ -40,31 +40,6 @@
       "ssh_username": "{{user `ssh_username`}}",
       "type": "qemu",
       "vm_name": "{{user `vm_name`}}.qcow2"
-    },
-    {
-      "boot_command": [
-        "<up><wait><tab><wait> text ks=http://{{.HTTPIP}}:{{.HTTPPort}}/ol8-kvm-ks.cfg<enter><wait>"
-      ],
-      "boot_wait": "6s",
-      "disk_size": "{{user `disk_size`}}",
-      "headless": "{{user `headless`}}",
-      "http_directory": "http",
-      "http_port_max": 10089,
-      "http_port_min": 10082,
-      "iso_checksum": "{{user `iso_checksum_type`}}:{{user `iso_checksum`}}",
-      "iso_urls": [
-        "{{user `iso_path`}}/{{user `iso_name`}}",
-        "{{user `iso_url`}}"
-      ],
-      "network": "nat",
-      "output_directory": "vmware/{{user `os_dist`}}-{{user `vm_name`}}",
-      "shutdown_command": "",
-      "ssh_password": "{{user `ssh_password`}}",
-      "ssh_port": 22,
-      "ssh_timeout": "1800s",
-      "ssh_username": "{{user `ssh_username`}}",
-      "type": "vmware-iso",
-      "vm_name": "{{user `vm_name`}}"
     }
   ],
   "post-processors": [
@@ -95,7 +70,6 @@
       "execute_command": "{{.Vars}} bash -e -x '{{.Path}}'",
       "expect_disconnect": "true",
       "scripts": [
-        "scripts/create-user.sh",
         "scripts/cleanup.sh"
       ],
       "skip_clean": true,
